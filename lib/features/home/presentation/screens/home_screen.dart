@@ -1,3 +1,4 @@
+// lib/features/home/presentation/screens/home_screen.dart
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -5,9 +6,6 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Smart Activity')),
-      body: const Center(child: Text('Willkommen bei Smart Activity')),
-    );
+    return const Center(child: Text("Home Screen - Smart Activity"));
   }
 }
