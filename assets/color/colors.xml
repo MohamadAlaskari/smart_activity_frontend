@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f2f2f2</color>
+    <color name="colorPrimaryDark">#0069B4</color>
+    <color name="colorAccent">#303F9F</color>
+    <color name="white">#FFFFFF</color>
+    <color name="label">#42000000</color>
+    <color name="background">#F5F5F5</color>
+    <color name="error">#E02020</color>
+    <color name="black">#000000</color>
+    <color name="greyBorder">#E5E5E5</color>
+    <color name="disabledButtonColor">#90CAF9</color>
+    <color name="secondaryText">#21262D</color>
+    <color name="appBarColor">#F5F5F5</color>
+    <color name="red">#E53935</color>
+    <color name="orange">#FFAA33</color>
+    <color name="blue">#1E88E5</color>
+    <color name="green">#00B8A0</color>
+    <color name="dateText">#424242</color>
+    <color name="grey">#E0E0E0</color>
+    <color name="dividerColor">#E0E0E0</color>
+</resources>

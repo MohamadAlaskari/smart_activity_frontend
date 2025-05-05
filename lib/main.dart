@@ -1,27 +1,54 @@
-// Ich beginne jetzt mit dem Schreiben der kompletten Flutter-Dateien entsprechend deiner Struktur. Ich fange mit main.dart und den wichtigsten Core-Dateien an. Danach folgen Router, Layout, WeatherScreen, ViewModel, Service und Widgets. Die einzelnen Dateien werden schrittweise erstellt. Sag einfach "weiter", wenn du bereit bist für den nächsten Teil.
-
-// lib/main.dart
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'routes/app_router.dart';
-import 'core/theme/app_theme.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:smart_activity_frontend/common/constants.dart';
+import 'package:smart_activity_frontend/data/api/key_value_storage.dart';
+import 'package:smart_activity_frontend/data/repository/auth_data_repository.dart';
+import 'package:smart_activity_frontend/data/repository/user_storage_repository.dart';
+import 'package:smart_activity_frontend/data/repository/vibe_day_repository.dart';
+import 'package:smart_activity_frontend/presentation/app/app.dart';
 
-void main() {
-  runApp(const ProviderScope(child: SmartActivityApp()));
+void main() async {
+  await mainCommon();
 }
 
-class SmartActivityApp extends StatelessWidget {
-  const SmartActivityApp({super.key});
+Future<void> mainCommon() async {
+  WidgetsBinding _ = WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Smart Activity',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      routerConfig: AppRouter.router,
-    );
-  }
+  await EasyLocalization.ensureInitialized();
+
+  await Hive.initFlutter();
+  final hiveKeyStore = KeyValueStorage();
+  await hiveKeyStore.init();
+
+  final directory = await getTemporaryDirectory();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: directory,
+  );
+
+  final userStorageRepository = UserStorageRepository(
+    storageKey: 'user_storage',
+  );
+
+  final authDataRepository = AuthDataRepository();
+
+  final vibeDayRepository = VibeDayRepository(
+    tokenStorageRepository: authDataRepository,
+    baseUrl: Constants.baseUrl,
+    userStorageRepository: userStorageRepository,
+  );
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('de', 'DE')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('de', 'DE'),
+      child: App(
+        vibeDayRepository: vibeDayRepository,
+        userStorageRepository: userStorageRepository,
+      ),
+    ),
+  );
 }

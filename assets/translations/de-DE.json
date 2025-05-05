@@ -1,0 +1,47 @@
+{
+  "LOGIN": {
+    "TITLE": "Login",
+    "MAIL_OR_USER": "Domäne/User oder E-Mail-Adresse",
+    "PASSWORD": "Passwort",
+    "ACTION": "Anmelden",
+    "FORGOT_PASSWORD": "Passwort vergessen?",
+    "ERROR": {
+      "ERROR_MESSAGE": "Das Feld ist erforderlich!"
+    },
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Fehler",
+        "DESCRIPTION": "Bitte überprüfen Sie Ihre Angaben! Diese scheinen unvollständig zu sein."
+      },
+      "INVALID": {
+        "TITLE": "Login nicht möglich",
+        "DESCRIPTION": "Bitte überprüfen Sie Ihren Benutzernamen und/oder Passwort."
+      },
+      "BUTTON": {
+        "CLOSE": "OK"
+      }
+    }
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Passwort vergessen",
+    "ACTION": "Passwort zurücksetzen",
+    "BACK": "Zurück",
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Fehler",
+        "DESCRIPTION": "Bitte geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein!"
+      },
+      "SUCCESS_RESET": {
+        "TITLE": "Passwort zurücksetzen",
+        "DESCRIPTION": "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie erhalten in den nächsten Minuten eine E-Mail mit einem Link zum Speichern des neuen Passworts."
+      },
+      "ERROR_RESET": {
+        "TITLE": "Fehler",
+        "DESCRIPTION": "Beim Zurücksetzen ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Administrator."
+      }
+    }
+  },
+  "HOME": {
+    "TITLE": "Home"
+  }
+}

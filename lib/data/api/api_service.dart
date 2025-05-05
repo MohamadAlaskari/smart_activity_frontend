@@ -1,0 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
+
+part 'api_service.g.dart';
+
+@RestApi()
+
+/// API Service class
+/// add all the REST endpoints here
+abstract class ApiService {
+  factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
+
+  /// VibeDay API
+}
