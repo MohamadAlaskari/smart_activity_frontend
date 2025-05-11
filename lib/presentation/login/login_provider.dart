@@ -2,12 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:smart_activity_frontend/data/repository/vibe_day_repository.dart';
-import 'package:smart_activity_frontend/presentation/login/login_cubit.dart';
-import 'package:smart_activity_frontend/presentation/login/login_state.dart';
-import 'package:smart_activity_frontend/presentation/login/login_view.dart';
-import 'package:smart_activity_frontend/presentation/ui/widgets/validation_dialog.dart';
-
+import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/presentation/login/login_cubit.dart';
+import 'package:vibe_day/presentation/login/login_state.dart';
+import 'package:vibe_day/presentation/login/login_view.dart';
+import 'package:vibe_day/presentation/ui/widgets/validation_dialog.dart';
 class LoginProvider extends StatelessWidget {
   const LoginProvider({super.key});
 

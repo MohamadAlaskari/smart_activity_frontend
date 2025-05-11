@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_activity_frontend/assets/colors.gen.dart';
+import 'package:vibe_day/assets/colors.gen.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:smart_activity_frontend/domain/model/user.dart';
+import 'package:vibe_day/domain/model/user.dart';
 
 part 'auth_result.g.dart';
 part 'auth_result.freezed.dart';

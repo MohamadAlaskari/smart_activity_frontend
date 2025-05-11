@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_activity_frontend/domain/model/user.dart';
+import 'package:vibe_day/domain/model/user.dart';
 
 const mspUser = 'mspUser';
 const mastodonUser = 'mastodonUser';
 
 class UserStorageRepository {
-  UserStorageRepository({
-    required String storageKey,
-  }) : _storageKey = storageKey;
+  UserStorageRepository({required String storageKey})
+    : _storageKey = storageKey;
 
   final String _storageKey;
 
@@ -46,11 +45,9 @@ class UserStorageRepository {
       yield user;
     }
 
-    yield* box.watch(key: mspUser).map(
-          (event) {
-        if (event.deleted) return null;
-        return User.fromJson(jsonDecode(event.value));
-      },
-    );
+    yield* box.watch(key: mspUser).map((event) {
+      if (event.deleted) return null;
+      return User.fromJson(jsonDecode(event.value));
+    });
   }
 }

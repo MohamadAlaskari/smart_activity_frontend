@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_activity_frontend/data/repository/vibe_day_repository.dart';
-import 'package:smart_activity_frontend/presentation/login/login_state.dart';
-import 'package:smart_activity_frontend/presentation/ui/helpers/debouncer.dart';
-import 'package:smart_activity_frontend/presentation/ui/validation/password.dart';
-import 'package:smart_activity_frontend/presentation/ui/validation/email_or_user.dart';
+import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/presentation/login/login_state.dart';
+import 'package:vibe_day/presentation/ui/helpers/debouncer.dart';
+import 'package:vibe_day/presentation/ui/validation/email_or_user.dart';
+import 'package:vibe_day/presentation/ui/validation/password.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit({required VibeDayRepository vibeDayRepository})

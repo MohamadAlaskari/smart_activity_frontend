@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:smart_activity_frontend/assets/colors.gen.dart';
-import 'package:smart_activity_frontend/router.dart';
+import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/router.dart';
 
 class AppView extends StatelessWidget {
   const AppView({super.key});

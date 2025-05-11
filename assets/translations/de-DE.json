@@ -5,6 +5,7 @@
     "PASSWORD": "Passwort",
     "ACTION": "Anmelden",
     "FORGOT_PASSWORD": "Passwort vergessen?",
+    "REGISTER_INSTEAD": "Noch kein Konto? Jetzt registrieren",
     "ERROR": {
       "ERROR_MESSAGE": "Das Feld ist erforderlich!"
     },
@@ -43,5 +44,39 @@
   },
   "HOME": {
     "TITLE": "Home"
+  },
+  "REGISTER": {
+    "TITLE": "Registrieren",
+    "EMAIL": "E-Mail-Adresse",
+    "FIRST_NAME": "Vorname",
+    "LAST_NAME": "Nachname",
+    "PASSWORD": "Passwort",
+    "CONFIRM_PASSWORD": "Passwort bestätigen",
+    "ACTION": "Registrieren",
+    "LOGIN_INSTEAD": "Bereits ein Konto? Anmelden",
+    "ERROR": {
+      "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "FIRST_NAME": "Bitte geben Sie Ihren Vornamen ein",
+      "LAST_NAME": "Bitte geben Sie Ihren Nachnamen ein",
+      "PASSWORD": "Das Passwort muss mindestens 6 Zeichen enthalten",
+      "PASSWORDS_DONT_MATCH": "Die Passwörter stimmen nicht überein"
+    },
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Fehler",
+        "DESCRIPTION": "Bitte überprüfen Sie Ihre Angaben! Diese scheinen unvollständig zu sein."
+      },
+      "INVALID": {
+        "TITLE": "Registrierung nicht möglich",
+        "DESCRIPTION": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+      },
+      "SUCCESS": {
+        "TITLE": "Registrierung erfolgreich",
+        "DESCRIPTION": "Ihr Konto wurde erfolgreich erstellt. Sie werden weitergeleitet..."
+      },
+      "BUTTON": {
+        "CLOSE": "OK"
+      }
+    }
   }
 }

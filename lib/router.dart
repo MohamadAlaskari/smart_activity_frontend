@@ -1,7 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smart_activity_frontend/presentation/app/app_cubit.dart';
-import 'package:smart_activity_frontend/presentation/login/login_provider.dart';
+import 'package:vibe_day/presentation/app/app_cubit.dart';
+import 'package:vibe_day/presentation/home/home_provider.dart';
+import 'package:vibe_day/presentation/login/login_provider.dart';
+import 'package:vibe_day/presentation/register/register_provider.dart';
+
+import 'presentation/forgot_password/forgot_password_provider.dart';
 
 final GoRouter router = GoRouter(
   routes: [
@@ -24,16 +28,21 @@ final GoRouter router = GoRouter(
       name: LoginProvider.routeName,
       builder: (_, __) => const LoginProvider(),
     ),
-    // GoRoute(
-    //   path: '/${ForgotPasswordProvider.routeName}',
-    //   name: ForgotPasswordProvider.routeName,
-    //   builder: (_, __) => const ForgotPasswordProvider(),
-    // ),
-    // GoRoute(
-    //   path: '/${HomeProvider.routeName}',
-    //   name: HomeProvider.routeName,
-    //   builder: (_, __) => const HomeProvider(),
-    // ),
+    GoRoute(
+      path: '/${RegisterProvider.routeName}',
+      name: RegisterProvider.routeName,
+      builder: (_, __) => const RegisterProvider(),
+    ),
+    GoRoute(
+      path: '/${ForgotPasswordProvider.routeName}',
+      name: ForgotPasswordProvider.routeName,
+      builder: (_, __) => const ForgotPasswordProvider(),
+    ),
+    GoRoute(
+      path: '/${HomeProvider.routeName}',
+      name: HomeProvider.routeName,
+      builder: (_, __) => const HomeProvider(),
+    ),
     // GoRoute(
     //   path: '/${SettingsProvider.routeName}',
     //   name: SettingsProvider.routeName,

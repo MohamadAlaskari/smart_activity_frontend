@@ -1,10 +1,9 @@
 import 'package:formz/formz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:smart_activity_frontend/common/screen_status.dart';
-import 'package:smart_activity_frontend/domain/model/user.dart';
-import 'package:smart_activity_frontend/presentation/ui/validation/email_or_user.dart';
-import 'package:smart_activity_frontend/presentation/ui/validation/password.dart';
-
+import 'package:vibe_day/common/screen_status.dart';
+import 'package:vibe_day/domain/model/user.dart';
+import 'package:vibe_day/presentation/ui/validation/email_or_user.dart';
+import 'package:vibe_day/presentation/ui/validation/password.dart';
 part 'login_state.freezed.dart';
 
 @freezed

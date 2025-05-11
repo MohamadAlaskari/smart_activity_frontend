@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:smart_activity_frontend/common/constants.dart';
-import 'package:smart_activity_frontend/data/api/key_value_storage.dart';
-import 'package:smart_activity_frontend/data/repository/auth_data_repository.dart';
-import 'package:smart_activity_frontend/data/repository/user_storage_repository.dart';
-import 'package:smart_activity_frontend/data/repository/vibe_day_repository.dart';
-import 'package:smart_activity_frontend/presentation/app/app.dart';
+import 'package:vibe_day/common/constants.dart';
+import 'package:vibe_day/data/api/key_value_storage.dart';
+import 'package:vibe_day/data/repository/auth_data_repository.dart';
+import 'package:vibe_day/data/repository/user_storage_repository.dart';
+import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/presentation/app/app.dart';
 
 void main() async {
   await mainCommon();
@@ -31,6 +31,7 @@ Future<void> mainCommon() async {
   final userStorageRepository = UserStorageRepository(
     storageKey: 'user_storage',
   );
+  await userStorageRepository.init();
 
   final authDataRepository = AuthDataRepository();
 

@@ -3,13 +3,11 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fresh_dio/fresh_dio.dart';
-import 'package:smart_activity_frontend/data/api/api_service.dart';
-import 'package:smart_activity_frontend/data/repository/auth_data_repository.dart';
-import 'package:smart_activity_frontend/data/repository/user_storage_repository.dart'
-    show UserStorageRepository;
-import 'package:smart_activity_frontend/domain/model/auth_result.dart';
-import 'package:smart_activity_frontend/domain/model/user.dart';
-
+import 'package:vibe_day/data/api/api_service.dart';
+import 'package:vibe_day/data/repository/auth_data_repository.dart';
+import 'package:vibe_day/data/repository/user_storage_repository.dart';
+import 'package:vibe_day/domain/model/auth_result.dart';
+import 'package:vibe_day/domain/model/user.dart';
 class VibeDayRepository {
   late final ApiService _client;
   final AuthDataRepository _tokenStorageRepository;

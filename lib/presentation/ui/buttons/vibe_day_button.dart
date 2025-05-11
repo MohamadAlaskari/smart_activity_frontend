@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_activity_frontend/assets/colors.gen.dart';
-import 'package:smart_activity_frontend/presentation/ui/text/app_text.dart';
+import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/presentation/ui/text/app_text.dart';
 
 class VibeDayButton extends StatelessWidget {
   final String text;
@@ -43,20 +43,18 @@ class VibeDayButton extends StatelessWidget {
               return backgroundColor ?? Theme.of(context).colorScheme.primary;
             }),
           ),
-          child: isLoading == true
-              ? Container(
-            alignment: Alignment.center,
-            width: 24,
-            height: 24,
-            child: const CircularProgressIndicator(
-              color: ColorName.white,
-              strokeWidth: 2,
-            ),
-          )
-              : ButtonsText(
-            text: text,
-            color: textColor,
-          ),
+          child:
+              isLoading == true
+                  ? Container(
+                    alignment: Alignment.center,
+                    width: 24,
+                    height: 24,
+                    child: const CircularProgressIndicator(
+                      color: ColorName.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                  : ButtonsText(text: text, color: textColor),
         ),
       ),
     );

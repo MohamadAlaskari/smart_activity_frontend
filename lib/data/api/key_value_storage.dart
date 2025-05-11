@@ -1,6 +1,6 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_activity_frontend/common/constants.dart';
-import 'package:smart_activity_frontend/data/api/base_key_value_storage.dart';
+import 'package:vibe_day/common/constants.dart';
+import 'package:vibe_day/data/api/base_key_value_storage.dart';
 
 
 /// Hive implementation to store key values.

@@ -2,11 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:smart_activity_frontend/assets/colors.gen.dart';
-import 'package:smart_activity_frontend/presentation/login/login_cubit.dart';
-import 'package:smart_activity_frontend/presentation/login/login_state.dart';
-import 'package:smart_activity_frontend/presentation/ui/buttons/vibe_day_button.dart';
-import 'package:smart_activity_frontend/presentation/ui/widgets/custom_text_field.dart';
+import 'package:go_router/go_router.dart';
+import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/presentation/forgot_password/forgot_password_provider.dart';
+import 'package:vibe_day/presentation/home/home_provider.dart';
+import 'package:vibe_day/presentation/login/login_cubit.dart';
+import 'package:vibe_day/presentation/login/login_state.dart';
+import 'package:vibe_day/presentation/ui/buttons/vibe_day_button.dart';
+import 'package:vibe_day/presentation/ui/widgets/custom_text_field.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -40,6 +43,8 @@ class LoginView extends StatelessWidget {
                       const _ForgotPasswordButton(),
                       const SizedBox(height: 20),
                       const _LoginButton(),
+                      const SizedBox(height: 20),
+                      const _RegisterButton(),
                     ],
                   ),
                 ),
@@ -120,6 +125,7 @@ class _LoginButton extends StatelessWidget {
           isLoading: state.status.isInProgress,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           onPressed: () {
+            context.pushNamed(HomeProvider.routeName);
             // final cubit = context.read<LoginCubit>();
             // if (!cubit.isValidInput) {
             //   ValidationDialog.show(
@@ -147,12 +153,39 @@ class _ForgotPasswordButton extends StatelessWidget {
       alignment: Alignment.center,
       child: TextButton(
         onPressed: () {
-          // context.pushNamed(ForgotPasswordProvider.routeName);
+          context.pushNamed(ForgotPasswordProvider.routeName);
         },
         child: Text(
           'LOGIN.FORGOT_PASSWORD'.tr(),
           style: const TextStyle(
             fontSize: 18,
+            fontWeight: FontWeight.w400,
+            color: ColorName.black,
+            decorationColor: ColorName.black,
+            decoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RegisterButton extends StatelessWidget {
+  const _RegisterButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.sizeOf(context).width,
+      alignment: Alignment.center,
+      child: TextButton(
+        onPressed: () {
+          context.pushNamed('register');
+        },
+        child: Text(
+          'LOGIN.REGISTER_INSTEAD'.tr(),
+          style: const TextStyle(
+            fontSize: 16,
             fontWeight: FontWeight.w400,
             color: ColorName.black,
             decorationColor: ColorName.black,
