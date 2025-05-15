@@ -40,7 +40,7 @@ class VibeDayButton extends StatelessWidget {
               if (states.contains(WidgetState.disabled)) {
                 return ColorName.disabledButtonColor;
               }
-              return backgroundColor ?? Theme.of(context).colorScheme.primary;
+              return backgroundColor ?? ColorName.green;
             }),
           ),
           child:

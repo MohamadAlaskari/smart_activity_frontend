@@ -12,6 +12,7 @@ class User with _$User {
     String? id,
     String? firstName,
     String? lastName,
+    String? username,
     String? email,
     bool? active,
     String? name,

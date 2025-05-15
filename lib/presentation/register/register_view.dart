@@ -21,11 +21,11 @@ class RegisterView extends StatelessWidget {
           AppBar(
             title: Text(
               'REGISTER.TITLE'.tr(),
-              style: const TextStyle(fontSize: 28, color: ColorName.black),
+              style: const TextStyle(fontSize: 26),
             ),
             centerTitle: true,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back, color: ColorName.green),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -38,6 +38,8 @@ class RegisterView extends StatelessWidget {
                   children: const [
                     SizedBox(height: 30),
                     _EmailField(),
+                    SizedBox(height: 20),
+                    _UsernameField(),
                     SizedBox(height: 20),
                     _FirstNameField(),
                     SizedBox(height: 20),
@@ -134,6 +136,30 @@ class _LastNameField extends StatelessWidget {
   }
 }
 
+class _UsernameField extends StatelessWidget {
+  const _UsernameField();
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<RegisterCubit, RegisterState>(
+      builder: (context, state) {
+        return CustomTextField(
+          labelText: 'REGISTER.USERNAME'.tr(),
+          initialValue: state.username.value,
+          onChanged:
+              (value) => context.read<RegisterCubit>().usernameChanged(value),
+          autofillHints: const [AutofillHints.username],
+          keyboardType: TextInputType.text,
+          errorText:
+              !state.username.isPure && !state.username.isValid
+                  ? 'REGISTER.ERROR.USERNAME'.tr()
+                  : null,
+        );
+      },
+    );
+  }
+}
+
 class _PasswordField extends StatelessWidget {
   const _PasswordField();
 
@@ -146,7 +172,7 @@ class _PasswordField extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(
               state.obscurePassword ? Icons.visibility : Icons.visibility_off,
-              color: ColorName.colorAccent,
+              color: ColorName.green,
             ),
             onPressed: () {
               context.read<RegisterCubit>().toggleObscurePassword();
@@ -181,7 +207,7 @@ class _ConfirmPasswordField extends StatelessWidget {
               state.obscureConfirmPassword
                   ? Icons.visibility
                   : Icons.visibility_off,
-              color: ColorName.colorAccent,
+              color: ColorName.green,
             ),
             onPressed: () {
               context.read<RegisterCubit>().toggleObscureConfirmPassword();
@@ -220,7 +246,7 @@ class _RegisterButton extends StatelessWidget {
           onPressed: () {
             final cubit = context.read<RegisterCubit>();
             if (cubit.isValidRegister) {
-              // cubit.register();
+              cubit.register();
             } else {
               ValidationDialog.show(
                 context: context,
@@ -251,9 +277,9 @@ class _LoginButton extends StatelessWidget {
           'REGISTER.LOGIN_INSTEAD'.tr(),
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: ColorName.black,
-            decorationColor: ColorName.black,
+            fontWeight: FontWeight.w500,
+            color: ColorName.green,
+            decorationColor: ColorName.green,
             decoration: TextDecoration.underline,
           ),
         ),

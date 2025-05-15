@@ -50,10 +50,15 @@
     "EMAIL": "E-Mail-Adresse",
     "FIRST_NAME": "Vorname",
     "LAST_NAME": "Nachname",
+    "USERNAME": "Benutzername",
     "PASSWORD": "Passwort",
     "CONFIRM_PASSWORD": "Passwort bestätigen",
     "ACTION": "Registrieren",
     "LOGIN_INSTEAD": "Bereits ein Konto? Anmelden",
+    "EMAIL_VERIFICATION": {
+      "TITLE": "Registrierung erfolgreich",
+      "DESCRIPTION": "Wir haben eine Bestätigungs-E-Mail an Ihre E-Mail-Adresse gesendet. Bitte prüfen Sie Ihren Posteingang und klicken Sie auf den Bestätigungslink, um Ihre Registrierung abzuschließen."
+    },
     "ERROR": {
       "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
       "FIRST_NAME": "Bitte geben Sie Ihren Vornamen ein",

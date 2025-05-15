@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/presentation/register/register_state.dart'
     show RegisterState;
@@ -18,6 +20,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   final VibeDayRepository _vibeDayRepository;
   final Debouncer _debouncerEmail = Debouncer(milliSeconds: 200);
+  final Debouncer _debouncerUsername = Debouncer(milliSeconds: 200);
   final Debouncer _debouncerFirstName = Debouncer(milliSeconds: 200);
   final Debouncer _debouncerLastName = Debouncer(milliSeconds: 200);
   final Debouncer _debouncerPassword = Debouncer(milliSeconds: 200);
@@ -27,6 +30,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     emit(
       state.copyWith(
         email: const EmailOrUser.pure(),
+        username: const Name.pure(),
         firstName: const Name.pure(),
         lastName: const Name.pure(),
         password: const Password.pure(),
@@ -39,6 +43,14 @@ class RegisterCubit extends Cubit<RegisterState> {
     _debouncerEmail(() {
       final email = EmailOrUser.dirty(value: value);
       emit(state.copyWith(email: email));
+    });
+  }
+
+  // Neue Methode für Username
+  void usernameChanged(String value) {
+    _debouncerUsername(() {
+      final username = Name.dirty(value);
+      emit(state.copyWith(username: username));
     });
   }
 
@@ -85,6 +97,8 @@ class RegisterCubit extends Cubit<RegisterState> {
       state.firstName.isValid &&
       !state.lastName.isPure &&
       state.lastName.isValid &&
+      !state.username.isPure &&
+      state.username.isValid &&
       !state.password.isPure &&
       state.password.isValid &&
       !state.confirmPassword.isPure &&
@@ -94,47 +108,49 @@ class RegisterCubit extends Cubit<RegisterState> {
   bool get isPasswordsMatch =>
       state.password.value == state.confirmPassword.value;
 
-  // void register() async {
-  //   if (!isValidRegister) return;
-  //
-  //   emit(
-  //     state.copyWith(
-  //       status: FormzSubmissionStatus.inProgress,
-  //       screenStatus: const ScreenStatusLoading(),
-  //     ),
-  //   );
-  //
-  //   var response = await _vibeDayRepository.register(
-  //     email: state.email.value,
-  //     firstName: state.firstName.value,
-  //     lastName: state.lastName.value,
-  //     password: state.password.value,
-  //   );
-  //
-  //   await response.whenOrNull(
-  //     authenticated: (data) async {
-  //       emit(
-  //         state.copyWith(
-  //           user: data,
-  //           status: FormzSubmissionStatus.success,
-  //           screenStatus: const ScreenStatusSuccess(),
-  //         ),
-  //       );
-  //     },
-  //     unauthenticated: (error, message) {
-  //       emit(
-  //         state.copyWith(
-  //           status: FormzSubmissionStatus.failure,
-  //           screenStatus: ScreenStatus.error(message ?? 'Registration failed'),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void register() async {
+    if (!isValidRegister) return;
+
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.inProgress,
+        screenStatus: const ScreenStatusLoading(),
+      ),
+    );
+
+    var response = await _vibeDayRepository.register(
+      email: state.email.value,
+      firstName: state.firstName.value,
+      lastName: state.lastName.value,
+      password: state.password.value,
+      username: state.username.value,
+    );
+
+    await response.whenOrNull(
+      authenticated: (data) async {
+        emit(
+          state.copyWith(
+            user: data,
+            status: FormzSubmissionStatus.success,
+            screenStatus: const ScreenStatusSuccess(),
+          ),
+        );
+      },
+      unauthenticated: (error, message) {
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            screenStatus: ScreenStatus.error(message ?? 'Registration failed'),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Future<void> close() {
     _debouncerEmail.dispose();
+    _debouncerUsername.dispose();
     _debouncerFirstName.dispose();
     _debouncerLastName.dispose();
     _debouncerPassword.dispose();

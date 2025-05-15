@@ -21,6 +21,7 @@ mixin _$RegisterState {
   EmailOrUser get email => throw _privateConstructorUsedError;
   Name get firstName => throw _privateConstructorUsedError;
   Name get lastName => throw _privateConstructorUsedError;
+  Name get username => throw _privateConstructorUsedError;
   Password get password => throw _privateConstructorUsedError;
   Password get confirmPassword => throw _privateConstructorUsedError;
   bool get obscurePassword => throw _privateConstructorUsedError;
@@ -46,6 +47,7 @@ abstract class $RegisterStateCopyWith<$Res> {
       EmailOrUser email,
       Name firstName,
       Name lastName,
+      Name username,
       Password password,
       Password confirmPassword,
       bool obscurePassword,
@@ -76,6 +78,7 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? username = null,
     Object? password = null,
     Object? confirmPassword = null,
     Object? obscurePassword = null,
@@ -102,6 +105,10 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
       lastName: null == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as Name,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as Name,
       password: null == password
           ? _value.password
@@ -165,6 +172,7 @@ abstract class _$$RegisterStateImplCopyWith<$Res>
       EmailOrUser email,
       Name firstName,
       Name lastName,
+      Name username,
       Password password,
       Password confirmPassword,
       bool obscurePassword,
@@ -195,6 +203,7 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
     Object? email = null,
     Object? firstName = null,
     Object? lastName = null,
+    Object? username = null,
     Object? password = null,
     Object? confirmPassword = null,
     Object? obscurePassword = null,
@@ -221,6 +230,10 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
       lastName: null == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as Name,
+      username: null == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as Name,
       password: null == password
           ? _value.password
@@ -255,6 +268,7 @@ class _$RegisterStateImpl extends _RegisterState {
       this.email = const EmailOrUser.pure(),
       this.firstName = const Name.pure(),
       this.lastName = const Name.pure(),
+      this.username = const Name.pure(),
       this.password = const Password.pure(),
       this.confirmPassword = const Password.pure(),
       this.obscurePassword = true,
@@ -279,6 +293,9 @@ class _$RegisterStateImpl extends _RegisterState {
   final Name lastName;
   @override
   @JsonKey()
+  final Name username;
+  @override
+  @JsonKey()
   final Password password;
   @override
   @JsonKey()
@@ -294,7 +311,7 @@ class _$RegisterStateImpl extends _RegisterState {
 
   @override
   String toString() {
-    return 'RegisterState(screenStatus: $screenStatus, status: $status, email: $email, firstName: $firstName, lastName: $lastName, password: $password, confirmPassword: $confirmPassword, obscurePassword: $obscurePassword, obscureConfirmPassword: $obscureConfirmPassword, user: $user)';
+    return 'RegisterState(screenStatus: $screenStatus, status: $status, email: $email, firstName: $firstName, lastName: $lastName, username: $username, password: $password, confirmPassword: $confirmPassword, obscurePassword: $obscurePassword, obscureConfirmPassword: $obscureConfirmPassword, user: $user)';
   }
 
   @override
@@ -310,6 +327,8 @@ class _$RegisterStateImpl extends _RegisterState {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.confirmPassword, confirmPassword) ||
@@ -329,6 +348,7 @@ class _$RegisterStateImpl extends _RegisterState {
       email,
       firstName,
       lastName,
+      username,
       password,
       confirmPassword,
       obscurePassword,
@@ -351,6 +371,7 @@ abstract class _RegisterState extends RegisterState {
       final EmailOrUser email,
       final Name firstName,
       final Name lastName,
+      final Name username,
       final Password password,
       final Password confirmPassword,
       final bool obscurePassword,
@@ -368,6 +389,8 @@ abstract class _RegisterState extends RegisterState {
   Name get firstName;
   @override
   Name get lastName;
+  @override
+  Name get username;
   @override
   Password get password;
   @override

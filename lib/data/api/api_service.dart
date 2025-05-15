@@ -4,11 +4,15 @@ import 'package:retrofit/retrofit.dart';
 part 'api_service.g.dart';
 
 @RestApi()
-
-/// API Service class
-/// add all the REST endpoints here
 abstract class ApiService {
   factory ApiService(Dio dio, {String baseUrl}) = _ApiService;
 
-  /// VibeDay API
+  @POST('/auth/login')
+  Future<dynamic> login(@Body() Map<String, dynamic> credentials);
+
+  @POST('/auth/register')
+  Future<dynamic> register(@Body() Map<String, dynamic> userData);
+
+  @POST('/auth/current-user')
+  Future<dynamic> getCurrentUser();
 }

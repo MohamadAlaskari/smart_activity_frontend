@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/presentation/login/login_state.dart';
 import 'package:vibe_day/presentation/ui/helpers/debouncer.dart';
@@ -8,8 +10,11 @@ import 'package:vibe_day/presentation/ui/validation/email_or_user.dart';
 import 'package:vibe_day/presentation/ui/validation/password.dart';
 
 class LoginCubit extends Cubit<LoginState> {
+  final VibeDayRepository _vibeDayRepository;
+
   LoginCubit({required VibeDayRepository vibeDayRepository})
-    : super(LoginState()) {
+    : _vibeDayRepository = vibeDayRepository,
+      super(LoginState()) {
     _init();
   }
 
@@ -54,41 +59,43 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(obscurePassword: !state.obscurePassword));
   }
 
-  // void login() async {
-  //   if (!isValidLogin) return;
-  //
-  //   emit(
-  //     state.copyWith(
-  //       status: FormzSubmissionStatus.inProgress,
-  //       screenStatus: const ScreenStatusLoading(),
-  //     ),
-  //   );
-  //
-  //   var response = await _vibeDayRepository.login(
-  //     state.email.value,
-  //     state.password.value,
-  //   );
-  //
-  //   await response.whenOrNull(
-  //     authenticated: (data) async {
-  //       emit(
-  //         state.copyWith(
-  //           user: data,
-  //           status: FormzSubmissionStatus.success,
-  //           screenStatus: const ScreenStatusSuccess(),
-  //         ),
-  //       );
-  //     },
-  //     unauthenticated: (error, message) {
-  //       emit(
-  //         state.copyWith(
-  //           status: FormzSubmissionStatus.failure,
-  //           screenStatus: ScreenStatus.error(message ?? 'Authentication failed'),
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
+  void login() async {
+    if (!isValidLogin) return;
+
+    emit(
+      state.copyWith(
+        status: FormzSubmissionStatus.inProgress,
+        screenStatus: const ScreenStatusLoading(),
+      ),
+    );
+
+    var response = await _vibeDayRepository.login(
+      state.email.value,
+      state.password.value,
+    );
+
+    await response.whenOrNull(
+      authenticated: (data) async {
+        emit(
+          state.copyWith(
+            user: data,
+            status: FormzSubmissionStatus.success,
+            screenStatus: const ScreenStatusSuccess(),
+          ),
+        );
+      },
+      unauthenticated: (error, message) {
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            screenStatus: ScreenStatus.error(
+              message ?? 'Authentication failed',
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   bool get isValidInput =>
       state.email.value.isNotEmpty && state.password.value.isNotEmpty;

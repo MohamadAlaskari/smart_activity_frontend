@@ -5,11 +5,11 @@ import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/presentation/forgot_password/forgot_password_provider.dart';
-import 'package:vibe_day/presentation/home/home_provider.dart';
 import 'package:vibe_day/presentation/login/login_cubit.dart';
 import 'package:vibe_day/presentation/login/login_state.dart';
 import 'package:vibe_day/presentation/ui/buttons/vibe_day_button.dart';
 import 'package:vibe_day/presentation/ui/widgets/custom_text_field.dart';
+import 'package:vibe_day/presentation/ui/widgets/validation_dialog.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -23,7 +23,7 @@ class LoginView extends StatelessWidget {
           AppBar(
             title: Text(
               'LOGIN.TITLE'.tr(),
-              style: const TextStyle(fontSize: 28, color: ColorName.black),
+              style: const TextStyle(fontSize: 26),
             ),
             centerTitle: true,
           ),
@@ -92,7 +92,7 @@ class PasswordField extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(
               state.obscurePassword ? Icons.visibility : Icons.visibility_off,
-              color: ColorName.colorAccent,
+              color: ColorName.green,
             ),
             onPressed: () {
               context.read<LoginCubit>().toggleObscurePassword();
@@ -125,17 +125,16 @@ class _LoginButton extends StatelessWidget {
           isLoading: state.status.isInProgress,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           onPressed: () {
-            context.pushNamed(HomeProvider.routeName);
-            // final cubit = context.read<LoginCubit>();
-            // if (!cubit.isValidInput) {
-            //   ValidationDialog.show(
-            //     context: context,
-            //     title: 'LOGIN.DIALOG.INCOMPLETE.TITLE'.tr(),
-            //     description: 'LOGIN.DIALOG.INCOMPLETE.DESCRIPTION'.tr(),
-            //   );
-            //   return;
-            // }
-            // // cubit.login();
+            final cubit = context.read<LoginCubit>();
+            if (!cubit.isValidInput) {
+              ValidationDialog.show(
+                context: context,
+                title: 'LOGIN.DIALOG.INCOMPLETE.TITLE'.tr(),
+                description: 'LOGIN.DIALOG.INCOMPLETE.DESCRIPTION'.tr(),
+              );
+              return;
+            }
+            cubit.login();
           },
         );
       },
@@ -159,9 +158,9 @@ class _ForgotPasswordButton extends StatelessWidget {
           'LOGIN.FORGOT_PASSWORD'.tr(),
           style: const TextStyle(
             fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: ColorName.black,
-            decorationColor: ColorName.black,
+            fontWeight: FontWeight.w500,
+            color: ColorName.green,
+            decorationColor: ColorName.green,
             decoration: TextDecoration.underline,
           ),
         ),
@@ -186,9 +185,9 @@ class _RegisterButton extends StatelessWidget {
           'LOGIN.REGISTER_INSTEAD'.tr(),
           style: const TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: ColorName.black,
-            decorationColor: ColorName.black,
+            fontWeight: FontWeight.w500,
+            color: ColorName.green,
+            decorationColor: ColorName.green,
             decoration: TextDecoration.underline,
           ),
         ),

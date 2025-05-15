@@ -46,8 +46,8 @@ class ColorName {
   /// Color: #E02020
   static const Color error = Color(0xFFE02020);
 
-  /// Color: #00B8A0
-  static const Color green = Color(0xFF00B8A0);
+  /// Color: #43A047
+  static const Color green = Color(0xFF43A047);
 
   /// Color: #E0E0E0
   static const Color grey = Color(0xFFE0E0E0);

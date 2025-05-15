@@ -8,6 +8,7 @@ import 'package:vibe_day/data/repository/auth_data_repository.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/domain/model/auth_result.dart';
 import 'package:vibe_day/domain/model/user.dart';
+
 class VibeDayRepository {
   late final ApiService _client;
   final AuthDataRepository _tokenStorageRepository;
@@ -39,72 +40,122 @@ class VibeDayRepository {
     yield* _controller.stream;
   }
 
-  // Future<AuthResult> login(String email, String password) async {
-  //   AuthResult status;
-  //   try {
-  //     var clientId = FlavorConfig.appFlavor.clientId;
-  //     var clientSecret = FlavorConfig.appFlavor.clientSecret;
-  //     final String encodedData =
-  //         'grant_type=password'
-  //         '&username=${Uri.encodeComponent(email)}'
-  //         '&password=${Uri.encodeComponent(password)}'
-  //         '&client_id=${Uri.encodeComponent(clientId)}'
-  //         '&client_secret=${Uri.encodeComponent(clientSecret)}';
-  //
-  //     final response = await _dio.post(
-  //       '/api/v2/auth/login',
-  //       data: encodedData,
-  //       options: Options(
-  //         contentType: 'application/x-www-form-urlencoded',
-  //         headers: {'Accept': 'application/json'},
-  //       ),
-  //     );
-  //     final accessToken = response.data['access_token'];
-  //     final refreshToken = response.data['refresh_token'];
-  //     final tokenType = response.data['token_type'] ?? 'bearer';
-  //
-  //     OAuth2Token token = OAuth2Token(
-  //       accessToken: accessToken,
-  //       refreshToken: refreshToken,
-  //       tokenType: tokenType,
-  //     );
-  //     await setToken(token);
-  //
-  //     try {
-  //       final userResponse = await _dio.get(
-  //         '/api/v2/accounts/self',
-  //         options: Options(
-  //           headers: {
-  //             'Authorization': '${token.tokenType} ${token.accessToken}',
-  //           },
-  //         ),
-  //       );
-  //       final user = User.fromJson(userResponse.data);
-  //       status = AuthResult.authenticated(user);
-  //       await _userStorageRepository.saveUser(user);
-  //
-  //       await getReportCategories();
-  //     } catch (userError) {
-  //       status = AuthResult.unauthenticated(500);
-  //     }
-  //   } on DioException catch (e) {
-  //     log(e.stackTrace.toString());
-  //     if (e.response != null) {
-  //       status = AuthResult.unauthenticated(
-  //         e.response!.statusCode,
-  //         e.response!.data.toString(),
-  //       );
-  //     } else {
-  //       status = AuthResult.unauthenticated(500, e.error.toString());
-  //     }
-  //     _controller.add(status);
-  //     return status;
-  //   } catch (e) {
-  //     status = AuthResult.unauthenticated(500, e.toString());
-  //   }
-  //   _controller.add(status);
-  //   return status;
-  // }
+  Future<AuthResult> login(String email, String password) async {
+    AuthResult status;
+    try {
+      final response = await _dio.post(
+        '/auth/login',
+        data: {'email': email, 'password': password},
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+
+      final accessToken = response.data['accessToken'];
+
+      if (accessToken == null) {
+        log('Error: Token not found in response: ${response.data}');
+        return AuthResult.unauthenticated(401, 'Token not found in response');
+      }
+
+      OAuth2Token token = OAuth2Token(
+        accessToken: accessToken,
+        refreshToken: accessToken,
+        tokenType: 'bearer',
+      );
+      await setToken(token);
+
+      try {
+        final userResponse = await Dio().post(
+          '${_dio.options.baseUrl}/auth/current-user',
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $accessToken',
+              'Accept': 'application/json',
+            },
+          ),
+        );
+
+        log('User response: ${userResponse.data}');
+        final user = User.fromJson(userResponse.data);
+        status = AuthResult.authenticated(user);
+        await _userStorageRepository.saveUser(user);
+      } catch (userError) {
+        log('Error fetching user details: $userError');
+        status = AuthResult.unauthenticated(
+          500,
+          'Failed to fetch user details: $userError',
+        );
+      }
+    } on DioException catch (e) {
+      String errorMessage = 'DioException: ';
+
+      if (e.response != null) {
+        errorMessage += 'Status ${e.response!.statusCode}: ${e.response!.data}';
+        log(errorMessage);
+        status = AuthResult.unauthenticated(
+          e.response!.statusCode,
+          errorMessage,
+        );
+      } else {
+        log(errorMessage);
+        status = AuthResult.unauthenticated(500, errorMessage);
+      }
+    } catch (e) {
+      log('Unexpected error during login: $e');
+      status = AuthResult.unauthenticated(500, e.toString());
+    }
+    _controller.add(status);
+    return status;
+  }
+
+  Future<AuthResult> register({
+    required String email,
+    required String firstName,
+    required String lastName,
+    required String password,
+    required String username,
+  }) async {
+    AuthResult status;
+    try {
+      final response = await _dio.post(
+        '/auth/register',
+        data: {
+          'email': email,
+          'firstName': firstName,
+          'lastName': lastName,
+          'username': username,
+          'password': password,
+        },
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        log('Registration successful: ${response.data}');
+        status = const AuthResult.unauthenticated(
+          200,
+          'Registration successful. Please log in.',
+        );
+      } else {
+        status = AuthResult.unauthenticated(
+          response.statusCode,
+          'Registration failed',
+        );
+      }
+    } on DioException catch (e) {
+      log(e.stackTrace.toString());
+      if (e.response != null) {
+        status = AuthResult.unauthenticated(
+          e.response!.statusCode,
+          e.response!.data.toString(),
+        );
+      } else {
+        status = AuthResult.unauthenticated(500, e.error.toString());
+      }
+    } catch (e) {
+      status = AuthResult.unauthenticated(500, e.toString());
+    }
+    _controller.add(status);
+    return status;
+  }
 
   Future<void> logout() async {
     await _fresh.setToken(null);

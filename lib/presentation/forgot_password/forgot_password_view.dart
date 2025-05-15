@@ -17,10 +17,9 @@ class ForgotPasswordView extends StatelessWidget {
       backgroundColor: ColorName.background,
       appBar: AppBar(
         backgroundColor: ColorName.background,
-        elevation: 0,
         title: Text(
           'FORGOT_PASSWORD.TITLE'.tr(),
-          style: const TextStyle(fontSize: 28),
+          style: const TextStyle(fontSize: 26),
         ),
         centerTitle: true,
       ),

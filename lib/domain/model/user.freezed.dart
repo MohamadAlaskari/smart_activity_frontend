@@ -23,6 +23,7 @@ mixin _$User {
   String? get id => throw _privateConstructorUsedError;
   String? get firstName => throw _privateConstructorUsedError;
   String? get lastName => throw _privateConstructorUsedError;
+  String? get username => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
@@ -48,6 +49,7 @@ abstract class $UserCopyWith<$Res> {
       {String? id,
       String? firstName,
       String? lastName,
+      String? username,
       String? email,
       bool? active,
       String? name,
@@ -74,6 +76,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? id = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? username = freezed,
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
@@ -93,6 +96,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
       lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String?,
       email: freezed == email
           ? _value.email
@@ -133,6 +140,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       {String? id,
       String? firstName,
       String? lastName,
+      String? username,
       String? email,
       bool? active,
       String? name,
@@ -156,6 +164,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? firstName = freezed,
     Object? lastName = freezed,
+    Object? username = freezed,
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
@@ -175,6 +184,10 @@ class __$$UserImplCopyWithImpl<$Res>
       lastName: freezed == lastName
           ? _value.lastName
           : lastName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
               as String?,
       email: freezed == email
           ? _value.email
@@ -211,6 +224,7 @@ class _$UserImpl extends _User {
       {this.id,
       this.firstName,
       this.lastName,
+      this.username,
       this.email,
       this.active,
       this.name,
@@ -229,6 +243,8 @@ class _$UserImpl extends _User {
   @override
   final String? lastName;
   @override
+  final String? username;
+  @override
   final String? email;
   @override
   final bool? active;
@@ -243,7 +259,7 @@ class _$UserImpl extends _User {
 
   @override
   String toString() {
-    return 'User(id: $id, firstName: $firstName, lastName: $lastName, email: $email, active: $active, name: $name, hasPushToken: $hasPushToken, localAccount: $localAccount, userAuthority: $userAuthority)';
+    return 'User(id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, active: $active, name: $name, hasPushToken: $hasPushToken, localAccount: $localAccount, userAuthority: $userAuthority)';
   }
 
   @override
@@ -256,6 +272,8 @@ class _$UserImpl extends _User {
                 other.firstName == firstName) &&
             (identical(other.lastName, lastName) ||
                 other.lastName == lastName) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.name, name) || other.name == name) &&
@@ -269,8 +287,8 @@ class _$UserImpl extends _User {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, firstName, lastName, email,
-      active, name, hasPushToken, localAccount, userAuthority);
+  int get hashCode => Object.hash(runtimeType, id, firstName, lastName,
+      username, email, active, name, hasPushToken, localAccount, userAuthority);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -293,6 +311,7 @@ abstract class _User extends User {
       {final String? id,
       final String? firstName,
       final String? lastName,
+      final String? username,
       final String? email,
       final bool? active,
       final String? name,
@@ -309,6 +328,8 @@ abstract class _User extends User {
   String? get firstName;
   @override
   String? get lastName;
+  @override
+  String? get username;
   @override
   String? get email;
   @override

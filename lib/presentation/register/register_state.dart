@@ -18,6 +18,7 @@ class RegisterState with _$RegisterState {
     @Default(EmailOrUser.pure()) EmailOrUser email,
     @Default(Name.pure()) Name firstName,
     @Default(Name.pure()) Name lastName,
+    @Default(Name.pure()) Name username,
     @Default(Password.pure()) Password password,
     @Default(Password.pure()) Password confirmPassword,
     @Default(true) bool obscurePassword,
