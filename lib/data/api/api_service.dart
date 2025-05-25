@@ -15,4 +15,7 @@ abstract class ApiService {
 
   @POST('/auth/current-user')
   Future<dynamic> getCurrentUser();
+
+  @POST('/auth/request-reset')
+  Future<dynamic> requestPasswordReset(@Body() Map<String, dynamic> requestData);
 }

@@ -16,42 +16,46 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          AppBar(
-            title: Text(
-              'LOGIN.TITLE'.tr(),
-              style: const TextStyle(fontSize: 26),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
+          children: [
+            AppBar(
+              title: Text(
+                'LOGIN.TITLE'.tr(),
+                style: const TextStyle(fontSize: 26),
+              ),
+              centerTitle: true,
+              automaticallyImplyLeading: false,
             ),
-            centerTitle: true,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 35),
-            child: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(),
-                child: IntrinsicHeight(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 160),
-                      const EmailField(),
-                      const SizedBox(height: 20),
-                      const PasswordField(),
-                      const SizedBox(height: 60),
-                      const _ForgotPasswordButton(),
-                      const SizedBox(height: 20),
-                      const _LoginButton(),
-                      const SizedBox(height: 20),
-                      const _RegisterButton(),
-                    ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              child: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 160),
+                        const EmailField(),
+                        const SizedBox(height: 20),
+                        const PasswordField(),
+                        const SizedBox(height: 60),
+                        const _ForgotPasswordButton(),
+                        const SizedBox(height: 20),
+                        const _LoginButton(),
+                        const SizedBox(height: 20),
+                        const _RegisterButton(),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

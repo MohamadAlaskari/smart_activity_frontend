@@ -46,7 +46,6 @@ class RegisterCubit extends Cubit<RegisterState> {
     });
   }
 
-  // Neue Methode für Username
   void usernameChanged(String value) {
     _debouncerUsername(() {
       final username = Name.dirty(value);
@@ -115,6 +114,10 @@ class RegisterCubit extends Cubit<RegisterState> {
       state.copyWith(
         status: FormzSubmissionStatus.inProgress,
         screenStatus: const ScreenStatusLoading(),
+        needsEmailVerification: false,
+        emailAlreadyExists: false,
+        usernameAlreadyExists: false,
+        passwordTooShort: false,
       ),
     );
 
@@ -126,23 +129,70 @@ class RegisterCubit extends Cubit<RegisterState> {
       username: state.username.value,
     );
 
-    await response.whenOrNull(
-      authenticated: (data) async {
+    response.when(
+      initial: () {
+        emit(
+          state.copyWith(
+            status: FormzSubmissionStatus.failure,
+            screenStatus: const ScreenStatus.error('Unexpected error'),
+            needsEmailVerification: false,
+          ),
+        );
+      },
+      authenticated: (data) {
         emit(
           state.copyWith(
             user: data,
             status: FormzSubmissionStatus.success,
             screenStatus: const ScreenStatusSuccess(),
+            needsEmailVerification: false,
           ),
         );
       },
       unauthenticated: (error, message) {
-        emit(
-          state.copyWith(
-            status: FormzSubmissionStatus.failure,
-            screenStatus: ScreenStatus.error(message ?? 'Registration failed'),
-          ),
-        );
+        if (error == 200 || error == 201) {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.success,
+              screenStatus: const ScreenStatusSuccess(),
+              needsEmailVerification: true,
+            ),
+          );
+        } else if (message == 'EMAIL_ALREADY_EXISTS') {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.failure,
+              screenStatus: const ScreenStatus.error('EMAIL_ALREADY_EXISTS'),
+              emailAlreadyExists: true,
+            ),
+          );
+        } else if (message == 'USERNAME_ALREADY_EXISTS') {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.failure,
+              screenStatus: const ScreenStatus.error('USERNAME_ALREADY_EXISTS'),
+              usernameAlreadyExists: true,
+            ),
+          );
+        } else if (message == 'PASSWORD_TOO_SHORT') {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.failure,
+              screenStatus: const ScreenStatus.error('PASSWORD_TOO_SHORT'),
+              passwordTooShort: true,
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              status: FormzSubmissionStatus.failure,
+              screenStatus: ScreenStatus.error(
+                message ?? 'Registration failed',
+              ),
+              needsEmailVerification: false,
+            ),
+          );
+        }
       },
     );
   }

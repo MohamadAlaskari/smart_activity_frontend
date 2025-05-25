@@ -39,6 +39,10 @@
       "ERROR_RESET": {
         "TITLE": "Fehler",
         "DESCRIPTION": "Beim Zurücksetzen ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Administrator."
+      },
+      "USER_NOT_FOUND": {
+        "TITLE": "Benutzer nicht gefunden",
+        "DESCRIPTION": "Es wurde kein Benutzer mit dieser E-Mail-Adresse gefunden. Bitte überprüfen Sie Ihre Eingabe oder registrieren Sie sich."
       }
     }
   },
@@ -61,9 +65,13 @@
     },
     "ERROR": {
       "EMAIL": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "EMAIL_ALREADY_EXISTS": "Diese E-Mail-Adresse ist bereits registriert",
       "FIRST_NAME": "Bitte geben Sie Ihren Vornamen ein",
       "LAST_NAME": "Bitte geben Sie Ihren Nachnamen ein",
+      "USERNAME": "Bitte geben Sie einen Benutzernamen ein",
+      "USERNAME_ALREADY_EXISTS": "Dieser Benutzername ist bereits vergeben",
       "PASSWORD": "Das Passwort muss mindestens 6 Zeichen enthalten",
+      "PASSWORD_TOO_SHORT": "Das Passwort muss mindestens 6 Zeichen lang sein",
       "PASSWORDS_DONT_MATCH": "Die Passwörter stimmen nicht überein"
     },
     "DIALOG": {
@@ -75,9 +83,25 @@
         "TITLE": "Registrierung nicht möglich",
         "DESCRIPTION": "Bei der Registrierung ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
       },
+      "EMAIL_EXISTS": {
+        "TITLE": "E-Mail bereits registriert",
+        "DESCRIPTION": "Diese E-Mail-Adresse ist bereits registriert. Bitte verwenden Sie eine andere E-Mail-Adresse oder loggen Sie sich ein."
+      },
+      "USERNAME_EXISTS": {
+        "TITLE": "Benutzername bereits vergeben",
+        "DESCRIPTION": "Dieser Benutzername ist bereits vergeben. Bitte wählen Sie einen anderen Benutzernamen."
+      },
+      "PASSWORD_TOO_SHORT": {
+        "TITLE": "Passwort zu kurz",
+        "DESCRIPTION": "Das Passwort muss mindestens 6 Zeichen lang sein. Bitte wählen Sie ein längeres Passwort."
+      },
       "SUCCESS": {
         "TITLE": "Registrierung erfolgreich",
         "DESCRIPTION": "Ihr Konto wurde erfolgreich erstellt. Sie werden weitergeleitet..."
+      },
+      "EMAIL_VERIFICATION": {
+        "TITLE": "E-Mail-Verifikation erforderlich",
+        "DESCRIPTION": "Wir haben Ihnen eine E-Mail geschickt. Bitte verifizieren Sie Ihre E-Mail-Adresse und loggen Sie sich danach ein."
       },
       "BUTTON": {
         "CLOSE": "OK"

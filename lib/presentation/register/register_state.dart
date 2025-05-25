@@ -23,6 +23,10 @@ class RegisterState with _$RegisterState {
     @Default(Password.pure()) Password confirmPassword,
     @Default(true) bool obscurePassword,
     @Default(true) bool obscureConfirmPassword,
+    @Default(false) bool needsEmailVerification,
+    @Default(false) bool emailAlreadyExists,
+    @Default(false) bool usernameAlreadyExists,
+    @Default(false) bool passwordTooShort,
     User? user,
   }) = _RegisterState;
 }
