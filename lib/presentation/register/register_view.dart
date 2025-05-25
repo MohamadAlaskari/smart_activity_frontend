@@ -71,6 +71,13 @@ class _EmailField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterCubit, RegisterState>(
       builder: (context, state) {
+        String? errorText;
+        if (!state.email.isPure && !state.email.isValid) {
+          errorText = 'REGISTER.ERROR.EMAIL'.tr();
+        } else if (state.emailAlreadyExists) {
+          errorText = 'REGISTER.ERROR.EMAIL_ALREADY_EXISTS'.tr();
+        }
+
         return CustomTextField(
           labelText: 'REGISTER.EMAIL'.tr(),
           initialValue: state.email.value,
@@ -78,10 +85,7 @@ class _EmailField extends StatelessWidget {
               (value) => context.read<RegisterCubit>().emailChanged(value),
           autofillHints: const [AutofillHints.email],
           keyboardType: TextInputType.emailAddress,
-          errorText:
-              !state.email.isPure && !state.email.isValid
-                  ? 'REGISTER.ERROR.EMAIL'.tr()
-                  : null,
+          errorText: errorText,
         );
       },
     );
@@ -143,6 +147,13 @@ class _UsernameField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterCubit, RegisterState>(
       builder: (context, state) {
+        String? errorText;
+        if (!state.username.isPure && !state.username.isValid) {
+          errorText = 'REGISTER.ERROR.USERNAME'.tr();
+        } else if (state.usernameAlreadyExists) {
+          errorText = 'REGISTER.ERROR.USERNAME_ALREADY_EXISTS'.tr();
+        }
+
         return CustomTextField(
           labelText: 'REGISTER.USERNAME'.tr(),
           initialValue: state.username.value,
@@ -150,10 +161,7 @@ class _UsernameField extends StatelessWidget {
               (value) => context.read<RegisterCubit>().usernameChanged(value),
           autofillHints: const [AutofillHints.username],
           keyboardType: TextInputType.text,
-          errorText:
-              !state.username.isPure && !state.username.isValid
-                  ? 'REGISTER.ERROR.USERNAME'.tr()
-                  : null,
+          errorText: errorText,
         );
       },
     );
@@ -167,6 +175,13 @@ class _PasswordField extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RegisterCubit, RegisterState>(
       builder: (context, state) {
+        String? errorText;
+        if (!state.password.isPure && !state.password.isValid) {
+          errorText = 'REGISTER.ERROR.PASSWORD'.tr();
+        } else if (state.passwordTooShort) {
+          errorText = 'REGISTER.ERROR.PASSWORD_TOO_SHORT'.tr();
+        }
+
         return CustomTextField(
           labelText: 'REGISTER.PASSWORD'.tr(),
           suffixIcon: IconButton(
@@ -183,10 +198,7 @@ class _PasswordField extends StatelessWidget {
               (value) => context.read<RegisterCubit>().passwordChanged(value),
           obscureText: state.obscurePassword,
           autofillHints: const [AutofillHints.newPassword],
-          errorText:
-              !state.password.isPure && !state.password.isValid
-                  ? 'REGISTER.ERROR.PASSWORD'.tr()
-                  : null,
+          errorText: errorText,
         );
       },
     );

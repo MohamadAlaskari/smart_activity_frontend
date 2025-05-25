@@ -59,12 +59,24 @@ class ForgotPasswordView extends StatelessWidget {
                       'FORGOT_PASSWORD.DIALOG.SUCCESS_RESET.DESCRIPTION'.tr(),
                 );
               },
-              error: (_) {
+              error: (errorType) {
+                String title;
+                String description;
+
+                if (errorType == 'USER_NOT_FOUND') {
+                  title = 'FORGOT_PASSWORD.DIALOG.USER_NOT_FOUND.TITLE'.tr();
+                  description =
+                      'FORGOT_PASSWORD.DIALOG.USER_NOT_FOUND.DESCRIPTION'.tr();
+                } else {
+                  title = 'FORGOT_PASSWORD.DIALOG.ERROR_RESET.TITLE'.tr();
+                  description =
+                      'FORGOT_PASSWORD.DIALOG.ERROR_RESET.DESCRIPTION'.tr();
+                }
+
                 ValidationDialog.show(
                   context: context,
-                  title: 'FORGOT_PASSWORD.DIALOG.ERROR_RESET.TITLE'.tr(),
-                  description:
-                      'FORGOT_PASSWORD.DIALOG.ERROR_RESET.DESCRIPTION'.tr(),
+                  title: title,
+                  description: description,
                 );
               },
               orElse: () {},
@@ -114,7 +126,7 @@ class _SubmitButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           onPressed: () {
             final cubit = context.read<ForgotPasswordCubit>();
-            if (cubit.state.emailOrUser.value.isEmpty) {
+            if (!cubit.isValidEmail) {
               ValidationDialog.show(
                 context: context,
                 title: 'FORGOT_PASSWORD.DIALOG.INCOMPLETE.TITLE'.tr(),
@@ -123,7 +135,7 @@ class _SubmitButton extends StatelessWidget {
               );
               return;
             }
-            // cubit.submit();
+            cubit.submit();
           },
         );
       },

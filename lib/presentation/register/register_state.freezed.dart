@@ -26,6 +26,10 @@ mixin _$RegisterState {
   Password get confirmPassword => throw _privateConstructorUsedError;
   bool get obscurePassword => throw _privateConstructorUsedError;
   bool get obscureConfirmPassword => throw _privateConstructorUsedError;
+  bool get needsEmailVerification => throw _privateConstructorUsedError;
+  bool get emailAlreadyExists => throw _privateConstructorUsedError;
+  bool get usernameAlreadyExists => throw _privateConstructorUsedError;
+  bool get passwordTooShort => throw _privateConstructorUsedError;
   User? get user => throw _privateConstructorUsedError;
 
   /// Create a copy of RegisterState
@@ -52,6 +56,10 @@ abstract class $RegisterStateCopyWith<$Res> {
       Password confirmPassword,
       bool obscurePassword,
       bool obscureConfirmPassword,
+      bool needsEmailVerification,
+      bool emailAlreadyExists,
+      bool usernameAlreadyExists,
+      bool passwordTooShort,
       User? user});
 
   $ScreenStatusCopyWith<$Res> get screenStatus;
@@ -83,6 +91,10 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
     Object? confirmPassword = null,
     Object? obscurePassword = null,
     Object? obscureConfirmPassword = null,
+    Object? needsEmailVerification = null,
+    Object? emailAlreadyExists = null,
+    Object? usernameAlreadyExists = null,
+    Object? passwordTooShort = null,
     Object? user = freezed,
   }) {
     return _then(_value.copyWith(
@@ -125,6 +137,22 @@ class _$RegisterStateCopyWithImpl<$Res, $Val extends RegisterState>
       obscureConfirmPassword: null == obscureConfirmPassword
           ? _value.obscureConfirmPassword
           : obscureConfirmPassword // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needsEmailVerification: null == needsEmailVerification
+          ? _value.needsEmailVerification
+          : needsEmailVerification // ignore: cast_nullable_to_non_nullable
+              as bool,
+      emailAlreadyExists: null == emailAlreadyExists
+          ? _value.emailAlreadyExists
+          : emailAlreadyExists // ignore: cast_nullable_to_non_nullable
+              as bool,
+      usernameAlreadyExists: null == usernameAlreadyExists
+          ? _value.usernameAlreadyExists
+          : usernameAlreadyExists // ignore: cast_nullable_to_non_nullable
+              as bool,
+      passwordTooShort: null == passwordTooShort
+          ? _value.passwordTooShort
+          : passwordTooShort // ignore: cast_nullable_to_non_nullable
               as bool,
       user: freezed == user
           ? _value.user
@@ -177,6 +205,10 @@ abstract class _$$RegisterStateImplCopyWith<$Res>
       Password confirmPassword,
       bool obscurePassword,
       bool obscureConfirmPassword,
+      bool needsEmailVerification,
+      bool emailAlreadyExists,
+      bool usernameAlreadyExists,
+      bool passwordTooShort,
       User? user});
 
   @override
@@ -208,6 +240,10 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
     Object? confirmPassword = null,
     Object? obscurePassword = null,
     Object? obscureConfirmPassword = null,
+    Object? needsEmailVerification = null,
+    Object? emailAlreadyExists = null,
+    Object? usernameAlreadyExists = null,
+    Object? passwordTooShort = null,
     Object? user = freezed,
   }) {
     return _then(_$RegisterStateImpl(
@@ -251,6 +287,22 @@ class __$$RegisterStateImplCopyWithImpl<$Res>
           ? _value.obscureConfirmPassword
           : obscureConfirmPassword // ignore: cast_nullable_to_non_nullable
               as bool,
+      needsEmailVerification: null == needsEmailVerification
+          ? _value.needsEmailVerification
+          : needsEmailVerification // ignore: cast_nullable_to_non_nullable
+              as bool,
+      emailAlreadyExists: null == emailAlreadyExists
+          ? _value.emailAlreadyExists
+          : emailAlreadyExists // ignore: cast_nullable_to_non_nullable
+              as bool,
+      usernameAlreadyExists: null == usernameAlreadyExists
+          ? _value.usernameAlreadyExists
+          : usernameAlreadyExists // ignore: cast_nullable_to_non_nullable
+              as bool,
+      passwordTooShort: null == passwordTooShort
+          ? _value.passwordTooShort
+          : passwordTooShort // ignore: cast_nullable_to_non_nullable
+              as bool,
       user: freezed == user
           ? _value.user
           : user // ignore: cast_nullable_to_non_nullable
@@ -273,6 +325,10 @@ class _$RegisterStateImpl extends _RegisterState {
       this.confirmPassword = const Password.pure(),
       this.obscurePassword = true,
       this.obscureConfirmPassword = true,
+      this.needsEmailVerification = false,
+      this.emailAlreadyExists = false,
+      this.usernameAlreadyExists = false,
+      this.passwordTooShort = false,
       this.user})
       : super._();
 
@@ -307,11 +363,23 @@ class _$RegisterStateImpl extends _RegisterState {
   @JsonKey()
   final bool obscureConfirmPassword;
   @override
+  @JsonKey()
+  final bool needsEmailVerification;
+  @override
+  @JsonKey()
+  final bool emailAlreadyExists;
+  @override
+  @JsonKey()
+  final bool usernameAlreadyExists;
+  @override
+  @JsonKey()
+  final bool passwordTooShort;
+  @override
   final User? user;
 
   @override
   String toString() {
-    return 'RegisterState(screenStatus: $screenStatus, status: $status, email: $email, firstName: $firstName, lastName: $lastName, username: $username, password: $password, confirmPassword: $confirmPassword, obscurePassword: $obscurePassword, obscureConfirmPassword: $obscureConfirmPassword, user: $user)';
+    return 'RegisterState(screenStatus: $screenStatus, status: $status, email: $email, firstName: $firstName, lastName: $lastName, username: $username, password: $password, confirmPassword: $confirmPassword, obscurePassword: $obscurePassword, obscureConfirmPassword: $obscureConfirmPassword, needsEmailVerification: $needsEmailVerification, emailAlreadyExists: $emailAlreadyExists, usernameAlreadyExists: $usernameAlreadyExists, passwordTooShort: $passwordTooShort, user: $user)';
   }
 
   @override
@@ -337,6 +405,14 @@ class _$RegisterStateImpl extends _RegisterState {
                 other.obscurePassword == obscurePassword) &&
             (identical(other.obscureConfirmPassword, obscureConfirmPassword) ||
                 other.obscureConfirmPassword == obscureConfirmPassword) &&
+            (identical(other.needsEmailVerification, needsEmailVerification) ||
+                other.needsEmailVerification == needsEmailVerification) &&
+            (identical(other.emailAlreadyExists, emailAlreadyExists) ||
+                other.emailAlreadyExists == emailAlreadyExists) &&
+            (identical(other.usernameAlreadyExists, usernameAlreadyExists) ||
+                other.usernameAlreadyExists == usernameAlreadyExists) &&
+            (identical(other.passwordTooShort, passwordTooShort) ||
+                other.passwordTooShort == passwordTooShort) &&
             (identical(other.user, user) || other.user == user));
   }
 
@@ -353,6 +429,10 @@ class _$RegisterStateImpl extends _RegisterState {
       confirmPassword,
       obscurePassword,
       obscureConfirmPassword,
+      needsEmailVerification,
+      emailAlreadyExists,
+      usernameAlreadyExists,
+      passwordTooShort,
       user);
 
   /// Create a copy of RegisterState
@@ -376,6 +456,10 @@ abstract class _RegisterState extends RegisterState {
       final Password confirmPassword,
       final bool obscurePassword,
       final bool obscureConfirmPassword,
+      final bool needsEmailVerification,
+      final bool emailAlreadyExists,
+      final bool usernameAlreadyExists,
+      final bool passwordTooShort,
       final User? user}) = _$RegisterStateImpl;
   _RegisterState._() : super._();
 
@@ -399,6 +483,14 @@ abstract class _RegisterState extends RegisterState {
   bool get obscurePassword;
   @override
   bool get obscureConfirmPassword;
+  @override
+  bool get needsEmailVerification;
+  @override
+  bool get emailAlreadyExists;
+  @override
+  bool get usernameAlreadyExists;
+  @override
+  bool get passwordTooShort;
   @override
   User? get user;
 

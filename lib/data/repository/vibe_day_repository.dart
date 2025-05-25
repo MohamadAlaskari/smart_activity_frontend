@@ -130,10 +130,20 @@ class VibeDayRepository {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         log('Registration successful: ${response.data}');
-        status = const AuthResult.unauthenticated(
-          200,
-          'Registration successful. Please log in.',
-        );
+
+        final accessToken = response.data['accessToken'];
+
+        if (accessToken != null) {
+          status = const AuthResult.unauthenticated(
+            200,
+            'Registration successful. Please verify your email and log in.',
+          );
+        } else {
+          status = const AuthResult.unauthenticated(
+            200,
+            'Registration successful. Please log in.',
+          );
+        }
       } else {
         status = AuthResult.unauthenticated(
           response.statusCode,
@@ -141,20 +151,112 @@ class VibeDayRepository {
         );
       }
     } on DioException catch (e) {
-      log(e.stackTrace.toString());
       if (e.response != null) {
-        status = AuthResult.unauthenticated(
-          e.response!.statusCode,
-          e.response!.data.toString(),
-        );
+        final statusCode = e.response!.statusCode;
+        final responseData = e.response!.data;
+
+        if ((statusCode == 200 || statusCode == 201) && responseData != null) {
+          log('Registration successful despite DioException: $responseData');
+          status = const AuthResult.unauthenticated(
+            200,
+            'Registration successful. Please verify your email and log in.',
+          );
+        } else if (statusCode == 400 && responseData != null) {
+          final errorMessage = responseData.toString();
+
+          if (errorMessage.contains(
+            'password must be longer than or equal to 6 characters',
+          )) {
+            status = const AuthResult.unauthenticated(
+              400,
+              'PASSWORD_TOO_SHORT',
+            );
+          } else {
+            log('Validation error during registration: $errorMessage');
+            status = AuthResult.unauthenticated(
+              statusCode,
+              'Validation error: $errorMessage',
+            );
+          }
+        } else if (statusCode == 500 && responseData != null) {
+          final errorMessage = responseData.toString();
+
+          if (errorMessage.contains('Duplicate entry') &&
+              errorMessage.contains('IDX_97672ac88f789774dd47f7c8be')) {
+            status = const AuthResult.unauthenticated(
+              500,
+              'EMAIL_ALREADY_EXISTS',
+            );
+          } else if (errorMessage.contains('Duplicate entry') &&
+              errorMessage.contains('IDX_fe0bb3f6520ee0469504521e71')) {
+            status = const AuthResult.unauthenticated(
+              500,
+              'USERNAME_ALREADY_EXISTS',
+            );
+          } else {
+            log('Server error during registration: $errorMessage');
+            status = AuthResult.unauthenticated(
+              statusCode,
+              'Registration failed: Server error',
+            );
+          }
+        } else {
+          log(
+            'HTTP error during registration: Status $statusCode: $responseData',
+          );
+          status = AuthResult.unauthenticated(
+            statusCode,
+            'Registration failed',
+          );
+        }
       } else {
-        status = AuthResult.unauthenticated(500, e.error.toString());
+        log('Network error during registration: ${e.message}');
+        status = AuthResult.unauthenticated(500, 'Network error');
       }
     } catch (e) {
+      log('Unexpected error during registration: $e');
       status = AuthResult.unauthenticated(500, e.toString());
     }
     _controller.add(status);
     return status;
+  }
+
+  Future<void> requestPasswordReset(String email) async {
+    try {
+      final response = await _dio.post(
+        '/auth/request-reset',
+        data: {'email': email},
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to send reset email');
+      }
+
+      log('Password reset email sent successfully: ${response.data}');
+    } on DioException catch (e) {
+      if (e.response != null) {
+        final statusCode = e.response!.statusCode;
+        final responseData = e.response!.data;
+
+        if (statusCode == 404 &&
+            responseData is Map &&
+            responseData['error']?['message'] == 'User not found') {
+          throw Exception('Status 404: User not found');
+        }
+
+        String errorMessage = 'Status $statusCode: $responseData';
+        log('Failed to send reset email: $errorMessage');
+        throw Exception(errorMessage);
+      } else {
+        String errorMessage = e.message ?? 'Unknown network error';
+        log('Network error during password reset request: $errorMessage');
+        throw Exception(errorMessage);
+      }
+    } catch (e) {
+      log('Unexpected error during password reset request: $e');
+      rethrow;
+    }
   }
 
   Future<void> logout() async {
