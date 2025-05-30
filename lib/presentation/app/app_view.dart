@@ -24,7 +24,6 @@ class AppView extends StatelessWidget {
           return Theme(
             data: ThemeData(
               useMaterial3: true,
-              colorSchemeSeed: ColorName.blue,
               brightness: Brightness.light,
             ),
             child: child ?? Container(),

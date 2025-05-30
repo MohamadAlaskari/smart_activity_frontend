@@ -4,6 +4,7 @@ import 'package:vibe_day/presentation/app/app_cubit.dart';
 import 'package:vibe_day/presentation/home/home_provider.dart';
 import 'package:vibe_day/presentation/login/login_provider.dart';
 import 'package:vibe_day/presentation/register/register_provider.dart';
+import 'package:vibe_day/presentation/settings/settings_provider.dart';
 
 import 'presentation/forgot_password/forgot_password_provider.dart';
 
@@ -42,6 +43,11 @@ final GoRouter router = GoRouter(
       path: '/${HomeProvider.routeName}',
       name: HomeProvider.routeName,
       builder: (_, __) => const HomeProvider(),
+    ),
+    GoRoute(
+      path: '/${SettingsProvider.routeName}',
+      name: SettingsProvider.routeName,
+      builder: (_, __) => const SettingsProvider(),
     ),
     // GoRoute(
     //   path: '/${SettingsProvider.routeName}',

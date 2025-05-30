@@ -18,4 +18,7 @@ abstract class ApiService {
 
   @POST('/auth/request-reset')
   Future<dynamic> requestPasswordReset(@Body() Map<String, dynamic> requestData);
+
+  @GET('/weather/week')
+  Future<dynamic> getWeeklyWeather(@Query('location') String location);
 }

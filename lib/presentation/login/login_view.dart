@@ -96,7 +96,7 @@ class PasswordField extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(
               state.obscurePassword ? Icons.visibility : Icons.visibility_off,
-              color: ColorName.green,
+              color: ColorName.colorPrimary,
             ),
             onPressed: () {
               context.read<LoginCubit>().toggleObscurePassword();
@@ -163,8 +163,8 @@ class _ForgotPasswordButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            color: ColorName.green,
-            decorationColor: ColorName.green,
+            color: ColorName.colorPrimary,
+            decorationColor: ColorName.colorPrimary,
             decoration: TextDecoration.underline,
           ),
         ),
@@ -190,8 +190,8 @@ class _RegisterButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: ColorName.green,
-            decorationColor: ColorName.green,
+            color: ColorName.colorPrimary,
+            decorationColor: ColorName.colorPrimary,
             decoration: TextDecoration.underline,
           ),
         ),

@@ -8,6 +8,7 @@ import 'package:vibe_day/data/repository/auth_data_repository.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/domain/model/auth_result.dart';
 import 'package:vibe_day/domain/model/user.dart';
+import 'package:vibe_day/domain/model/activity.dart';
 
 class VibeDayRepository {
   late final ApiService _client;
@@ -17,7 +18,6 @@ class VibeDayRepository {
   late Dio _dio;
   late final Fresh _fresh;
   final _controller = StreamController<AuthResult>();
-  bool _isTokenRefreshing = false;
 
   VibeDayRepository({
     required AuthDataRepository tokenStorageRepository,
@@ -40,6 +40,97 @@ class VibeDayRepository {
     yield* _controller.stream;
   }
 
+  Future<List<dynamic>> getWeeklyWeather(String location) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final authHeader = 'Bearer ${token.accessToken}';
+
+      final response = await _dio.get(
+        '/weather/week',
+        queryParameters: {'location': location},
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': authHeader,
+          },
+        ),
+      );
+
+      log('Weather API Response: ${response.data}');
+
+      if (response.data is List) {
+        return response.data as List<dynamic>;
+      } else {
+        throw Exception('Unexpected response format for weather data');
+      }
+    } catch (e) {
+      log('Error fetching weather data: $e');
+
+      if (e is DioException) {
+        log('DioException details:');
+        log('- Status Code: ${e.response?.statusCode}');
+        log('- Request URL: ${e.requestOptions.uri}');
+        log('- Request Headers: ${e.requestOptions.headers}');
+        log('- Response Data: ${e.response?.data}');
+
+        if (e.response?.statusCode == 401) {
+          log('401 error - forcing logout');
+          await logout();
+          throw Exception('Session expired. Please login again.');
+        }
+      }
+
+      rethrow;
+    }
+  }
+
+  List<Activity> getDummyActivities() {
+    return [
+      const Activity(
+        id: '1',
+        title: 'Going for a Walk @ Hasbruch Park',
+        description: 'Entspannter Spaziergang durch den schönen Hasbruch Park',
+        imageUrl:
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500',
+        location: 'Wildeshausen',
+        date: 'Today, 15. May',
+        time: '19:30-21:00',
+        cost: '0€',
+        category: 'nature',
+      ),
+      const Activity(
+        id: '2',
+        title: 'Summer Sounds',
+        description: 'Live Musik Festival mit verschiedenen Künstlern',
+        imageUrl:
+            'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500',
+        location: 'Bremen Wallanlagen',
+        date: 'Today, 15. May',
+        time: '19:30-21:00',
+        cost: '0€',
+        category: 'music',
+      ),
+      const Activity(
+        id: '3',
+        title: 'Bremen City Street Art Tour',
+        description: 'Entdecke die vielfältige Street Art Szene Bremens',
+        imageUrl:
+            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500',
+        location: 'Bremen',
+        date: 'Today, 15. May',
+        time: '19:30-21:00',
+        cost: '5€',
+        category: 'culture',
+      ),
+    ];
+  }
+
   Future<AuthResult> login(String email, String password) async {
     AuthResult status;
     try {
@@ -59,7 +150,7 @@ class VibeDayRepository {
       OAuth2Token token = OAuth2Token(
         accessToken: accessToken,
         refreshToken: accessToken,
-        tokenType: 'bearer',
+        tokenType: 'Bearer',
       );
       await setToken(token);
 
@@ -303,11 +394,7 @@ class VibeDayRepository {
         },
         onError: (error, handler) async {
           if (error.response?.statusCode == 401 ||
-              error.response?.statusCode == 403) {
-            if (error.requestOptions.path.contains('/api/v2/auth/login')) {
-              await logout();
-            }
-          }
+              error.response?.statusCode == 403) {}
           return handler.next(error);
         },
       ),
@@ -316,97 +403,27 @@ class VibeDayRepository {
     _fresh = Fresh.oAuth2(
       tokenStorage: _tokenStorageRepository,
       refreshToken: (token, client) async {
-        if (_isTokenRefreshing) {
-          await Future.delayed(const Duration(milliseconds: 500));
-          return await _fresh.token;
-        }
-
-        _isTokenRefreshing = true;
-        try {
-          if (token?.refreshToken == null) {
-            await logout();
-            _isTokenRefreshing = false;
-            throw DioException(
-              requestOptions: RequestOptions(path: ''),
-              type: DioExceptionType.badResponse,
-              message: 'No refresh token available',
-            );
-          }
-          final String encodedData =
-              'grant_type=refresh_token'
-              '&refresh_token=${Uri.encodeComponent(token?.refreshToken ?? '')}';
-
-          final refreshDio = Dio(
-            BaseOptions(
-              baseUrl: _baseUrl,
-              headers: {'Accept': 'application/json'},
-            ),
-          );
-
-          final response = await refreshDio.post(
-            '/api/v2/auth/login',
-            data: encodedData,
-            options: Options(
-              contentType: 'application/x-www-form-urlencoded',
-              headers: {'Accept': 'application/json'},
-            ),
-          );
-
-          if (response.statusCode != 200) {
-            await logout();
-            _isTokenRefreshing = false;
-            throw DioException(
-              requestOptions: response.requestOptions,
-              response: response,
-              type: DioExceptionType.badResponse,
-            );
-          }
-
-          final accessToken = response.data['access_token'];
-          final refreshToken = response.data['refresh_token'];
-          final tokenType = response.data['token_type'] ?? 'bearer';
-
-          final newToken = OAuth2Token(
-            accessToken: accessToken,
-            refreshToken: refreshToken,
-            tokenType: tokenType,
-          );
-
-          try {
-            final userResponse = await refreshDio.get(
-              '/api/v2/accounts/self',
-              options: Options(
-                headers: {
-                  'Authorization':
-                      '${newToken.tokenType} ${newToken.accessToken}',
-                  'Accept': 'application/json',
-                },
-              ),
-            );
-
-            final user = User.fromJson(userResponse.data);
-            _controller.add(AuthResult.authenticated(user));
-            await _userStorageRepository.saveUser(user);
-          } catch (userError) {
-            log('Failed to get user info after token refresh: $userError');
-          }
-
-          _isTokenRefreshing = false;
-          return newToken;
-        } catch (e) {
-          await logout();
-          _isTokenRefreshing = false;
-          rethrow;
-        }
+        log(
+          'Token refresh requested, but no refresh endpoint available - forcing logout',
+        );
+        await logout();
+        throw DioException(
+          requestOptions: RequestOptions(path: ''),
+          type: DioExceptionType.badResponse,
+          message: 'Token expired - please login again',
+        );
       },
       tokenHeader: (token) {
-        return {
-          HttpHeaders.authorizationHeader:
-              '${token.tokenType} ${token.accessToken}',
-        };
+        log(
+          'Fresh: tokenHeader called with token: ${token.accessToken.substring(0, 10)}...',
+        );
+        return {HttpHeaders.authorizationHeader: 'Bearer ${token.accessToken}'};
       },
       shouldRefresh: (response) {
-        return response?.statusCode == 401 || response?.statusCode == 403;
+        log(
+          'Fresh: shouldRefresh called, status: ${response?.statusCode}, but refresh disabled',
+        );
+        return false;
       },
     );
 

@@ -47,7 +47,22 @@
     }
   },
   "HOME": {
-    "TITLE": "Home"
+    "TITLE": "Home",
+    "ACTIVITY": {
+      "COSTS": "Kostet"
+    },
+    "WEATHER": {
+      "LOADING": "Wetterdaten werden geladen...",
+      "ERROR": "Wetterdaten konnten nicht geladen werden",
+      "RETRY": "Wiederholen",
+      "TODAY": "Heute",
+      "TOMORROW": "Morgen",
+      "DAY": "Tag {}"
+    }
+  },
+  "SETTINGS": {
+    "TITLE": "Einstellungen",
+    "LOGOUT": "Abmelden"
   },
   "REGISTER": {
     "TITLE": "Registrieren",

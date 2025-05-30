@@ -25,7 +25,7 @@ class RegisterView extends StatelessWidget {
             ),
             centerTitle: true,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: ColorName.green),
+              icon: const Icon(Icons.arrow_back, color: ColorName.colorPrimary),
               onPressed: () => Navigator.of(context).pop(),
             ),
           ),
@@ -187,7 +187,7 @@ class _PasswordField extends StatelessWidget {
           suffixIcon: IconButton(
             icon: Icon(
               state.obscurePassword ? Icons.visibility : Icons.visibility_off,
-              color: ColorName.green,
+              color: ColorName.colorPrimary,
             ),
             onPressed: () {
               context.read<RegisterCubit>().toggleObscurePassword();
@@ -219,7 +219,7 @@ class _ConfirmPasswordField extends StatelessWidget {
               state.obscureConfirmPassword
                   ? Icons.visibility
                   : Icons.visibility_off,
-              color: ColorName.green,
+              color: ColorName.colorPrimary,
             ),
             onPressed: () {
               context.read<RegisterCubit>().toggleObscureConfirmPassword();
@@ -290,8 +290,8 @@ class _LoginButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: ColorName.green,
-            decorationColor: ColorName.green,
+            color: ColorName.colorPrimary,
+            decorationColor: ColorName.colorPrimary,
             decoration: TextDecoration.underline,
           ),
         ),

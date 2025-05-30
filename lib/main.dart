@@ -19,12 +19,10 @@ Future<void> mainCommon() async {
   WidgetsBinding _ = WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
-  // ✅ Hive global initialisieren
   await Hive.initFlutter();
   final hiveKeyStore = KeyValueStorage();
   await hiveKeyStore.init();
 
-  // ✅ HydratedBloc setup (plattformspezifisch)
   if (kIsWeb) {
     HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: HydratedStorage.webStorageDirectory,
@@ -36,7 +34,6 @@ Future<void> mainCommon() async {
     );
   }
 
-  // ✅ User/Auth/Repo Setup
   final userStorageRepository = UserStorageRepository(
     storageKey: 'user_storage',
   );
@@ -50,7 +47,6 @@ Future<void> mainCommon() async {
     userStorageRepository: userStorageRepository,
   );
 
-  // ✅ App starten
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('de', 'DE')],
