@@ -70,13 +70,26 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
 
+flutter_launcher_icons:
+      android: "launcher_icon"
+      ios: true
+      image_path: "assets/images/vibeday_app_logo.png"
+
+  #flutter_native_splash:
+  #    background_image: assets/images/vibeday_logo.png
+  #
+  #    android_12:
+  #      image: assets/images/vibeday_logo.png
+  #      icon_background_color: "#ffffff"
+
+
 flutter_gen:
-    output: lib/assets
-    integrations:
-      flutter_svg: true
-    colors:
-      inputs:
-        - assets/color/colors.xml
+  output: lib/assets
+  integrations:
+    flutter_svg: true
+  colors:
+    inputs:
+      - assets/color/colors.xml
 
 flutter:
   uses-material-design: true
@@ -87,23 +100,23 @@ flutter:
     - assets/fonts/
 
   fonts:
-      - family: Roboto
-        fonts:
-          - asset: assets/fonts/Roboto-Regular.ttf
-            weight: 100
-          - asset: assets/fonts/Roboto-Regular.ttf
-            weight: 200
-          - asset: assets/fonts/Roboto-Regular.ttf
-            weight: 300
-          - asset: assets/fonts/Roboto-Regular.ttf
-            weight: 400
-          - asset: assets/fonts/Roboto-Medium.ttf
-            weight: 500
-          - asset: assets/fonts/Roboto-Medium.ttf
-            weight: 600
-          - asset: assets/fonts/Roboto-Bold.ttf
-            weight: 700
-          - asset: assets/fonts/Roboto-Bold.ttf
-            weight: 800
-          - asset: assets/fonts/Roboto-Bold.ttf
-            weight: 900
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 100
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 200
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 300
+        - asset: assets/fonts/Roboto-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 600
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 800
+        - asset: assets/fonts/Roboto-Bold.ttf
+          weight: 900

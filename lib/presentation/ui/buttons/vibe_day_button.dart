@@ -59,7 +59,7 @@ class VibeDayButton extends StatelessWidget {
                     alignment: Alignment.center,
                     child: Text(
                       text,
-                      style: TextStyle(color: textColor),
+                      style: TextStyle(color: textColor, fontSize: 16),
                       textAlign: textAlign ?? TextAlign.center,
                     ),
                   ),

@@ -25,8 +25,8 @@ class ColorName {
   /// Color: #303F9F
   static const Color colorAccent = Color(0xFF303F9F);
 
-  /// Color: #43A047
-  static const Color colorPrimary = Color(0xFF43A047);
+  /// Color: #8258FA
+  static const Color colorPrimary = Color(0xFF8258FA);
 
   /// Color: #90CAF9
   static const Color disabledButtonColor = Color(0xFF90CAF9);

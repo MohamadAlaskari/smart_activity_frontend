@@ -20,9 +20,11 @@ class LoginView extends StatelessWidget {
       canPop: false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
+        backgroundColor: ColorName.white,
         body: Column(
           children: [
             AppBar(
+              backgroundColor: ColorName.white,
               title: Text(
                 'LOGIN.TITLE'.tr(),
                 style: const TextStyle(fontSize: 26),
@@ -163,8 +165,8 @@ class _ForgotPasswordButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
-            color: ColorName.colorPrimary,
-            decorationColor: ColorName.colorPrimary,
+            color: ColorName.black,
+            decorationColor: ColorName.black,
             decoration: TextDecoration.underline,
           ),
         ),
@@ -190,7 +192,7 @@ class _RegisterButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: ColorName.colorPrimary,
+            color: ColorName.black,
             decorationColor: ColorName.colorPrimary,
             decoration: TextDecoration.underline,
           ),

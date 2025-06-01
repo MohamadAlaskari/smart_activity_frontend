@@ -68,7 +68,7 @@ class WeatherRow extends StatelessWidget {
                           : Colors.grey.shade400,
                   width: isSelected ? 2 : 1,
                 ),
-                color: isSelected ? Colors.green[50] : Colors.transparent,
+                color: isSelected ? Colors.purple[50] : Colors.transparent,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

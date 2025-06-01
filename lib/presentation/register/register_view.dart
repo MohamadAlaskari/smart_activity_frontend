@@ -15,19 +15,17 @@ class RegisterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorName.white,
       resizeToAvoidBottomInset: false,
       body: Column(
         children: [
           AppBar(
+            backgroundColor: ColorName.white,
             title: Text(
               'REGISTER.TITLE'.tr(),
               style: const TextStyle(fontSize: 26),
             ),
             centerTitle: true,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back, color: ColorName.colorPrimary),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
           ),
           Expanded(
             child: Padding(
@@ -290,7 +288,7 @@ class _LoginButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: ColorName.colorPrimary,
+            color: ColorName.black,
             decorationColor: ColorName.colorPrimary,
             decoration: TextDecoration.underline,
           ),

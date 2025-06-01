@@ -122,7 +122,7 @@ class HomeView extends StatelessWidget {
                 onPressed: () {
                   context.pushNamed(VibeSelectionProvider.routeName);
                 },
-                icon: const Icon(Icons.search, size: 30),
+                icon: const Icon(Icons.mood, size: 30),
               ),
               Transform.translate(
                 offset: const Offset(-8, 0),
@@ -130,7 +130,7 @@ class HomeView extends StatelessWidget {
                   onPressed: () {
                     context.pushNamed(SettingsProvider.routeName);
                   },
-                  icon: const Icon(Icons.settings_outlined, size: 30),
+                  icon: const Icon(Icons.person, size: 30),
                 ),
               ),
             ],
