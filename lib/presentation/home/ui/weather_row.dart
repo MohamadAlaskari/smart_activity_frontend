@@ -18,19 +18,16 @@ class WeatherRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (weatherData.isEmpty) {
-      return SizedBox(
-        height: 130,
-        child: Center(
-          child: Text(
-            'HOME.WEATHER.LOADING'.tr(),
-            style: TextStyle(color: Colors.grey[600], fontSize: 16),
-          ),
+      return Center(
+        child: Text(
+          'HOME.WEATHER.LOADING'.tr(),
+          style: TextStyle(color: Colors.grey[600], fontSize: 16),
         ),
       );
     }
 
     return SizedBox(
-      height: 75,
+      height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: weatherData.length.clamp(0, 4),

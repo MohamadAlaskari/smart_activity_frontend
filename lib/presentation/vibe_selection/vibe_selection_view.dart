@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/domain/model/user.dart';
+import 'package:vibe_day/presentation/app/app_cubit.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/budget_setting.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/distance_radius_setting.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/group_size_selection.dart';
@@ -29,29 +31,33 @@ class VibeSelectionView extends StatelessWidget {
           style: const TextStyle(color: Colors.black),
         ),
       ),
-      body: BlocBuilder<VibeSelectionCubit, VibeSelectionState>(
-        builder: (context, state) {
-          return SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Header(),
-                const SizedBox(height: 30),
-                VibeSelection(state: state),
-                const SizedBox(height: 30),
-                BudgetSetting(state: state),
-                const SizedBox(height: 30),
-                DistanceRadius(state: state),
-                const SizedBox(height: 30),
-                TimeWindow(state: state),
-                const SizedBox(height: 30),
-                GroupSize(state: state),
-                const SizedBox(height: 40),
-                FinishButton(state: state),
-                const SizedBox(height: 20),
-              ],
-            ),
+      body: BlocBuilder<AppCubit, AppState>(
+        builder: (context, appState) {
+          return BlocBuilder<VibeSelectionCubit, VibeSelectionState>(
+            builder: (context, state) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Header(user: appState.user),
+                    const SizedBox(height: 30),
+                    VibeSelection(state: state),
+                    const SizedBox(height: 30),
+                    BudgetSetting(state: state),
+                    const SizedBox(height: 30),
+                    DistanceRadius(state: state),
+                    const SizedBox(height: 30),
+                    TimeWindow(state: state),
+                    const SizedBox(height: 30),
+                    GroupSize(state: state),
+                    const SizedBox(height: 40),
+                    FinishButton(state: state),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
@@ -60,15 +66,24 @@ class VibeSelectionView extends StatelessWidget {
 }
 
 class Header extends StatelessWidget {
-  const Header({super.key});
+  final User? user;
+
+  const Header({super.key, this.user});
 
   @override
   Widget build(BuildContext context) {
+    final userName = user?.firstName ?? user?.username ?? '';
+    final nameWithSpace = userName.isNotEmpty ? ' $userName' : '';
+
+    final displayText = 'VIBE_SELECTION.HEADER'.tr(
+      namedArgs: {'name': nameWithSpace},
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'VIBE_SELECTION.HEADER'.tr(),
+          displayText,
           style: const TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,

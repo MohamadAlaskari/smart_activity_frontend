@@ -125,7 +125,7 @@
   },
   "VIBE_SELECTION": {
     "TITLE": "Vibe-Auswahl",
-    "HEADER": "Hallo! Was ist heute dein Vibe?",
+    "HEADER": "Hallo{name}! Was ist heute dein Vibe?",
     "SUBTITLE": "Vibe-Auswahl",
     "VIBES": {
       "MOVEMENT": "Bewegung",
