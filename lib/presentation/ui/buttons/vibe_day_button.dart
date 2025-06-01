@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
-import 'package:vibe_day/presentation/ui/text/app_text.dart';
 
 class VibeDayButton extends StatelessWidget {
   final String text;
@@ -12,6 +11,7 @@ class VibeDayButton extends StatelessWidget {
   final Color? backgroundColor;
   final bool? enabled;
   final Color textColor;
+  final TextAlign? textAlign;
 
   const VibeDayButton({
     required this.text,
@@ -23,6 +23,7 @@ class VibeDayButton extends StatelessWidget {
     this.backgroundColor,
     this.enabled = true,
     this.textColor = ColorName.white,
+    this.textAlign,
     super.key,
   });
 
@@ -54,7 +55,14 @@ class VibeDayButton extends StatelessWidget {
                       strokeWidth: 2,
                     ),
                   )
-                  : ButtonsText(text: text, color: textColor),
+                  : Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      text,
+                      style: TextStyle(color: textColor),
+                      textAlign: textAlign ?? TextAlign.center,
+                    ),
+                  ),
         ),
       ),
     );

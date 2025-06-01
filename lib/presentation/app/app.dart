@@ -4,6 +4,7 @@ import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/presentation/app/app_cubit.dart';
 import 'package:vibe_day/presentation/app/app_view.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_cubit.dart';
 
 class App extends StatelessWidget {
   final VibeDayRepository vibeDayRepository;
@@ -21,11 +22,13 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider.value(value: vibeDayRepository),
         BlocProvider(
-          create:
-              (_) => AppCubit(
-                vibeDayRepository: vibeDayRepository,
-                userStorageRepository: userStorageRepository,
-              ),
+          create: (_) => AppCubit(
+            vibeDayRepository: vibeDayRepository,
+            userStorageRepository: userStorageRepository,
+          ),
+        ),
+        BlocProvider(
+          create: (_) => VibeSelectionCubit(),
         ),
       ],
       child: const AppView(),

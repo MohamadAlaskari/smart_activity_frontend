@@ -122,5 +122,40 @@
         "CLOSE": "OK"
       }
     }
+  },
+  "VIBE_SELECTION": {
+    "TITLE": "Vibe-Auswahl",
+    "HEADER": "Hallo! Was ist heute dein Vibe?",
+    "SUBTITLE": "Vibe-Auswahl",
+    "VIBES": {
+      "MOVEMENT": "Bewegung",
+      "CULTURE": "Kultur",
+      "NIGHT_OUT": "Ausgehen",
+      "OUTDOORS": "Draußen",
+      "CHILL": "Entspannen"
+    },
+    "REMEMBER_VIBE": "Meinen Vibe für das nächste Mal merken",
+    "BUDGET": {
+      "TITLE": "Budget-Einstellung",
+      "REMEMBER": "Budget für nächste Sitzungen merken"
+    },
+    "DISTANCE": {
+      "TITLE": "Entfernungsradius",
+      "REMEMBER": "Meine Entfernungspräferenz merken"
+    },
+    "TIME_WINDOW": {
+      "TITLE": "Zeitfenster",
+      "MORNING": "Morgen",
+      "AFTERNOON": "Nachmittag",
+      "EVENING": "Abend",
+      "REMEMBER": "Meine Zeitfenster merken"
+    },
+    "GROUP_SIZE": {
+      "TITLE": "Gruppengröße",
+      "SOLO": "Alleine",
+      "DUO": "Zu zweit",
+      "GROUP": "Gruppe"
+    },
+    "FINISH_BUTTON": "Fertig & Erkunden starten"
   }
 }

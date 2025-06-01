@@ -5,6 +5,7 @@ import 'package:vibe_day/presentation/home/home_provider.dart';
 import 'package:vibe_day/presentation/login/login_provider.dart';
 import 'package:vibe_day/presentation/register/register_provider.dart';
 import 'package:vibe_day/presentation/settings/settings_provider.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
 
 import 'presentation/forgot_password/forgot_password_provider.dart';
 
@@ -49,10 +50,10 @@ final GoRouter router = GoRouter(
       name: SettingsProvider.routeName,
       builder: (_, __) => const SettingsProvider(),
     ),
-    // GoRoute(
-    //   path: '/${SettingsProvider.routeName}',
-    //   name: SettingsProvider.routeName,
-    //   builder: (_, __) => const SettingsProvider(),
-    // ),
+    GoRoute(
+      path: '/${VibeSelectionProvider.routeName}',
+      name: VibeSelectionProvider.routeName,
+      builder: (_, __) => const VibeSelectionProvider(),
+    ),
   ],
 );

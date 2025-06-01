@@ -5,6 +5,7 @@ import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/presentation/home/ui/activity_card.dart';
 import 'package:vibe_day/presentation/home/ui/weather_row.dart';
 import 'package:vibe_day/presentation/settings/settings_provider.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
 
 import 'home_cubit.dart';
 import 'home_state.dart';
@@ -119,7 +120,7 @@ class HomeView extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  context.pushNamed(SettingsProvider.routeName);
+                  context.pushNamed(VibeSelectionProvider.routeName);
                 },
                 icon: const Icon(Icons.search, size: 30),
               ),
