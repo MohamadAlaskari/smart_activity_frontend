@@ -75,12 +75,12 @@ flutter_launcher_icons:
       ios: true
       image_path: "assets/images/vibeday_app_logo.png"
 
-  #flutter_native_splash:
-  #    background_image: assets/images/vibeday_logo.png
-  #
-  #    android_12:
-  #      image: assets/images/vibeday_logo.png
-  #      icon_background_color: "#ffffff"
+flutter_native_splash:
+      background_image: assets/images/vibeday_splashscreen.png
+
+      android_12:
+        image: assets/images/vibeday_splashscreen.png
+        icon_background_color: "#ffffff"
 
 
 flutter_gen:
@@ -98,6 +98,7 @@ flutter:
     - assets/translations/
     - assets/color/
     - assets/fonts/
+    - assets/images/
 
   fonts:
     - family: Roboto
