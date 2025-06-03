@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/presentation/home/ui/activity_card.dart';
 import 'package:vibe_day/presentation/home/ui/weather_row.dart';
-import 'package:vibe_day/presentation/settings/settings_provider.dart';
+import 'package:vibe_day/presentation/settings/settings_view.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
 
 import 'home_cubit.dart';
@@ -128,7 +128,7 @@ class HomeView extends StatelessWidget {
                 offset: const Offset(-8, 0),
                 child: IconButton(
                   onPressed: () {
-                    context.pushNamed(SettingsProvider.routeName);
+                    SettingsModal.show(context);
                   },
                   icon: const Icon(Icons.person, size: 30),
                 ),

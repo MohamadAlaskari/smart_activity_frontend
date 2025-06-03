@@ -12,6 +12,7 @@ class VibeDayButton extends StatelessWidget {
   final bool? enabled;
   final Color textColor;
   final TextAlign? textAlign;
+  final IconData? icon;
 
   const VibeDayButton({
     required this.text,
@@ -24,6 +25,7 @@ class VibeDayButton extends StatelessWidget {
     this.enabled = true,
     this.textColor = ColorName.white,
     this.textAlign,
+    this.icon,
     super.key,
   });
 
@@ -57,11 +59,29 @@ class VibeDayButton extends StatelessWidget {
                   )
                   : Container(
                     alignment: Alignment.center,
-                    child: Text(
-                      text,
-                      style: TextStyle(color: textColor, fontSize: 16),
-                      textAlign: textAlign ?? TextAlign.center,
-                    ),
+                    child:
+                        icon != null
+                            ? Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(icon, color: textColor, size: 20),
+                                const SizedBox(width: 8),
+                                Text(
+                                  text,
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 16,
+                                  ),
+                                  textAlign: textAlign ?? TextAlign.center,
+                                ),
+                              ],
+                            )
+                            : Text(
+                              text,
+                              style: TextStyle(color: textColor, fontSize: 16),
+                              textAlign: textAlign ?? TextAlign.center,
+                            ),
                   ),
         ),
       ),
