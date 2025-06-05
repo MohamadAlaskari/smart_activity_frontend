@@ -18,5 +18,8 @@ class VibeSelectionState with _$VibeSelectionState {
     String? selectedTimeWindow,
     @Default(false) bool rememberTimeWindow,
     String? selectedGroupSize,
+    @Default(false) bool showAdvancedSettings,
+    @Default([]) List<String> selectedLifeVibes,
+    @Default([]) List<String> selectedExperienceTypes,
   }) = _VibeSelectionState;
 }

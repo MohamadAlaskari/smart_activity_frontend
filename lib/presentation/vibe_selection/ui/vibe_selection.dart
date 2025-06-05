@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/domain/model/vibe_type.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_cubit.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_view.dart';
@@ -13,33 +14,7 @@ class VibeSelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vibes = [
-      {
-        'name': 'Movement',
-        'displayName': 'VIBE_SELECTION.VIBES.MOVEMENT'.tr(),
-        'icon': '🏃',
-      },
-      {
-        'name': 'Culture',
-        'displayName': 'VIBE_SELECTION.VIBES.CULTURE'.tr(),
-        'icon': '🎭',
-      },
-      {
-        'name': 'Night Out',
-        'displayName': 'VIBE_SELECTION.VIBES.NIGHT_OUT'.tr(),
-        'icon': '🌙',
-      },
-      {
-        'name': 'Outdoors',
-        'displayName': 'VIBE_SELECTION.VIBES.OUTDOORS'.tr(),
-        'icon': '🌿',
-      },
-      {
-        'name': 'Chill',
-        'displayName': 'VIBE_SELECTION.VIBES.CHILL'.tr(),
-        'icon': '🍺',
-      },
-    ];
+    final vibes = VibeType.all;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,11 +24,11 @@ class VibeSelection extends StatelessWidget {
           runSpacing: 10,
           children:
               vibes.map((vibe) {
-                final isSelected = state.selectedVibes.contains(vibe['name']);
+                final isSelected = state.selectedVibes.contains(vibe.name);
                 return GestureDetector(
                   onTap:
                       () => context.read<VibeSelectionCubit>().toggleVibe(
-                        vibe['name']!,
+                        vibe.name,
                       ),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
@@ -74,13 +49,14 @@ class VibeSelection extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          vibe['icon']!,
-                          style: const TextStyle(fontSize: 16),
+                        Icon(
+                          vibe.icon,
+                          size: 16,
+                          color: isSelected ? Colors.white : vibe.color,
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          vibe['displayName']!,
+                          vibe.localizedDisplayName,
                           style: TextStyle(
                             color: isSelected ? Colors.white : Colors.black,
                             fontWeight: FontWeight.w500,

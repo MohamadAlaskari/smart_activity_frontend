@@ -26,6 +26,10 @@ mixin _$VibeSelectionState {
   String? get selectedTimeWindow => throw _privateConstructorUsedError;
   bool get rememberTimeWindow => throw _privateConstructorUsedError;
   String? get selectedGroupSize => throw _privateConstructorUsedError;
+  bool get showAdvancedSettings => throw _privateConstructorUsedError;
+  List<String> get selectedLifeVibes => throw _privateConstructorUsedError;
+  List<String> get selectedExperienceTypes =>
+      throw _privateConstructorUsedError;
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.
@@ -50,7 +54,10 @@ abstract class $VibeSelectionStateCopyWith<$Res> {
       bool rememberDistance,
       String? selectedTimeWindow,
       bool rememberTimeWindow,
-      String? selectedGroupSize});
+      String? selectedGroupSize,
+      bool showAdvancedSettings,
+      List<String> selectedLifeVibes,
+      List<String> selectedExperienceTypes});
 
   $ScreenStatusCopyWith<$Res> get screenStatus;
 }
@@ -80,6 +87,9 @@ class _$VibeSelectionStateCopyWithImpl<$Res, $Val extends VibeSelectionState>
     Object? selectedTimeWindow = freezed,
     Object? rememberTimeWindow = null,
     Object? selectedGroupSize = freezed,
+    Object? showAdvancedSettings = null,
+    Object? selectedLifeVibes = null,
+    Object? selectedExperienceTypes = null,
   }) {
     return _then(_value.copyWith(
       screenStatus: null == screenStatus
@@ -122,6 +132,18 @@ class _$VibeSelectionStateCopyWithImpl<$Res, $Val extends VibeSelectionState>
           ? _value.selectedGroupSize
           : selectedGroupSize // ignore: cast_nullable_to_non_nullable
               as String?,
+      showAdvancedSettings: null == showAdvancedSettings
+          ? _value.showAdvancedSettings
+          : showAdvancedSettings // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selectedLifeVibes: null == selectedLifeVibes
+          ? _value.selectedLifeVibes
+          : selectedLifeVibes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      selectedExperienceTypes: null == selectedExperienceTypes
+          ? _value.selectedExperienceTypes
+          : selectedExperienceTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 
@@ -154,7 +176,10 @@ abstract class _$$VibeSelectionStateImplCopyWith<$Res>
       bool rememberDistance,
       String? selectedTimeWindow,
       bool rememberTimeWindow,
-      String? selectedGroupSize});
+      String? selectedGroupSize,
+      bool showAdvancedSettings,
+      List<String> selectedLifeVibes,
+      List<String> selectedExperienceTypes});
 
   @override
   $ScreenStatusCopyWith<$Res> get screenStatus;
@@ -183,6 +208,9 @@ class __$$VibeSelectionStateImplCopyWithImpl<$Res>
     Object? selectedTimeWindow = freezed,
     Object? rememberTimeWindow = null,
     Object? selectedGroupSize = freezed,
+    Object? showAdvancedSettings = null,
+    Object? selectedLifeVibes = null,
+    Object? selectedExperienceTypes = null,
   }) {
     return _then(_$VibeSelectionStateImpl(
       screenStatus: null == screenStatus
@@ -225,6 +253,18 @@ class __$$VibeSelectionStateImplCopyWithImpl<$Res>
           ? _value.selectedGroupSize
           : selectedGroupSize // ignore: cast_nullable_to_non_nullable
               as String?,
+      showAdvancedSettings: null == showAdvancedSettings
+          ? _value.showAdvancedSettings
+          : showAdvancedSettings // ignore: cast_nullable_to_non_nullable
+              as bool,
+      selectedLifeVibes: null == selectedLifeVibes
+          ? _value._selectedLifeVibes
+          : selectedLifeVibes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      selectedExperienceTypes: null == selectedExperienceTypes
+          ? _value._selectedExperienceTypes
+          : selectedExperienceTypes // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -242,8 +282,13 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
       this.rememberDistance = false,
       this.selectedTimeWindow,
       this.rememberTimeWindow = false,
-      this.selectedGroupSize})
+      this.selectedGroupSize,
+      this.showAdvancedSettings = false,
+      final List<String> selectedLifeVibes = const [],
+      final List<String> selectedExperienceTypes = const []})
       : _selectedVibes = selectedVibes,
+        _selectedLifeVibes = selectedLifeVibes,
+        _selectedExperienceTypes = selectedExperienceTypes,
         super._();
 
   @override
@@ -280,10 +325,32 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
   final bool rememberTimeWindow;
   @override
   final String? selectedGroupSize;
+  @override
+  @JsonKey()
+  final bool showAdvancedSettings;
+  final List<String> _selectedLifeVibes;
+  @override
+  @JsonKey()
+  List<String> get selectedLifeVibes {
+    if (_selectedLifeVibes is EqualUnmodifiableListView)
+      return _selectedLifeVibes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedLifeVibes);
+  }
+
+  final List<String> _selectedExperienceTypes;
+  @override
+  @JsonKey()
+  List<String> get selectedExperienceTypes {
+    if (_selectedExperienceTypes is EqualUnmodifiableListView)
+      return _selectedExperienceTypes;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_selectedExperienceTypes);
+  }
 
   @override
   String toString() {
-    return 'VibeSelectionState(screenStatus: $screenStatus, selectedVibes: $selectedVibes, rememberVibe: $rememberVibe, budget: $budget, rememberBudget: $rememberBudget, distanceRadius: $distanceRadius, rememberDistance: $rememberDistance, selectedTimeWindow: $selectedTimeWindow, rememberTimeWindow: $rememberTimeWindow, selectedGroupSize: $selectedGroupSize)';
+    return 'VibeSelectionState(screenStatus: $screenStatus, selectedVibes: $selectedVibes, rememberVibe: $rememberVibe, budget: $budget, rememberBudget: $rememberBudget, distanceRadius: $distanceRadius, rememberDistance: $rememberDistance, selectedTimeWindow: $selectedTimeWindow, rememberTimeWindow: $rememberTimeWindow, selectedGroupSize: $selectedGroupSize, showAdvancedSettings: $showAdvancedSettings, selectedLifeVibes: $selectedLifeVibes, selectedExperienceTypes: $selectedExperienceTypes)';
   }
 
   @override
@@ -309,7 +376,13 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
             (identical(other.rememberTimeWindow, rememberTimeWindow) ||
                 other.rememberTimeWindow == rememberTimeWindow) &&
             (identical(other.selectedGroupSize, selectedGroupSize) ||
-                other.selectedGroupSize == selectedGroupSize));
+                other.selectedGroupSize == selectedGroupSize) &&
+            (identical(other.showAdvancedSettings, showAdvancedSettings) ||
+                other.showAdvancedSettings == showAdvancedSettings) &&
+            const DeepCollectionEquality()
+                .equals(other._selectedLifeVibes, _selectedLifeVibes) &&
+            const DeepCollectionEquality().equals(
+                other._selectedExperienceTypes, _selectedExperienceTypes));
   }
 
   @override
@@ -324,7 +397,10 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
       rememberDistance,
       selectedTimeWindow,
       rememberTimeWindow,
-      selectedGroupSize);
+      selectedGroupSize,
+      showAdvancedSettings,
+      const DeepCollectionEquality().hash(_selectedLifeVibes),
+      const DeepCollectionEquality().hash(_selectedExperienceTypes));
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.
@@ -347,7 +423,10 @@ abstract class _VibeSelectionState extends VibeSelectionState {
       final bool rememberDistance,
       final String? selectedTimeWindow,
       final bool rememberTimeWindow,
-      final String? selectedGroupSize}) = _$VibeSelectionStateImpl;
+      final String? selectedGroupSize,
+      final bool showAdvancedSettings,
+      final List<String> selectedLifeVibes,
+      final List<String> selectedExperienceTypes}) = _$VibeSelectionStateImpl;
   _VibeSelectionState._() : super._();
 
   @override
@@ -370,6 +449,12 @@ abstract class _VibeSelectionState extends VibeSelectionState {
   bool get rememberTimeWindow;
   @override
   String? get selectedGroupSize;
+  @override
+  bool get showAdvancedSettings;
+  @override
+  List<String> get selectedLifeVibes;
+  @override
+  List<String> get selectedExperienceTypes;
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.

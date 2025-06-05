@@ -156,6 +156,31 @@
       "DUO": "Zu zweit",
       "GROUP": "Gruppe"
     },
+    "ADVANCED_SETTINGS": {
+      "BUTTON": "Erweiterte Einstellung",
+      "LIFE_VIBES": {
+        "TITLE": "Was sind typische Vibes in deinem Leben?",
+        "SUBTITLE": "Wähle bis zu 3",
+        "CREATIVE": "Kreativ & verspielt",
+        "CHILL": "Chillig & entspannt",
+        "ACTIVE": "Aktiv & energiegeladen",
+        "SOCIAL": "Sozial & kommunikativ",
+        "REFLECTIVE": "Tiefgründig & reflektiert",
+        "CURIOUS": "Neugierig & offen",
+        "STRUCTURED": "Struktur & Klarheit"
+      },
+      "EXPERIENCE_TYPES": {
+        "TITLE": "Welche Arten von Erlebnissen reizen dich am meisten?",
+        "ADVENTUROUS": "Abenteuerliches & Neu",
+        "PEACEFUL": "Ruhiges & Achtsames",
+        "SOCIAL": "Soziales & Verbindendes",
+        "PLAYFUL": "Lustiges & Spielerisches",
+        "ROMANTIC": "Romantisches & Emotionales",
+        "PRODUCTIVE": "Produktives & Zielorientiertes",
+        "INSPIRING": "Inspirierendes & Lehrreiches",
+        "MOOD": "Je nach Stimmung"
+      }
+    },
     "FINISH_BUTTON": "Fertig & Erkunden starten"
   }
 }

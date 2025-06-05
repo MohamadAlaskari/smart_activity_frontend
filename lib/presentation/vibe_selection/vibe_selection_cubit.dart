@@ -44,7 +44,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
 
   void selectTimeWindow(String timeWindow) {
     final newTimeWindow =
-    state.selectedTimeWindow == timeWindow ? null : timeWindow;
+        state.selectedTimeWindow == timeWindow ? null : timeWindow;
     emit(state.copyWith(selectedTimeWindow: newTimeWindow));
   }
 
@@ -54,8 +54,36 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
 
   void selectGroupSize(String groupSize) {
     final newGroupSize =
-    state.selectedGroupSize == groupSize ? null : groupSize;
+        state.selectedGroupSize == groupSize ? null : groupSize;
     emit(state.copyWith(selectedGroupSize: newGroupSize));
+  }
+
+  void toggleAdvancedSettings() {
+    emit(state.copyWith(showAdvancedSettings: !state.showAdvancedSettings));
+  }
+
+  void toggleLifeVibe(String lifeVibe) {
+    final currentLifeVibes = List<String>.from(state.selectedLifeVibes);
+    if (currentLifeVibes.contains(lifeVibe)) {
+      currentLifeVibes.remove(lifeVibe);
+    } else {
+      if (currentLifeVibes.length < 3) {
+        currentLifeVibes.add(lifeVibe);
+      }
+    }
+    emit(state.copyWith(selectedLifeVibes: currentLifeVibes));
+  }
+
+  void toggleExperienceType(String experienceType) {
+    final currentExperienceTypes = List<String>.from(
+      state.selectedExperienceTypes,
+    );
+    if (currentExperienceTypes.contains(experienceType)) {
+      currentExperienceTypes.remove(experienceType);
+    } else {
+      currentExperienceTypes.add(experienceType);
+    }
+    emit(state.copyWith(selectedExperienceTypes: currentExperienceTypes));
   }
 
   Future<void> finishSelection() async {
@@ -69,6 +97,9 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       log('Distance: ${state.distanceRadius}km');
       log('Time: ${state.selectedTimeWindow}');
       log('Group: ${state.selectedGroupSize}');
+      log('Life Vibes: ${state.selectedLifeVibes}');
+      log('Experience Types: ${state.selectedExperienceTypes}');
+      log('Life Vibes: ${state.selectedLifeVibes}');
 
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
     } catch (e) {

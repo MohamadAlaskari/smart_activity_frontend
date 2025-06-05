@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/domain/model/user.dart';
 import 'package:vibe_day/presentation/app/app_cubit.dart';
+import 'package:vibe_day/presentation/vibe_selection/ui/advanced_selection.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/budget_setting.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/distance_radius_setting.dart';
+import 'package:vibe_day/presentation/vibe_selection/ui/experience_type.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/group_size_selection.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/time_window_selection.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/vibe_selection.dart';
@@ -51,7 +53,10 @@ class VibeSelectionView extends StatelessWidget {
                     TimeWindow(state: state),
                     const SizedBox(height: 30),
                     GroupSize(state: state),
-                    const SizedBox(height: 40),
+                    AdvancedSettings(state: state),
+                    const SizedBox(height: 30),
+                    AdvancedSettingsButton(state: state),
+                    const SizedBox(height: 20),
                     FinishButton(state: state),
                     const SizedBox(height: 20),
                   ],
@@ -127,6 +132,40 @@ class CustomCheckbox extends StatelessWidget {
   }
 }
 
+class AdvancedSettingsButton extends StatelessWidget {
+  final VibeSelectionState state;
+
+  const AdvancedSettingsButton({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: TextButton.icon(
+        onPressed:
+            () => context.read<VibeSelectionCubit>().toggleAdvancedSettings(),
+        icon: Icon(
+          state.showAdvancedSettings ? Icons.expand_less : Icons.expand_more,
+          color: ColorName.colorPrimary,
+        ),
+        label: Text(
+          'VIBE_SELECTION.ADVANCED_SETTINGS.BUTTON'.tr(),
+          style: TextStyle(
+            color: ColorName.colorPrimary,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        style: TextButton.styleFrom(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(25),
+            side: BorderSide(color: ColorName.colorPrimary, width: 1),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class FinishButton extends StatelessWidget {
   final VibeSelectionState state;
 
@@ -152,6 +191,29 @@ class FinishButton extends StatelessWidget {
           context.pop();
         }
       },
+    );
+  }
+}
+
+class AdvancedSettings extends StatelessWidget {
+  final VibeSelectionState state;
+
+  const AdvancedSettings({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!state.showAdvancedSettings) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 30),
+        LifeVibesQuestion(state: state),
+        const SizedBox(height: 30),
+        ExperienceTypesQuestion(state: state),
+      ],
     );
   }
 }

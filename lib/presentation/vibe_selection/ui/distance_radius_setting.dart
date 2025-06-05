@@ -18,7 +18,7 @@ class DistanceRadius extends StatelessWidget {
       children: [
         Text(
           'VIBE_SELECTION.DISTANCE.TITLE'.tr(),
-          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          style: TextStyle(fontSize: 16, color: ColorName.black),
         ),
         const SizedBox(height: 15),
         Row(

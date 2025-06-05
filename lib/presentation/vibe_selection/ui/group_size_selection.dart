@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/domain/model/group_size.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_cubit.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
 
@@ -12,36 +13,20 @@ class GroupSize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final groupSizes = [
-      {
-        'name': 'Solo',
-        'displayName': 'VIBE_SELECTION.GROUP_SIZE.SOLO'.tr(),
-        'icon': Icons.person,
-      },
-      {
-        'name': 'Duo',
-        'displayName': 'VIBE_SELECTION.GROUP_SIZE.DUO'.tr(),
-        'icon': Icons.people,
-      },
-      {
-        'name': 'Group',
-        'displayName': 'VIBE_SELECTION.GROUP_SIZE.GROUP'.tr(),
-        'icon': Icons.groups,
-      },
-    ];
+    final groupSizes = GroupSizeType.all;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'VIBE_SELECTION.GROUP_SIZE.TITLE'.tr(),
-          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          style: TextStyle(fontSize: 16, color: ColorName.black),
         ),
         const SizedBox(height: 15),
         Row(
           children:
               groupSizes.map((group) {
-                final isSelected = state.selectedGroupSize == group['name'];
+                final isSelected = state.selectedGroupSize == group.name;
                 return Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -49,7 +34,7 @@ class GroupSize extends StatelessWidget {
                       onTap:
                           () => context
                               .read<VibeSelectionCubit>()
-                              .selectGroupSize(group['name'] as String),
+                              .selectGroupSize(group.name),
                       child: Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
@@ -66,7 +51,7 @@ class GroupSize extends StatelessWidget {
                         child: Column(
                           children: [
                             Icon(
-                              group['icon'] as IconData,
+                              group.icon,
                               size: 32,
                               color:
                                   isSelected
@@ -75,7 +60,7 @@ class GroupSize extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              group['displayName'] as String,
+                              group.localizedDisplayName,
                               style: TextStyle(
                                 color:
                                     isSelected
