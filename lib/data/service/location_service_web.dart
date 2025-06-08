@@ -12,31 +12,34 @@ class WebLocationService {
     try {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        throw Exception('Location services are disabled in the browser.');
+        throw Exception('Standortdienste sind im Browser deaktiviert.');
       }
 
       LocationPermission permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw Exception('Location permission denied.');
+          throw Exception('Standortberechtigung wurde verweigert.');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw Exception('Location permission permanently denied.');
+        throw Exception('Standortberechtigung dauerhaft verweigert.');
       }
 
+      // ⚠️ Keine Parameter wie desiredAccuracy oder timeLimit im Web!
       Position position = await Geolocator.getCurrentPosition();
-      log('Web Position: ${position.latitude}, ${position.longitude}');
+
+      log('📍 Web Position: ${position.latitude}, ${position.longitude}');
 
       return await _getCityFromCoordinates(
         position.latitude,
         position.longitude,
       );
     } catch (e) {
-      log('Error retrieving location on web: $e');
-      rethrow;
+      log('❌ Fehler beim Abrufen der Position im Web: $e');
+      log('⚠️ Fallback auf Standardstadt: Berlin');
+      return 'Berlin'; // fallback city
     }
   }
 
@@ -52,14 +55,15 @@ class WebLocationService {
             placemark.administrativeArea;
 
         if (city != null && city.isNotEmpty) {
+          log('🏙️ Erkannte Stadt: $city');
           return city;
         }
       }
 
-      throw Exception('Could not determine city from coordinates.');
+      throw Exception('Stadt konnte nicht aus Koordinaten ermittelt werden.');
     } catch (e) {
-      log('Geocoding error: $e');
-      rethrow;
+      log('❌ Fehler beim Geocoding: $e');
+      return 'Berlin'; // fallback
     }
   }
 }
