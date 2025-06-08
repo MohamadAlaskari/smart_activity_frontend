@@ -39,7 +39,7 @@ class WebLocationService {
     } catch (e) {
       log('❌ Fehler beim Abrufen der Position im Web: $e');
       log('⚠️ Fallback auf Standardstadt: Berlin');
-      return 'Berlin'; // fallback city
+      return 'Bremen'; // fallback city
     }
   }
 
