@@ -5,7 +5,8 @@ import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/domain/model/activity.dart';
 import 'dart:developer';
 
-import 'package:vibe_day/data/service/location_service.dart';
+import 'package:vibe_day/data/service/location_servicee.dart';
+//import 'package:vibe_day/data/service/location_service.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({required VibeDayRepository vibeDayRepository})
@@ -26,8 +27,8 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-
-      final detectedLocation = await LocationService.getCurrentLocation();
+      //  final detectedLocation = await LocationService.getCurrentLocation();
+      final detectedLocation = await LocationServicee.getCurrentCity();
       log('Detected location: $detectedLocation');
 
       if (isClosed) return;
@@ -89,15 +90,17 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> loadActivitiesForDay(
-      int dayIndex,
-      Map<String, dynamic> weatherInfo,
-      ) async {
+    int dayIndex,
+    Map<String, dynamic> weatherInfo,
+  ) async {
     if (isClosed) return;
 
-    emit(state.copyWith(
-      screenStatus: const ScreenStatus.loading(),
-      activities: [],
-    ));
+    emit(
+      state.copyWith(
+        screenStatus: const ScreenStatus.loading(),
+        activities: [],
+      ),
+    );
 
     try {
       await Future.delayed(const Duration(milliseconds: 500));
@@ -110,19 +113,18 @@ class HomeCubit extends Cubit<HomeState> {
 
       if (isClosed) return;
 
-      emit(state.copyWith(
-        screenStatus: const ScreenStatus.success(),
-        activities: activities,
-        selectedDayIndex: dayIndex,
-      ));
-
+      emit(
+        state.copyWith(
+          screenStatus: const ScreenStatus.success(),
+          activities: activities,
+          selectedDayIndex: dayIndex,
+        ),
+      );
     } catch (e) {
       log('Error loading activities for day: $e');
       if (isClosed) return;
 
-      emit(state.copyWith(
-        screenStatus: ScreenStatus.error(e.toString()),
-      ));
+      emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));
     }
   }
 
@@ -149,12 +151,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   String _getDaySpecificTime(int dayIndex) {
-    final times = [
-      '10:00',
-      '14:00',
-      '16:00',
-      '11:00',
-    ];
+    final times = ['10:00', '14:00', '16:00', '11:00'];
 
     return times[dayIndex % times.length];
   }
