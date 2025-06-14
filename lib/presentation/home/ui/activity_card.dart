@@ -18,9 +18,77 @@ class ActivityCard extends StatelessWidget {
       case 'food':
         return Colors.red;
       case 'sport':
+      case 'movement':
         return Colors.purple;
       default:
         return Colors.grey;
+    }
+  }
+
+  Widget _buildImageWidget() {
+    return Image.network(
+      activity.imageUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Container(
+          color: Colors.grey[200],
+          child: Center(
+            child: CircularProgressIndicator(
+              value: loadingProgress.expectedTotalBytes != null
+                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                  : null,
+            ),
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: _getCategoryColor(activity.category).withOpacity(0.1),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                _getCategoryIcon(activity.category),
+                size: 40,
+                color: _getCategoryColor(activity.category),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                activity.category.toUpperCase(),
+                style: TextStyle(
+                  color: _getCategoryColor(activity.category),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  IconData _getCategoryIcon(String category) {
+    switch (category.toLowerCase()) {
+      case 'nature':
+      case 'outdoors':
+        return Icons.nature;
+      case 'music':
+        return Icons.music_note;
+      case 'culture':
+        return Icons.theater_comedy;
+      case 'food':
+        return Icons.restaurant;
+      case 'sport':
+      case 'movement':
+        return Icons.directions_run;
+      case 'chill':
+        return Icons.coffee;
+      case 'night out':
+        return Icons.nightlife;
+      default:
+        return Icons.local_activity;
     }
   }
 
@@ -51,26 +119,26 @@ class ActivityCard extends StatelessWidget {
             children: [
               Expanded(
                 flex: 3,
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: NetworkImage(activity.imageUrl),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [Colors.transparent, Colors.black12],
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: _buildImageWidget(),
                       ),
-                    ),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Colors.transparent, Colors.black12],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-
               Expanded(
                 flex: 2,
                 child: Padding(
@@ -84,7 +152,6 @@ class ActivityCard extends StatelessWidget {
                         style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 2),
-
                       Flexible(
                         child: Text(
                           activity.title,
@@ -97,21 +164,18 @@ class ActivityCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Flexible(
                             child: Text(
                               '${'HOME.ACTIVITY.COSTS'.tr()}: ${activity.cost}',
-
                               style: TextStyle(
                                 fontSize: 11,
                                 color: Colors.grey[600],
                               ),
                             ),
                           ),
-
                           Flexible(
                             child: Row(
                               mainAxisSize: MainAxisSize.min,

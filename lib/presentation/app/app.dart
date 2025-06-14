@@ -21,6 +21,7 @@ class App extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         RepositoryProvider.value(value: vibeDayRepository),
+        RepositoryProvider.value(value: userStorageRepository),
         BlocProvider(
           create: (_) => AppCubit(
             vibeDayRepository: vibeDayRepository,
@@ -28,7 +29,10 @@ class App extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (_) => VibeSelectionCubit(),
+          create: (context) => VibeSelectionCubit(
+            vibeDayRepository: context.read<VibeDayRepository>(),
+            userStorageRepository: context.read<UserStorageRepository>(),
+          ),
         ),
       ],
       child: const AppView(),

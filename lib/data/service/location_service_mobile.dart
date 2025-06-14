@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:vibe_day/domain/model/location_result.dart';
 import 'dart:developer';
 
 class MobileLocationService {
@@ -37,6 +38,52 @@ class MobileLocationService {
       return await _getCityFromCoordinates(
         position.latitude,
         position.longitude,
+      );
+    } catch (e) {
+      log('Error getting location on mobile: $e');
+      rethrow;
+    }
+  }
+
+  static Future<LocationResult> getLocationMobileOnly() async {
+    if (kIsWeb) {
+      throw UnsupportedError('This method is for Mobile only.');
+    }
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        throw Exception('Location services are disabled.');
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          throw Exception('Location permissions are denied');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        throw Exception('Location permissions are permanently denied');
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 15),
+      );
+
+      log('Mobile Position: ${position.latitude}, ${position.longitude}');
+
+      final cityName = await _getCityFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      return LocationResult(
+        cityName: cityName,
+        latitude: position.latitude,
+        longitude: position.longitude,
       );
     } catch (e) {
       log('Error getting location on mobile: $e');

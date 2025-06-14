@@ -4,7 +4,10 @@ class TimeWindowType {
   final String name;
   final String displayName;
 
-  const TimeWindowType({required this.name, required this.displayName});
+  const TimeWindowType({
+    required this.name,
+    required this.displayName,
+  });
 
   static const TimeWindowType morning = TimeWindowType(
     name: 'Morning',

@@ -1,15 +1,102 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
 import 'package:vibe_day/common/screen_status.dart';
+import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/data/repository/user_storage_repository.dart';
+import 'package:vibe_day/domain/model/user_preferences.dart';
 import 'dart:developer';
 
 class VibeSelectionCubit extends Cubit<VibeSelectionState> {
-  VibeSelectionCubit() : super(VibeSelectionState()) {
+  VibeSelectionCubit({
+    required VibeDayRepository vibeDayRepository,
+    required UserStorageRepository userStorageRepository,
+  }) : _vibeDayRepository = vibeDayRepository,
+       _userStorageRepository = userStorageRepository,
+       super(VibeSelectionState()) {
     _init();
   }
 
+  final VibeDayRepository _vibeDayRepository;
+  final UserStorageRepository _userStorageRepository;
+
   Future<void> _init() async {
-    emit(state.copyWith(screenStatus: const ScreenStatus.success()));
+    emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
+
+    try {
+      await _loadUserPreferences();
+      emit(state.copyWith(screenStatus: const ScreenStatus.success()));
+    } catch (e) {
+      log('Error loading user preferences: $e');
+      emit(state.copyWith(screenStatus: const ScreenStatus.success()));
+    }
+  }
+
+  Future<void> _loadUserPreferences() async {
+    try {
+      final user = await _userStorageRepository.getUser();
+      if (user?.id == null) {
+        log('No user found, skipping preference loading');
+        return;
+      }
+
+      final preferences = await _vibeDayRepository.getUserPreferences(
+        user!.id!,
+      );
+      if (preferences != null) {
+        log('Loaded user preferences: ${preferences.selectedVibes}');
+
+        emit(
+          state.copyWith(
+            selectedVibes: preferences.selectedVibes,
+            selectedLifeVibes: preferences.selectedLifeVibes,
+            selectedExperienceTypes: preferences.selectedExperienceTypes,
+            budget: preferences.budget,
+            distanceRadius: preferences.distanceRadius,
+            selectedTimeWindow:
+                preferences.selectedTimeWindows.isNotEmpty
+                    ? preferences.selectedTimeWindows.first
+                    : null,
+            selectedGroupSize:
+                preferences.selectedGroupSizes.isNotEmpty
+                    ? preferences.selectedGroupSizes.first
+                    : null,
+          ),
+        );
+      }
+    } catch (e) {
+      log('Error loading user preferences: $e');
+    }
+  }
+
+  Future<String?> _getUserId() async {
+    try {
+      final user = await _userStorageRepository.getUser();
+      return user?.id;
+    } catch (e) {
+      log('Error getting user ID: $e');
+      return null;
+    }
+  }
+
+  UserPreferences _createUserPreferencesFromState() {
+    final timeWindows =
+        state.selectedTimeWindow != null
+            ? [state.selectedTimeWindow!]
+            : <String>[];
+    final groupSizes =
+        state.selectedGroupSize != null
+            ? [state.selectedGroupSize!]
+            : <String>[];
+
+    return UserPreferences(
+      selectedVibes: state.selectedVibes,
+      selectedLifeVibes: state.selectedLifeVibes,
+      selectedExperienceTypes: state.selectedExperienceTypes,
+      budget: state.budget,
+      distanceRadius: state.distanceRadius,
+      selectedTimeWindows: timeWindows,
+      selectedGroupSizes: groupSizes,
+    );
   }
 
   void toggleVibe(String vibe) {
@@ -22,34 +109,18 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(selectedVibes: currentVibes));
   }
 
-  void toggleRememberVibe(bool value) {
-    emit(state.copyWith(rememberVibe: value));
-  }
-
   void updateBudget(double value) {
     emit(state.copyWith(budget: value));
-  }
-
-  void toggleRememberBudget(bool value) {
-    emit(state.copyWith(rememberBudget: value));
   }
 
   void updateDistanceRadius(double value) {
     emit(state.copyWith(distanceRadius: value));
   }
 
-  void toggleRememberDistance(bool value) {
-    emit(state.copyWith(rememberDistance: value));
-  }
-
   void selectTimeWindow(String timeWindow) {
     final newTimeWindow =
         state.selectedTimeWindow == timeWindow ? null : timeWindow;
     emit(state.copyWith(selectedTimeWindow: newTimeWindow));
-  }
-
-  void toggleRememberTimeWindow(bool value) {
-    emit(state.copyWith(rememberTimeWindow: value));
   }
 
   void selectGroupSize(String groupSize) {
@@ -90,6 +161,28 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
+      final userId = await _getUserId();
+      if (userId == null) {
+        throw Exception('User not found. Please login again.');
+      }
+
+      final preferences = _createUserPreferencesFromState();
+
+      try {
+        await _vibeDayRepository.updateUserPreferences(
+          userId: userId,
+          preferences: preferences,
+        );
+        log('Updated user preferences successfully');
+      } catch (e) {
+        log('Update failed, trying to create new preferences: $e');
+        await _vibeDayRepository.createUserPreferences(
+          userId: userId,
+          preferences: preferences,
+        );
+        log('Created new user preferences successfully');
+      }
+
       await Future.delayed(const Duration(milliseconds: 500));
 
       log('Vibe Selection completed: ${state.selectedVibes}');
@@ -99,7 +192,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       log('Group: ${state.selectedGroupSize}');
       log('Life Vibes: ${state.selectedLifeVibes}');
       log('Experience Types: ${state.selectedExperienceTypes}');
-      log('Life Vibes: ${state.selectedLifeVibes}');
 
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
     } catch (e) {

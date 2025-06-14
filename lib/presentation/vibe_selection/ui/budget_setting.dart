@@ -54,14 +54,6 @@ class BudgetSetting extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        CustomCheckbox(
-          text: 'VIBE_SELECTION.BUDGET.REMEMBER'.tr(),
-          value: state.rememberBudget,
-          onChanged:
-              (value) => context
-                  .read<VibeSelectionCubit>()
-                  .toggleRememberBudget(value!),
-        ),
       ],
     );
   }

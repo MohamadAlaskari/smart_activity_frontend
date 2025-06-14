@@ -21,4 +21,28 @@ abstract class ApiService {
 
   @GET('/weather/week')
   Future<dynamic> getWeeklyWeather(@Query('location') String location);
+
+  @GET('/suggestions')
+  Future<dynamic> getSuggestions(
+      @Query('userId') String userId,
+      @Query('lat') double lat,
+      @Query('lon') double lon,
+      @Query('date') String date,
+      );
+  @POST('/user-preferences')
+  Future<dynamic> createUserPreferences(
+      @Query('userId') String userId,
+      @Body() Map<String, dynamic> preferences,
+      );
+
+  @GET('/user-preferences')
+  Future<dynamic> getUserPreferences(
+      @Query('userId') String userId,
+      );
+
+  @PATCH('/user-preferences')
+  Future<dynamic> updateUserPreferences(
+      @Query('userId') String userId,
+      @Body() Map<String, dynamic> preferences,
+      );
 }

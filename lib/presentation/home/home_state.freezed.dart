@@ -21,6 +21,8 @@ mixin _$HomeState {
   List<Activity> get activities => throw _privateConstructorUsedError;
   String get location => throw _privateConstructorUsedError;
   int get selectedDayIndex => throw _privateConstructorUsedError;
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -39,7 +41,9 @@ abstract class $HomeStateCopyWith<$Res> {
       List<dynamic> weatherData,
       List<Activity> activities,
       String location,
-      int selectedDayIndex});
+      int selectedDayIndex,
+      double latitude,
+      double longitude});
 
   $ScreenStatusCopyWith<$Res> get screenStatus;
 }
@@ -64,6 +68,8 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? activities = null,
     Object? location = null,
     Object? selectedDayIndex = null,
+    Object? latitude = null,
+    Object? longitude = null,
   }) {
     return _then(_value.copyWith(
       screenStatus: null == screenStatus
@@ -86,6 +92,14 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.selectedDayIndex
           : selectedDayIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 
@@ -113,7 +127,9 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       List<dynamic> weatherData,
       List<Activity> activities,
       String location,
-      int selectedDayIndex});
+      int selectedDayIndex,
+      double latitude,
+      double longitude});
 
   @override
   $ScreenStatusCopyWith<$Res> get screenStatus;
@@ -137,6 +153,8 @@ class __$$HomeStateImplCopyWithImpl<$Res>
     Object? activities = null,
     Object? location = null,
     Object? selectedDayIndex = null,
+    Object? latitude = null,
+    Object? longitude = null,
   }) {
     return _then(_$HomeStateImpl(
       screenStatus: null == screenStatus
@@ -159,6 +177,14 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value.selectedDayIndex
           : selectedDayIndex // ignore: cast_nullable_to_non_nullable
               as int,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -171,7 +197,9 @@ class _$HomeStateImpl extends _HomeState {
       final List<dynamic> weatherData = const [],
       final List<Activity> activities = const [],
       this.location = '',
-      this.selectedDayIndex = 0})
+      this.selectedDayIndex = 0,
+      this.latitude = 0.0,
+      this.longitude = 0.0})
       : _weatherData = weatherData,
         _activities = activities,
         super._();
@@ -203,10 +231,16 @@ class _$HomeStateImpl extends _HomeState {
   @override
   @JsonKey()
   final int selectedDayIndex;
+  @override
+  @JsonKey()
+  final double latitude;
+  @override
+  @JsonKey()
+  final double longitude;
 
   @override
   String toString() {
-    return 'HomeState(screenStatus: $screenStatus, weatherData: $weatherData, activities: $activities, location: $location, selectedDayIndex: $selectedDayIndex)';
+    return 'HomeState(screenStatus: $screenStatus, weatherData: $weatherData, activities: $activities, location: $location, selectedDayIndex: $selectedDayIndex, latitude: $latitude, longitude: $longitude)';
   }
 
   @override
@@ -223,7 +257,11 @@ class _$HomeStateImpl extends _HomeState {
             (identical(other.location, location) ||
                 other.location == location) &&
             (identical(other.selectedDayIndex, selectedDayIndex) ||
-                other.selectedDayIndex == selectedDayIndex));
+                other.selectedDayIndex == selectedDayIndex) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude));
   }
 
   @override
@@ -233,7 +271,9 @@ class _$HomeStateImpl extends _HomeState {
       const DeepCollectionEquality().hash(_weatherData),
       const DeepCollectionEquality().hash(_activities),
       location,
-      selectedDayIndex);
+      selectedDayIndex,
+      latitude,
+      longitude);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -250,7 +290,9 @@ abstract class _HomeState extends HomeState {
       final List<dynamic> weatherData,
       final List<Activity> activities,
       final String location,
-      final int selectedDayIndex}) = _$HomeStateImpl;
+      final int selectedDayIndex,
+      final double latitude,
+      final double longitude}) = _$HomeStateImpl;
   _HomeState._() : super._();
 
   @override
@@ -263,6 +305,10 @@ abstract class _HomeState extends HomeState {
   String get location;
   @override
   int get selectedDayIndex;
+  @override
+  double get latitude;
+  @override
+  double get longitude;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

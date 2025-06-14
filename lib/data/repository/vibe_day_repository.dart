@@ -9,6 +9,7 @@ import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/domain/model/auth_result.dart';
 import 'package:vibe_day/domain/model/user.dart';
 import 'package:vibe_day/domain/model/activity.dart';
+import 'package:vibe_day/domain/model/user_preferences.dart';
 
 class VibeDayRepository {
   late final ApiService _client;
@@ -62,8 +63,6 @@ class VibeDayRepository {
         ),
       );
 
-      log('Weather API Response: ${response.data}');
-
       if (response.data is List) {
         return response.data as List<dynamic>;
       } else {
@@ -88,47 +87,6 @@ class VibeDayRepository {
 
       rethrow;
     }
-  }
-
-  List<Activity> getDummyActivities() {
-    return [
-      const Activity(
-        id: '1',
-        title: 'Going for a Walk @ Hasbruch Park',
-        description: 'Entspannter Spaziergang durch den schönen Hasbruch Park',
-        imageUrl:
-            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500',
-        location: 'Wildeshausen',
-        date: 'Today, 15. May',
-        time: '19:30-21:00',
-        cost: '0€',
-        category: 'nature',
-      ),
-      const Activity(
-        id: '2',
-        title: 'Summer Sounds',
-        description: 'Live Musik Festival mit verschiedenen Künstlern',
-        imageUrl:
-            'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500',
-        location: 'Bremen Wallanlagen',
-        date: 'Today, 15. May',
-        time: '19:30-21:00',
-        cost: '0€',
-        category: 'music',
-      ),
-      const Activity(
-        id: '3',
-        title: 'Bremen City Street Art Tour',
-        description: 'Entdecke die vielfältige Street Art Szene Bremens',
-        imageUrl:
-            'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500',
-        location: 'Bremen',
-        date: 'Today, 15. May',
-        time: '19:30-21:00',
-        cost: '5€',
-        category: 'culture',
-      ),
-    ];
   }
 
   Future<AuthResult> login(String email, String password) async {
@@ -346,6 +304,274 @@ class VibeDayRepository {
       }
     } catch (e) {
       log('Unexpected error during password reset request: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Activity>> getSuggestions({
+    required String userId,
+    required double latitude,
+    required double longitude,
+    required String date,
+  }) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.getSuggestions(
+        userId,
+        latitude,
+        longitude,
+        date,
+      );
+
+      log('Suggestions API Response: $response');
+
+      final List<Activity> activities = [];
+
+      List<dynamic> suggestions;
+      if (response is List) {
+        suggestions = response;
+      } else {
+        log('Unexpected response format: ${response.runtimeType}');
+        suggestions = [];
+      }
+
+      final baseTimestamp = DateTime.now().millisecondsSinceEpoch;
+
+      for (int i = 0; i < suggestions.length; i++) {
+        final suggestion = suggestions[i];
+
+        if (suggestion is! Map<String, dynamic>) {
+          log(
+            'Skipping invalid suggestion at index $i: ${suggestion.runtimeType}',
+          );
+          continue;
+        }
+
+        final id =
+            'suggestion_${baseTimestamp}_${i}_${suggestion['title']?.toString().hashCode ?? i}';
+
+        final locationObj = suggestion['location'];
+        String locationName = 'Unknown Location';
+        if (locationObj is Map<String, dynamic>) {
+          locationName = locationObj['name']?.toString() ?? 'Unknown Location';
+        }
+
+        final startTime = suggestion['startTime'] as String?;
+        final endTime = suggestion['endTime'] as String?;
+
+        String formattedDate = '';
+        String formattedTime = '';
+
+        if (startTime != null) {
+          try {
+            final startDateTime = DateTime.parse(startTime);
+            formattedDate =
+                '${startDateTime.day.toString().padLeft(2, '0')}.${startDateTime.month.toString().padLeft(2, '0')}.${startDateTime.year}';
+
+            if (endTime != null) {
+              final endDateTime = DateTime.parse(endTime);
+              formattedTime =
+                  '${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')}-${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}';
+            } else {
+              formattedTime =
+                  '${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')}';
+            }
+          } catch (e) {
+            log('Error parsing date/time: $e');
+            formattedDate = date;
+            formattedTime = 'Time TBD';
+          }
+        } else {
+          formattedDate = date;
+          formattedTime = 'Time TBD';
+        }
+
+        final imagesObj = suggestion['images'];
+        List<dynamic> images = [];
+        if (imagesObj is List) {
+          images = imagesObj;
+        }
+
+        String imageUrl;
+        if (images.isNotEmpty) {
+          final apiImageUrl = images.first.toString();
+          if (apiImageUrl.isNotEmpty &&
+              !apiImageUrl.contains('example.com') &&
+              apiImageUrl.startsWith('http')) {
+            imageUrl = apiImageUrl;
+          } else {
+            imageUrl = _getFallbackImageForCategory(
+              suggestion['category']?.toString() ?? 'general',
+            );
+          }
+        } else {
+          imageUrl = _getFallbackImageForCategory(
+            suggestion['category']?.toString() ?? 'general',
+          );
+        }
+
+        final price = suggestion['price']?.toString() ?? '0€';
+        final formattedPrice = price.contains('€') ? price : '${price}€';
+
+        final title = suggestion['title']?.toString()?.trim();
+        final finalTitle =
+            (title != null && title.isNotEmpty) ? title : 'Activity ${i + 1}';
+
+        final activity = Activity(
+          id: id,
+          title: finalTitle,
+          description: suggestion['description']?.toString() ?? '',
+          imageUrl: imageUrl,
+          location: locationName,
+          date: formattedDate,
+          time: formattedTime,
+          cost: formattedPrice,
+          category: suggestion['category']?.toString() ?? 'general',
+        );
+
+        activities.add(activity);
+      }
+
+      log('Converted ${activities.length} suggestions to activities');
+
+      return activities;
+    } catch (e) {
+      log('Error fetching suggestions: $e');
+
+      if (e is DioException) {
+        log('DioException details:');
+        log('- Status Code: ${e.response?.statusCode}');
+        log('- Request URL: ${e.requestOptions.uri}');
+        log('- Response Data: ${e.response?.data}');
+
+        if (e.response?.statusCode == 401) {
+          log('401 error - forcing logout');
+          await logout();
+          throw Exception('Session expired. Please login again.');
+        }
+      }
+
+      log('Falling back to dummy activities due to error');
+      return [];
+    }
+  }
+
+  String _getFallbackImageForCategory(String category) {
+    switch (category.toLowerCase()) {
+      case 'nature':
+      case 'outdoors':
+        return 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=300&fit=crop';
+      case 'music':
+        return 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&h=300&fit=crop';
+      case 'culture':
+      case 'arts & theatre':
+        return 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500&h=300&fit=crop';
+      case 'food':
+        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=500&h=300&fit=crop';
+      case 'sport':
+      case 'sports':
+      case 'movement':
+        return 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop';
+      case 'chill':
+        return 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=500&h=300&fit=crop';
+      case 'night out':
+        return 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=300&fit=crop';
+      default:
+        return 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=500&h=300&fit=crop';
+    }
+  }
+
+  Future<UserPreferences> createUserPreferences({
+    required String userId,
+    required UserPreferences preferences,
+  }) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.createUserPreferences(
+        userId,
+        preferences.toApiRequest(),
+      );
+
+      log('Create User Preferences API Response: $response');
+      return UserPreferences.fromJson(response);
+    } catch (e) {
+      log('Error creating user preferences: $e');
+
+      if (e is DioException && e.response?.statusCode == 401) {
+        await logout();
+        throw Exception('Session expired. Please login again.');
+      }
+
+      rethrow;
+    }
+  }
+
+  Future<UserPreferences?> getUserPreferences(String userId) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.getUserPreferences(userId);
+
+      log('Get User Preferences API Response: $response');
+      return UserPreferences.fromJson(response);
+    } catch (e) {
+      log('Error getting user preferences: $e');
+
+      if (e is DioException) {
+        if (e.response?.statusCode == 401) {
+          await logout();
+          throw Exception('Session expired. Please login again.');
+        }
+        if (e.response?.statusCode == 404) {
+          log('User preferences not found - returning null');
+          return null;
+        }
+      }
+
+      rethrow;
+    }
+  }
+
+  Future<UserPreferences> updateUserPreferences({
+    required String userId,
+    required UserPreferences preferences,
+  }) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.updateUserPreferences(
+        userId,
+        preferences.toApiRequest(),
+      );
+
+      log('Update User Preferences API Response: $response');
+      return UserPreferences.fromJson(response);
+    } catch (e) {
+      log('Error updating user preferences: $e');
+
+      if (e is DioException && e.response?.statusCode == 401) {
+        await logout();
+        throw Exception('Session expired. Please login again.');
+      }
+
       rethrow;
     }
   }

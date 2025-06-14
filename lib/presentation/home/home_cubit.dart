@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/presentation/home/home_state.dart';
 import 'package:vibe_day/common/screen_status.dart';
@@ -6,16 +7,19 @@ import 'package:vibe_day/domain/model/activity.dart';
 import 'dart:developer';
 
 import 'package:vibe_day/data/service/location_servicee.dart';
-//import 'package:vibe_day/data/service/location_service.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit({required VibeDayRepository vibeDayRepository})
-    : _vibeDayRepository = vibeDayRepository,
-      super(HomeState()) {
+  HomeCubit({
+    required VibeDayRepository vibeDayRepository,
+    required UserStorageRepository userStorageRepository,
+  }) : _vibeDayRepository = vibeDayRepository,
+       _userStorageRepository = userStorageRepository,
+       super(HomeState()) {
     _init();
   }
 
   final VibeDayRepository _vibeDayRepository;
+  final UserStorageRepository _userStorageRepository;
 
   Future<void> _init() async {
     await _detectLocationAndLoadData();
@@ -27,13 +31,21 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      //  final detectedLocation = await LocationService.getCurrentLocation();
-      final detectedLocation = await LocationServicee.getCurrentCity();
-      log('Detected location: $detectedLocation');
+      final locationResult =
+          await LocationServicee.getCurrentLocationWithCoordinates();
+      log(
+        'Detected location: ${locationResult.cityName} (${locationResult.latitude}, ${locationResult.longitude})',
+      );
 
       if (isClosed) return;
 
-      emit(state.copyWith(location: detectedLocation));
+      emit(
+        state.copyWith(
+          location: locationResult.cityName,
+          latitude: locationResult.latitude,
+          longitude: locationResult.longitude,
+        ),
+      );
       await loadData();
     } catch (e) {
       log('Error detecting location: $e');
@@ -42,12 +54,12 @@ class HomeCubit extends Cubit<HomeState> {
 
       emit(
         state.copyWith(
-          screenStatus: ScreenStatus.error('Location error: ${e.toString()}'),
-          location: 'Location Error',
-          activities: [],
-          weatherData: [],
+          location: 'Bremen',
+          latitude: 53.0793,
+          longitude: 8.8017,
         ),
       );
+      await loadData();
     }
   }
 
@@ -57,14 +69,14 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      final activities = _vibeDayRepository.getDummyActivities();
-
-      if (isClosed) return;
-
+      // Load weather data
       log('Loading weather data for: ${state.location}');
       final weatherData = await _vibeDayRepository.getWeeklyWeather(
         state.location,
       );
+
+      // Load suggestions instead of dummy activities
+      final activities = await _loadSuggestions();
 
       if (isClosed) return;
 
@@ -72,7 +84,7 @@ class HomeCubit extends Cubit<HomeState> {
         state.copyWith(
           screenStatus: const ScreenStatus.success(),
           weatherData: weatherData,
-          activities: activities,
+          activities: activities, // This can now be an empty list
         ),
       );
     } catch (e) {
@@ -82,10 +94,77 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(
           screenStatus: ScreenStatus.error(e.toString()),
-          activities: _vibeDayRepository.getDummyActivities(),
+          activities: [], // Empty list instead of dummy activities
           weatherData: [],
         ),
       );
+    }
+  }
+
+  Future<List<Activity>> _loadSuggestions() async {
+    try {
+      final userId = await _getUserId();
+
+      if (userId == null) {
+        log('No user ID available, returning empty list');
+        return []; // Return empty list instead of dummy activities
+      }
+
+      // Format current date for API
+      final currentDate =
+          DateTime.now().toIso8601String().split('T')[0]; // YYYY-MM-DD format
+
+      final suggestions = await _vibeDayRepository.getSuggestions(
+        userId: userId,
+        latitude: state.latitude,
+        longitude: state.longitude,
+        date: currentDate,
+      );
+
+      return suggestions;
+    } catch (e) {
+      log('Error loading suggestions: $e');
+      // Return empty list instead of dummy activities
+      return [];
+    }
+  }
+
+  Future<String?> _getUserId() async {
+    try {
+      final user = await _userStorageRepository.getUser();
+      return user?.id;
+    } catch (e) {
+      log('Error getting user ID: $e');
+      return null;
+    }
+  }
+
+  Future<List<Activity>> _loadSuggestionsForDate(
+    DateTime date,
+    int dayIndex,
+  ) async {
+    try {
+      final userId = await _getUserId();
+
+      if (userId == null) {
+        log('No user ID available for date $date, returning empty list');
+        return []; // Return empty list instead of dummy activities
+      }
+
+      final dateStr = date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
+
+      final suggestions = await _vibeDayRepository.getSuggestions(
+        userId: userId,
+        latitude: state.latitude,
+        longitude: state.longitude,
+        date: dateStr,
+      );
+
+      return suggestions;
+    } catch (e) {
+      log('Error loading suggestions for date: $e');
+      // Return empty list instead of dummy activities
+      return [];
     }
   }
 
@@ -109,7 +188,7 @@ class HomeCubit extends Cubit<HomeState> {
           weatherInfo['date'] as String? ?? DateTime.now().toIso8601String();
       final selectedDate = DateTime.parse(date);
 
-      final activities = _generateActivitiesForDate(selectedDate, dayIndex);
+      final activities = await _loadSuggestionsForDate(selectedDate, dayIndex);
 
       if (isClosed) return;
 
@@ -126,34 +205,6 @@ class HomeCubit extends Cubit<HomeState> {
 
       emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));
     }
-  }
-
-  List<Activity> _generateActivitiesForDate(DateTime date, int dayIndex) {
-    final baseActivities = _vibeDayRepository.getDummyActivities();
-    final dateStr =
-        "${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}.${date.year}";
-
-    return baseActivities.map((activity) {
-      final daySpecificTime = _getDaySpecificTime(dayIndex);
-
-      return Activity(
-        id: '${activity.id}_day_$dayIndex',
-        title: activity.title,
-        location: activity.location,
-        date: dateStr,
-        time: daySpecificTime,
-        cost: activity.cost,
-        imageUrl: activity.imageUrl,
-        description: activity.description,
-        category: activity.category,
-      );
-    }).toList();
-  }
-
-  String _getDaySpecificTime(int dayIndex) {
-    final times = ['10:00', '14:00', '16:00', '11:00'];
-
-    return times[dayIndex % times.length];
   }
 
   Future<void> resetToToday() async {

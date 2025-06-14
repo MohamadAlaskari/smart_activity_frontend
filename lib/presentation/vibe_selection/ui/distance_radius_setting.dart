@@ -54,14 +54,6 @@ class DistanceRadius extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        CustomCheckbox(
-          text: 'VIBE_SELECTION.DISTANCE.REMEMBER'.tr(),
-          value: state.rememberDistance,
-          onChanged:
-              (value) => context
-                  .read<VibeSelectionCubit>()
-                  .toggleRememberDistance(value!),
-        ),
       ],
     );
   }

@@ -14,5 +14,7 @@ class HomeState with _$HomeState {
     @Default([]) List<Activity> activities,
     @Default('') String location,
     @Default(0) int selectedDayIndex,
+    @Default(0.0) double latitude,
+    @Default(0.0) double longitude,
   }) = _HomeState;
 }

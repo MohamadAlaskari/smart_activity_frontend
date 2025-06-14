@@ -68,14 +68,6 @@ class TimeWindow extends StatelessWidget {
               }).toList(),
         ),
         const SizedBox(height: 15),
-        CustomCheckbox(
-          text: 'VIBE_SELECTION.TIME_WINDOW.REMEMBER'.tr(),
-          value: state.rememberTimeWindow,
-          onChanged:
-              (value) => context
-                  .read<VibeSelectionCubit>()
-                  .toggleRememberTimeWindow(value!),
-        ),
       ],
     );
   }

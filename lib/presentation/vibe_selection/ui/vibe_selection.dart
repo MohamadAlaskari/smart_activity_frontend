@@ -68,14 +68,6 @@ class VibeSelection extends StatelessWidget {
                 );
               }).toList(),
         ),
-        const SizedBox(height: 15),
-        CustomCheckbox(
-          text: 'VIBE_SELECTION.REMEMBER_VIBE'.tr(),
-          value: state.rememberVibe,
-          onChanged:
-              (value) =>
-                  context.read<VibeSelectionCubit>().toggleRememberVibe(value!),
-        ),
       ],
     );
   }
