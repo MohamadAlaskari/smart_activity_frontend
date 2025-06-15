@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
+import 'package:vibe_day/presentation/detail/activity_detail_provider.dart';
 import 'package:vibe_day/presentation/home/ui/activity_card.dart';
 import 'package:vibe_day/presentation/home/ui/weather_row.dart';
 import 'package:vibe_day/presentation/settings/settings_view.dart';
@@ -52,6 +53,12 @@ class HomeView extends StatelessWidget {
                               if (index < state.activities.length) {
                                 return ActivityCard(
                                   activity: state.activities[index],
+                                  onTap: () {
+                                    context.pushNamed(
+                                      ActivityDetailProvider.routeName,
+                                      extra: state.activities[index],
+                                    );
+                                  },
                                 );
                               }
                               return null;
@@ -63,8 +70,15 @@ class HomeView extends StatelessWidget {
                               children: [
                                 if (state.activities.isNotEmpty)
                                   ...state.activities.map(
-                                    (activity) =>
-                                        ActivityCard(activity: activity),
+                                    (activity) => ActivityCard(
+                                      activity: activity,
+                                      onTap: () {
+                                        // TODO: Navigate to activity detail page
+                                        print(
+                                          'Activity tapped: ${activity.title}',
+                                        );
+                                      },
+                                    ),
                                   ),
                               ],
                             ),

@@ -30,7 +30,7 @@ class WeatherRow extends StatelessWidget {
       height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: weatherData.length.clamp(0, 4),
+        itemCount: weatherData.length.clamp(0, 7),
         itemBuilder: (context, index) {
           final weather = weatherData[index];
           final isToday = index == 0;
@@ -43,15 +43,11 @@ class WeatherRow extends StatelessWidget {
           } else if (isTomorrow) {
             dayLabel = 'HOME.WEATHER.TOMORROW'.tr();
           } else {
-            try {
-              final date = DateTime.parse(weather['date']);
-              dayLabel = DateFormat(
-                'E',
-                context.locale.languageCode,
-              ).format(date);
-            } catch (e) {
-              dayLabel = 'HOME.WEATHER.DAY'.tr(args: ['${index + 1}']);
-            }
+            final date = DateTime.now().add(Duration(days: index));
+            dayLabel = DateFormat(
+              'E',
+              context.locale.languageCode,
+            ).format(date);
           }
 
           return GestureDetector(

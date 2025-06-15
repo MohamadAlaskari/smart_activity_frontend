@@ -60,6 +60,23 @@
       "DAY": "Tag {}"
     }
   },
+  "DETAIL": {
+    "TITLE": "Aktivitätsdetails",
+    "DESCRIPTION": "Beschreibung",
+    "INFORMATION": "Informationen",
+    "ACTION": {
+      "SHARE": "Teilen",
+      "FAVORITE": "Favorit",
+      "ROUTE": "Route"
+    },
+    "ACTIVITY_INFORMATION": {
+      "TIME": "Zeit",
+      "DATE": "Datum",
+      "COSTS": "Kosten",
+      "CATEGORY": "Kategorie",
+      "LOCATION": "Ort"
+    }
+  },
   "SETTINGS": {
     "TITLE": "Einstellungen",
     "LOGOUT": "Abmelden"

@@ -1,12 +1,12 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/data/service/location_service.dart';
 import 'package:vibe_day/presentation/home/home_state.dart';
 import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/domain/model/activity.dart';
 import 'dart:developer';
 
-import 'package:vibe_day/data/service/location_servicee.dart';
 
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
@@ -32,7 +32,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     try {
       final locationResult =
-          await LocationServicee.getCurrentLocationWithCoordinates();
+          await LocationService.getCurrentLocationWithCoordinates();
       log(
         'Detected location: ${locationResult.cityName} (${locationResult.latitude}, ${locationResult.longitude})',
       );
@@ -69,13 +69,11 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      // Load weather data
       log('Loading weather data for: ${state.location}');
       final weatherData = await _vibeDayRepository.getWeeklyWeather(
         state.location,
       );
 
-      // Load suggestions instead of dummy activities
       final activities = await _loadSuggestions();
 
       if (isClosed) return;
@@ -84,7 +82,7 @@ class HomeCubit extends Cubit<HomeState> {
         state.copyWith(
           screenStatus: const ScreenStatus.success(),
           weatherData: weatherData,
-          activities: activities, // This can now be an empty list
+          activities: activities,
         ),
       );
     } catch (e) {
@@ -94,7 +92,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(
         state.copyWith(
           screenStatus: ScreenStatus.error(e.toString()),
-          activities: [], // Empty list instead of dummy activities
+          activities: [],
           weatherData: [],
         ),
       );
@@ -107,12 +105,10 @@ class HomeCubit extends Cubit<HomeState> {
 
       if (userId == null) {
         log('No user ID available, returning empty list');
-        return []; // Return empty list instead of dummy activities
+        return [];
       }
 
-      // Format current date for API
-      final currentDate =
-          DateTime.now().toIso8601String().split('T')[0]; // YYYY-MM-DD format
+      final currentDate = DateTime.now().toIso8601String().split('T')[0];
 
       final suggestions = await _vibeDayRepository.getSuggestions(
         userId: userId,
@@ -124,7 +120,6 @@ class HomeCubit extends Cubit<HomeState> {
       return suggestions;
     } catch (e) {
       log('Error loading suggestions: $e');
-      // Return empty list instead of dummy activities
       return [];
     }
   }
@@ -148,10 +143,14 @@ class HomeCubit extends Cubit<HomeState> {
 
       if (userId == null) {
         log('No user ID available for date $date, returning empty list');
-        return []; // Return empty list instead of dummy activities
+        return [];
       }
 
-      final dateStr = date.toIso8601String().split('T')[0]; // YYYY-MM-DD format
+      final dateStr = date.toIso8601String().split('T')[0];
+
+      log(
+        'Requesting suggestions for userId: $userId, date: $dateStr, lat: ${state.latitude}, lng: ${state.longitude}',
+      );
 
       final suggestions = await _vibeDayRepository.getSuggestions(
         userId: userId,
@@ -160,10 +159,11 @@ class HomeCubit extends Cubit<HomeState> {
         date: dateStr,
       );
 
+      log('Received ${suggestions.length} suggestions for date: $dateStr');
+
       return suggestions;
     } catch (e) {
       log('Error loading suggestions for date: $e');
-      // Return empty list instead of dummy activities
       return [];
     }
   }
@@ -184,9 +184,12 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       await Future.delayed(const Duration(milliseconds: 500));
 
-      final date =
-          weatherInfo['date'] as String? ?? DateTime.now().toIso8601String();
-      final selectedDate = DateTime.parse(date);
+      final today = DateTime.now();
+      final selectedDate = today.add(Duration(days: dayIndex));
+
+      log(
+        'Loading activities for day index: $dayIndex, calculated date: ${selectedDate.toIso8601String().split('T')[0]}',
+      );
 
       final activities = await _loadSuggestionsForDate(selectedDate, dayIndex);
 

@@ -1,11 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/presentation/app/app_cubit.dart';
+import 'package:vibe_day/presentation/detail/activity_detail_provider.dart';
 import 'package:vibe_day/presentation/home/home_provider.dart';
 import 'package:vibe_day/presentation/login/login_provider.dart';
 import 'package:vibe_day/presentation/register/register_provider.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
 
+import 'domain/model/activity.dart';
 import 'presentation/forgot_password/forgot_password_provider.dart';
 
 final GoRouter router = GoRouter(
@@ -48,6 +50,14 @@ final GoRouter router = GoRouter(
       path: '/${VibeSelectionProvider.routeName}',
       name: VibeSelectionProvider.routeName,
       builder: (_, __) => const VibeSelectionProvider(),
+    ),
+    GoRoute(
+      path: '/${ActivityDetailProvider.routeName}',
+      name: ActivityDetailProvider.routeName,
+      builder: (context, state) {
+        final activity = state.extra as Activity;
+        return ActivityDetailProvider(activity: activity);
+      },
     ),
   ],
 );

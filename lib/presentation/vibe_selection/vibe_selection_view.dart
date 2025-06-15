@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/domain/model/user.dart';
 import 'package:vibe_day/presentation/app/app_cubit.dart';
+import 'package:vibe_day/presentation/home/home_cubit.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/advanced_selection.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/budget_setting.dart';
 import 'package:vibe_day/presentation/vibe_selection/ui/distance_radius_setting.dart';
@@ -185,6 +186,7 @@ class FinishButton extends StatelessWidget {
       onPressed: () async {
         await context.read<VibeSelectionCubit>().finishSelection();
         if (context.mounted) {
+          context.read<HomeCubit>().refreshData();
           context.pop();
         }
       },
