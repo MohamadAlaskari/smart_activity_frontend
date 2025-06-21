@@ -79,7 +79,7 @@ class _ApiService implements ApiService {
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
-      method: 'POST',
+      method: 'GET',
       headers: _headers,
       extra: _extra,
     )
@@ -138,7 +138,7 @@ class _ApiService implements ApiService {
     )
         .compose(
           _dio.options,
-          '/weather/week',
+          '/weather/week/location',
           queryParameters: queryParameters,
           data: _data,
         )

@@ -52,7 +52,7 @@ class VibeDayRepository {
       final authHeader = 'Bearer ${token.accessToken}';
 
       final response = await _dio.get(
-        '/weather/week',
+        '/weather/week/location',
         queryParameters: {'location': location},
         options: Options(
           headers: {
@@ -113,7 +113,7 @@ class VibeDayRepository {
       await setToken(token);
 
       try {
-        final userResponse = await Dio().post(
+        final userResponse = await Dio().get(
           '${_dio.options.baseUrl}/auth/current-user',
           options: Options(
             headers: {
