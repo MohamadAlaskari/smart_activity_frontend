@@ -8,16 +8,33 @@ class Activity with _$Activity {
   const Activity._();
 
   const factory Activity({
-    required String id,
     required String title,
     required String description,
-    required String imageUrl,
-    required String location,
-    required String date,
-    required String time,
-    required String cost,
     required String category,
+    required ActivityLocation location,
+    required double distanceKm,
+    required DateTime startTime,
+    required DateTime endTime,
+    required String price,
+    required bool isTicketed,
+    required List<String> vibeMatch,
+    required List<String> images,
+    required String url,
   }) = _Activity;
 
-  factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
+  factory Activity.fromJson(Map<String, dynamic> json) =>
+      _$ActivityFromJson(json);
+}
+
+@freezed
+class ActivityLocation with _$ActivityLocation {
+  const factory ActivityLocation({
+    required String name,
+    required String address,
+    required double lat,
+    required double lon,
+  }) = _ActivityLocation;
+
+  factory ActivityLocation.fromJson(Map<String, dynamic> json) =>
+      _$ActivityLocationFromJson(json);
 }

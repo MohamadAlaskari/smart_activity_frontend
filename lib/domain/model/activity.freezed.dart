@@ -20,15 +20,18 @@ Activity _$ActivityFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Activity {
-  String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  String get imageUrl => throw _privateConstructorUsedError;
-  String get location => throw _privateConstructorUsedError;
-  String get date => throw _privateConstructorUsedError;
-  String get time => throw _privateConstructorUsedError;
-  String get cost => throw _privateConstructorUsedError;
   String get category => throw _privateConstructorUsedError;
+  ActivityLocation get location => throw _privateConstructorUsedError;
+  double get distanceKm => throw _privateConstructorUsedError;
+  DateTime get startTime => throw _privateConstructorUsedError;
+  DateTime get endTime => throw _privateConstructorUsedError;
+  String get price => throw _privateConstructorUsedError;
+  bool get isTicketed => throw _privateConstructorUsedError;
+  List<String> get vibeMatch => throw _privateConstructorUsedError;
+  List<String> get images => throw _privateConstructorUsedError;
+  String get url => throw _privateConstructorUsedError;
 
   /// Serializes this Activity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,15 +49,20 @@ abstract class $ActivityCopyWith<$Res> {
       _$ActivityCopyWithImpl<$Res, Activity>;
   @useResult
   $Res call(
-      {String id,
-      String title,
+      {String title,
       String description,
-      String imageUrl,
-      String location,
-      String date,
-      String time,
-      String cost,
-      String category});
+      String category,
+      ActivityLocation location,
+      double distanceKm,
+      DateTime startTime,
+      DateTime endTime,
+      String price,
+      bool isTicketed,
+      List<String> vibeMatch,
+      List<String> images,
+      String url});
+
+  $ActivityLocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -72,21 +80,20 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? imageUrl = null,
-    Object? location = null,
-    Object? date = null,
-    Object? time = null,
-    Object? cost = null,
     Object? category = null,
+    Object? location = null,
+    Object? distanceKm = null,
+    Object? startTime = null,
+    Object? endTime = null,
+    Object? price = null,
+    Object? isTicketed = null,
+    Object? vibeMatch = null,
+    Object? images = null,
+    Object? url = null,
   }) {
     return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -95,31 +102,57 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String,
-      location: null == location
-          ? _value.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as String,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as String,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as String,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
+      location: null == location
+          ? _value.location
+          : location // ignore: cast_nullable_to_non_nullable
+              as ActivityLocation,
+      distanceKm: null == distanceKm
+          ? _value.distanceKm
+          : distanceKm // ignore: cast_nullable_to_non_nullable
+              as double,
+      startTime: null == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      endTime: null == endTime
+          ? _value.endTime
+          : endTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      price: null == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
+              as String,
+      isTicketed: null == isTicketed
+          ? _value.isTicketed
+          : isTicketed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      vibeMatch: null == vibeMatch
+          ? _value.vibeMatch
+          : vibeMatch // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
+  }
+
+  /// Create a copy of Activity
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ActivityLocationCopyWith<$Res> get location {
+    return $ActivityLocationCopyWith<$Res>(_value.location, (value) {
+      return _then(_value.copyWith(location: value) as $Val);
+    });
   }
 }
 
@@ -132,15 +165,21 @@ abstract class _$$ActivityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String id,
-      String title,
+      {String title,
       String description,
-      String imageUrl,
-      String location,
-      String date,
-      String time,
-      String cost,
-      String category});
+      String category,
+      ActivityLocation location,
+      double distanceKm,
+      DateTime startTime,
+      DateTime endTime,
+      String price,
+      bool isTicketed,
+      List<String> vibeMatch,
+      List<String> images,
+      String url});
+
+  @override
+  $ActivityLocationCopyWith<$Res> get location;
 }
 
 /// @nodoc
@@ -156,21 +195,20 @@ class __$$ActivityImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
     Object? title = null,
     Object? description = null,
-    Object? imageUrl = null,
-    Object? location = null,
-    Object? date = null,
-    Object? time = null,
-    Object? cost = null,
     Object? category = null,
+    Object? location = null,
+    Object? distanceKm = null,
+    Object? startTime = null,
+    Object? endTime = null,
+    Object? price = null,
+    Object? isTicketed = null,
+    Object? vibeMatch = null,
+    Object? images = null,
+    Object? url = null,
   }) {
     return _then(_$ActivityImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -179,29 +217,45 @@ class __$$ActivityImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      imageUrl: null == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
               as String,
       location: null == location
           ? _value.location
           : location // ignore: cast_nullable_to_non_nullable
+              as ActivityLocation,
+      distanceKm: null == distanceKm
+          ? _value.distanceKm
+          : distanceKm // ignore: cast_nullable_to_non_nullable
+              as double,
+      startTime: null == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      endTime: null == endTime
+          ? _value.endTime
+          : endTime // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      price: null == price
+          ? _value.price
+          : price // ignore: cast_nullable_to_non_nullable
               as String,
-      date: null == date
-          ? _value.date
-          : date // ignore: cast_nullable_to_non_nullable
-              as String,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as String,
-      cost: null == cost
-          ? _value.cost
-          : cost // ignore: cast_nullable_to_non_nullable
-              as String,
-      category: null == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
+      isTicketed: null == isTicketed
+          ? _value.isTicketed
+          : isTicketed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      vibeMatch: null == vibeMatch
+          ? _value._vibeMatch
+          : vibeMatch // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      url: null == url
+          ? _value.url
+          : url // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -211,42 +265,65 @@ class __$$ActivityImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ActivityImpl extends _Activity {
   const _$ActivityImpl(
-      {required this.id,
-      required this.title,
+      {required this.title,
       required this.description,
-      required this.imageUrl,
+      required this.category,
       required this.location,
-      required this.date,
-      required this.time,
-      required this.cost,
-      required this.category})
-      : super._();
+      required this.distanceKm,
+      required this.startTime,
+      required this.endTime,
+      required this.price,
+      required this.isTicketed,
+      required final List<String> vibeMatch,
+      required final List<String> images,
+      required this.url})
+      : _vibeMatch = vibeMatch,
+        _images = images,
+        super._();
 
   factory _$ActivityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ActivityImplFromJson(json);
 
   @override
-  final String id;
-  @override
   final String title;
   @override
   final String description;
   @override
-  final String imageUrl;
-  @override
-  final String location;
-  @override
-  final String date;
-  @override
-  final String time;
-  @override
-  final String cost;
-  @override
   final String category;
+  @override
+  final ActivityLocation location;
+  @override
+  final double distanceKm;
+  @override
+  final DateTime startTime;
+  @override
+  final DateTime endTime;
+  @override
+  final String price;
+  @override
+  final bool isTicketed;
+  final List<String> _vibeMatch;
+  @override
+  List<String> get vibeMatch {
+    if (_vibeMatch is EqualUnmodifiableListView) return _vibeMatch;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_vibeMatch);
+  }
+
+  final List<String> _images;
+  @override
+  List<String> get images {
+    if (_images is EqualUnmodifiableListView) return _images;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_images);
+  }
+
+  @override
+  final String url;
 
   @override
   String toString() {
-    return 'Activity(id: $id, title: $title, description: $description, imageUrl: $imageUrl, location: $location, date: $date, time: $time, cost: $cost, category: $category)';
+    return 'Activity(title: $title, description: $description, category: $category, location: $location, distanceKm: $distanceKm, startTime: $startTime, endTime: $endTime, price: $price, isTicketed: $isTicketed, vibeMatch: $vibeMatch, images: $images, url: $url)';
   }
 
   @override
@@ -254,25 +331,43 @@ class _$ActivityImpl extends _Activity {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ActivityImpl &&
-            (identical(other.id, id) || other.id == id) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
             (identical(other.location, location) ||
                 other.location == location) &&
-            (identical(other.date, date) || other.date == date) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.cost, cost) || other.cost == cost) &&
-            (identical(other.category, category) ||
-                other.category == category));
+            (identical(other.distanceKm, distanceKm) ||
+                other.distanceKm == distanceKm) &&
+            (identical(other.startTime, startTime) ||
+                other.startTime == startTime) &&
+            (identical(other.endTime, endTime) || other.endTime == endTime) &&
+            (identical(other.price, price) || other.price == price) &&
+            (identical(other.isTicketed, isTicketed) ||
+                other.isTicketed == isTicketed) &&
+            const DeepCollectionEquality()
+                .equals(other._vibeMatch, _vibeMatch) &&
+            const DeepCollectionEquality().equals(other._images, _images) &&
+            (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title, description, imageUrl,
-      location, date, time, cost, category);
+  int get hashCode => Object.hash(
+      runtimeType,
+      title,
+      description,
+      category,
+      location,
+      distanceKm,
+      startTime,
+      endTime,
+      price,
+      isTicketed,
+      const DeepCollectionEquality().hash(_vibeMatch),
+      const DeepCollectionEquality().hash(_images),
+      url);
 
   /// Create a copy of Activity
   /// with the given fields replaced by the non-null parameter values.
@@ -292,43 +387,258 @@ class _$ActivityImpl extends _Activity {
 
 abstract class _Activity extends Activity {
   const factory _Activity(
-      {required final String id,
-      required final String title,
+      {required final String title,
       required final String description,
-      required final String imageUrl,
-      required final String location,
-      required final String date,
-      required final String time,
-      required final String cost,
-      required final String category}) = _$ActivityImpl;
+      required final String category,
+      required final ActivityLocation location,
+      required final double distanceKm,
+      required final DateTime startTime,
+      required final DateTime endTime,
+      required final String price,
+      required final bool isTicketed,
+      required final List<String> vibeMatch,
+      required final List<String> images,
+      required final String url}) = _$ActivityImpl;
   const _Activity._() : super._();
 
   factory _Activity.fromJson(Map<String, dynamic> json) =
       _$ActivityImpl.fromJson;
 
   @override
-  String get id;
-  @override
   String get title;
   @override
   String get description;
   @override
-  String get imageUrl;
-  @override
-  String get location;
-  @override
-  String get date;
-  @override
-  String get time;
-  @override
-  String get cost;
-  @override
   String get category;
+  @override
+  ActivityLocation get location;
+  @override
+  double get distanceKm;
+  @override
+  DateTime get startTime;
+  @override
+  DateTime get endTime;
+  @override
+  String get price;
+  @override
+  bool get isTicketed;
+  @override
+  List<String> get vibeMatch;
+  @override
+  List<String> get images;
+  @override
+  String get url;
 
   /// Create a copy of Activity
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ActivityImplCopyWith<_$ActivityImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ActivityLocation _$ActivityLocationFromJson(Map<String, dynamic> json) {
+  return _ActivityLocation.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ActivityLocation {
+  String get name => throw _privateConstructorUsedError;
+  String get address => throw _privateConstructorUsedError;
+  double get lat => throw _privateConstructorUsedError;
+  double get lon => throw _privateConstructorUsedError;
+
+  /// Serializes this ActivityLocation to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ActivityLocation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ActivityLocationCopyWith<ActivityLocation> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ActivityLocationCopyWith<$Res> {
+  factory $ActivityLocationCopyWith(
+          ActivityLocation value, $Res Function(ActivityLocation) then) =
+      _$ActivityLocationCopyWithImpl<$Res, ActivityLocation>;
+  @useResult
+  $Res call({String name, String address, double lat, double lon});
+}
+
+/// @nodoc
+class _$ActivityLocationCopyWithImpl<$Res, $Val extends ActivityLocation>
+    implements $ActivityLocationCopyWith<$Res> {
+  _$ActivityLocationCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ActivityLocation
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? address = null,
+    Object? lat = null,
+    Object? lon = null,
+  }) {
+    return _then(_value.copyWith(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      lat: null == lat
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double,
+      lon: null == lon
+          ? _value.lon
+          : lon // ignore: cast_nullable_to_non_nullable
+              as double,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ActivityLocationImplCopyWith<$Res>
+    implements $ActivityLocationCopyWith<$Res> {
+  factory _$$ActivityLocationImplCopyWith(_$ActivityLocationImpl value,
+          $Res Function(_$ActivityLocationImpl) then) =
+      __$$ActivityLocationImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String name, String address, double lat, double lon});
+}
+
+/// @nodoc
+class __$$ActivityLocationImplCopyWithImpl<$Res>
+    extends _$ActivityLocationCopyWithImpl<$Res, _$ActivityLocationImpl>
+    implements _$$ActivityLocationImplCopyWith<$Res> {
+  __$$ActivityLocationImplCopyWithImpl(_$ActivityLocationImpl _value,
+      $Res Function(_$ActivityLocationImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ActivityLocation
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? name = null,
+    Object? address = null,
+    Object? lat = null,
+    Object? lon = null,
+  }) {
+    return _then(_$ActivityLocationImpl(
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      address: null == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String,
+      lat: null == lat
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double,
+      lon: null == lon
+          ? _value.lon
+          : lon // ignore: cast_nullable_to_non_nullable
+              as double,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ActivityLocationImpl implements _ActivityLocation {
+  const _$ActivityLocationImpl(
+      {required this.name,
+      required this.address,
+      required this.lat,
+      required this.lon});
+
+  factory _$ActivityLocationImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ActivityLocationImplFromJson(json);
+
+  @override
+  final String name;
+  @override
+  final String address;
+  @override
+  final double lat;
+  @override
+  final double lon;
+
+  @override
+  String toString() {
+    return 'ActivityLocation(name: $name, address: $address, lat: $lat, lon: $lon)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ActivityLocationImpl &&
+            (identical(other.name, name) || other.name == name) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.lat, lat) || other.lat == lat) &&
+            (identical(other.lon, lon) || other.lon == lon));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, name, address, lat, lon);
+
+  /// Create a copy of ActivityLocation
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ActivityLocationImplCopyWith<_$ActivityLocationImpl> get copyWith =>
+      __$$ActivityLocationImplCopyWithImpl<_$ActivityLocationImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ActivityLocationImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ActivityLocation implements ActivityLocation {
+  const factory _ActivityLocation(
+      {required final String name,
+      required final String address,
+      required final double lat,
+      required final double lon}) = _$ActivityLocationImpl;
+
+  factory _ActivityLocation.fromJson(Map<String, dynamic> json) =
+      _$ActivityLocationImpl.fromJson;
+
+  @override
+  String get name;
+  @override
+  String get address;
+  @override
+  double get lat;
+  @override
+  double get lon;
+
+  /// Create a copy of ActivityLocation
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ActivityLocationImplCopyWith<_$ActivityLocationImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

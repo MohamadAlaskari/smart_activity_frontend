@@ -330,116 +330,16 @@ class VibeDayRepository {
 
       log('Suggestions API Response: $response');
 
-      final List<Activity> activities = [];
-
-      List<dynamic> suggestions;
-      if (response is List) {
-        suggestions = response;
-      } else {
+      if (response is! List) {
         log('Unexpected response format: ${response.runtimeType}');
-        suggestions = [];
+        return [];
       }
 
-      final baseTimestamp = DateTime.now().millisecondsSinceEpoch;
-
-      for (int i = 0; i < suggestions.length; i++) {
-        final suggestion = suggestions[i];
-
-        if (suggestion is! Map<String, dynamic>) {
-          log(
-            'Skipping invalid suggestion at index $i: ${suggestion.runtimeType}',
-          );
-          continue;
-        }
-
-        final id =
-            'suggestion_${baseTimestamp}_${i}_${suggestion['title']?.toString().hashCode ?? i}';
-
-        final locationObj = suggestion['location'];
-        String locationName = 'Unknown Location';
-        if (locationObj is Map<String, dynamic>) {
-          locationName = locationObj['name']?.toString() ?? 'Unknown Location';
-        }
-
-        final startTime = suggestion['startTime'] as String?;
-        final endTime = suggestion['endTime'] as String?;
-
-        String formattedDate = '';
-        String formattedTime = '';
-
-        if (startTime != null) {
-          try {
-            final startDateTime = DateTime.parse(startTime);
-            formattedDate =
-                '${startDateTime.day.toString().padLeft(2, '0')}.${startDateTime.month.toString().padLeft(2, '0')}.${startDateTime.year}';
-
-            if (endTime != null) {
-              final endDateTime = DateTime.parse(endTime);
-              formattedTime =
-                  '${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')}-${endDateTime.hour.toString().padLeft(2, '0')}:${endDateTime.minute.toString().padLeft(2, '0')}';
-            } else {
-              formattedTime =
-                  '${startDateTime.hour.toString().padLeft(2, '0')}:${startDateTime.minute.toString().padLeft(2, '0')}';
-            }
-          } catch (e) {
-            log('Error parsing date/time: $e');
-            formattedDate = date;
-            formattedTime = 'Time TBD';
-          }
-        } else {
-          formattedDate = date;
-          formattedTime = 'Time TBD';
-        }
-
-        final imagesObj = suggestion['images'];
-        List<dynamic> images = [];
-        if (imagesObj is List) {
-          images = imagesObj;
-        }
-
-        String imageUrl;
-        if (images.isNotEmpty) {
-          final apiImageUrl = images.first.toString();
-          if (apiImageUrl.isNotEmpty &&
-              !apiImageUrl.contains('example.com') &&
-              apiImageUrl.startsWith('http')) {
-            imageUrl = apiImageUrl;
-          } else {
-            imageUrl = _getFallbackImageForCategory(
-              suggestion['category']?.toString() ?? 'general',
-            );
-          }
-        } else {
-          imageUrl = _getFallbackImageForCategory(
-            suggestion['category']?.toString() ?? 'general',
-          );
-        }
-
-        final price = suggestion['price']?.toString() ?? '0€';
-        final formattedPrice = price.contains('€') ? price : '${price}€';
-
-        final title = suggestion['title']?.toString()?.trim();
-        final finalTitle =
-            (title != null && title.isNotEmpty) ? title : 'Activity ${i + 1}';
-
-        final activity = Activity(
-          id: id,
-          title: finalTitle,
-          description: suggestion['description']?.toString() ?? '',
-          imageUrl: imageUrl,
-          location: locationName,
-          date: formattedDate,
-          time: formattedTime,
-          cost: formattedPrice,
-          category: suggestion['category']?.toString() ?? 'general',
-        );
-
-        activities.add(activity);
-      }
-
-      log('Converted ${activities.length} suggestions to activities');
-
-      return activities;
+      // Transformiere die JSON-Liste direkt zu Activity-Objekten
+      return response
+          .whereType<Map<String, dynamic>>()
+          .map((suggestion) => Activity.fromJson(suggestion))
+          .toList();
     } catch (e) {
       log('Error fetching suggestions: $e');
 
@@ -456,7 +356,6 @@ class VibeDayRepository {
         }
       }
 
-      log('Falling back to dummy activities due to error');
       return [];
     }
   }

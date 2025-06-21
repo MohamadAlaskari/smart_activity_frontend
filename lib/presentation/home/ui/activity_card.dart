@@ -6,11 +6,7 @@ class ActivityCard extends StatelessWidget {
   final Activity activity;
   final VoidCallback? onTap;
 
-  const ActivityCard({
-    super.key,
-    required this.activity,
-    this.onTap,
-  });
+  const ActivityCard({super.key, required this.activity, this.onTap});
 
   Color _getCategoryColor(String category) {
     switch (category.toLowerCase()) {
@@ -28,50 +24,6 @@ class ActivityCard extends StatelessWidget {
       default:
         return Colors.grey;
     }
-  }
-
-  Widget _buildImageWidget() {
-    return Image.network(
-      activity.imageUrl,
-      fit: BoxFit.cover,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Container(
-          color: Colors.grey[200],
-          child: Center(
-            child: CircularProgressIndicator(
-              value: loadingProgress.expectedTotalBytes != null
-                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                  : null,
-            ),
-          ),
-        );
-      },
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          color: _getCategoryColor(activity.category).withOpacity(0.1),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                _getCategoryIcon(activity.category),
-                size: 40,
-                color: _getCategoryColor(activity.category),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                activity.category.toUpperCase(),
-                style: TextStyle(
-                  color: _getCategoryColor(activity.category),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   IconData _getCategoryIcon(String category) {
@@ -97,8 +49,57 @@ class ActivityCard extends StatelessWidget {
     }
   }
 
+  Widget _buildImageWidget() {
+    if (activity.images.isEmpty) {
+      return Container(
+        color: _getCategoryColor(activity.category).withOpacity(0.1),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              _getCategoryIcon(activity.category),
+              size: 40,
+              color: _getCategoryColor(activity.category),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              activity.category.toUpperCase(),
+              style: TextStyle(
+                color: _getCategoryColor(activity.category),
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Image.network(
+      activity.images.first,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Container(
+          color: Colors.grey[200],
+          child: const Center(child: CircularProgressIndicator()),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          color: Colors.grey[300],
+          child: const Center(child: Icon(Icons.broken_image)),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final startTimeStr = DateFormat.Hm().format(activity.startTime);
+    final endTimeStr = DateFormat.Hm().format(activity.endTime);
+    final dateStr = DateFormat.yMd().format(activity.startTime);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -130,11 +131,9 @@ class ActivityCard extends StatelessWidget {
                     width: double.infinity,
                     child: Stack(
                       children: [
-                        Positioned.fill(
-                          child: _buildImageWidget(),
-                        ),
+                        Positioned.fill(child: _buildImageWidget()),
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.topCenter,
                               end: Alignment.bottomCenter,
@@ -155,8 +154,11 @@ class ActivityCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${activity.date} | ${activity.time}',
-                          style: TextStyle(fontSize: 11, color: Colors.grey[600]),
+                          '$dateStr | $startTimeStr - $endTimeStr',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: Colors.grey[600],
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Flexible(
@@ -176,7 +178,7 @@ class ActivityCard extends StatelessWidget {
                           children: [
                             Flexible(
                               child: Text(
-                                '${'HOME.ACTIVITY.COSTS'.tr()}: ${activity.cost}',
+                                '${'HOME.ACTIVITY.COSTS'.tr()}: ${activity.price}',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Colors.grey[600],
@@ -195,7 +197,7 @@ class ActivityCard extends StatelessWidget {
                                   const SizedBox(width: 2),
                                   Flexible(
                                     child: Text(
-                                      activity.location,
+                                      activity.location.name,
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: Colors.grey[600],
