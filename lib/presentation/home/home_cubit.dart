@@ -7,7 +7,6 @@ import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/domain/model/activity.dart';
 import 'dart:developer';
 
-
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit({
     required VibeDayRepository vibeDayRepository,
@@ -69,12 +68,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      log('Loading weather data for: ${state.location}');
+      // ⛅ أولًا: حمّل بيانات الطقس
       final weatherData = await _vibeDayRepository.getWeeklyWeather(
         state.location,
       );
-
-      final activities = await _loadSuggestions();
 
       if (isClosed) return;
 
@@ -82,9 +79,15 @@ class HomeCubit extends Cubit<HomeState> {
         state.copyWith(
           screenStatus: const ScreenStatus.success(),
           weatherData: weatherData,
-          activities: activities,
+          activities: [],
         ),
       );
+
+      final activities = await _loadSuggestions();
+
+      if (isClosed) return;
+
+      emit(state.copyWith(activities: activities));
     } catch (e) {
       log('Error loading home data: $e');
       if (isClosed) return;
