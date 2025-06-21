@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:vibe_day/presentation/detail/activity_detail_cubit.dart';
 import 'package:vibe_day/presentation/detail/activity_detail_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ActivityDetailView extends StatelessWidget {
   const ActivityDetailView({super.key});
@@ -26,9 +28,6 @@ class ActivityDetailView extends StatelessWidget {
                   background:
                       activity.images.isNotEmpty
                           ? ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(32),
-                            ),
                             child: Image.network(
                               activity.images.first,
                               fit: BoxFit.cover,
@@ -73,25 +72,6 @@ class ActivityDetailView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 4,
-                        children:
-                            activity.vibeMatch.map((vibe) {
-                              final color = _getBadgeColor(vibe);
-                              return Chip(
-                                label: Text(
-                                  vibe,
-                                  style: const TextStyle(fontSize: 12),
-                                ),
-                                backgroundColor: color.withOpacity(0.2),
-                                labelStyle: TextStyle(color: color),
-                                visualDensity: VisualDensity.compact,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                              );
-                            }).toList(),
-                      ),
                     ],
                   ),
                 ),
@@ -109,12 +89,37 @@ class ActivityDetailView extends StatelessWidget {
                       _buildActionIcon(
                         icon: Icons.share,
                         label: 'Teilen',
-                        onTap: () {},
+                        onTap: () {
+                          final shareText =
+                              '${activity.title}\n\n${activity.description}\n\n${activity.url}';
+                          Share.share(shareText);
+                        },
                       ),
                       _buildActionIcon(
                         icon: Icons.directions,
                         label: 'Route',
-                        onTap: () {},
+                        onTap: () async {
+                          final encodedAddress = Uri.encodeComponent(
+                            '${activity.location.name}, ${activity.location.address}',
+                          );
+                          final url =
+                              'https://www.google.com/maps/search/?api=1&query=$encodedAddress';
+
+                          if (await canLaunchUrl(Uri.parse(url))) {
+                            await launchUrl(
+                              Uri.parse(url),
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  'Karte kann nicht geöffnet werden',
+                                ),
+                              ),
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
