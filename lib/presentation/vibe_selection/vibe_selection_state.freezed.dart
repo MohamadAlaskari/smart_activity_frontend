@@ -26,6 +26,7 @@ mixin _$VibeSelectionState {
   List<String> get selectedLifeVibes => throw _privateConstructorUsedError;
   List<String> get selectedExperienceTypes =>
       throw _privateConstructorUsedError;
+  bool get isFirstLogin => throw _privateConstructorUsedError;
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.
@@ -49,7 +50,8 @@ abstract class $VibeSelectionStateCopyWith<$Res> {
       String? selectedGroupSize,
       bool showAdvancedSettings,
       List<String> selectedLifeVibes,
-      List<String> selectedExperienceTypes});
+      List<String> selectedExperienceTypes,
+      bool isFirstLogin});
 
   $ScreenStatusCopyWith<$Res> get screenStatus;
 }
@@ -78,6 +80,7 @@ class _$VibeSelectionStateCopyWithImpl<$Res, $Val extends VibeSelectionState>
     Object? showAdvancedSettings = null,
     Object? selectedLifeVibes = null,
     Object? selectedExperienceTypes = null,
+    Object? isFirstLogin = null,
   }) {
     return _then(_value.copyWith(
       screenStatus: null == screenStatus
@@ -116,6 +119,10 @@ class _$VibeSelectionStateCopyWithImpl<$Res, $Val extends VibeSelectionState>
           ? _value.selectedExperienceTypes
           : selectedExperienceTypes // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isFirstLogin: null == isFirstLogin
+          ? _value.isFirstLogin
+          : isFirstLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -147,7 +154,8 @@ abstract class _$$VibeSelectionStateImplCopyWith<$Res>
       String? selectedGroupSize,
       bool showAdvancedSettings,
       List<String> selectedLifeVibes,
-      List<String> selectedExperienceTypes});
+      List<String> selectedExperienceTypes,
+      bool isFirstLogin});
 
   @override
   $ScreenStatusCopyWith<$Res> get screenStatus;
@@ -175,6 +183,7 @@ class __$$VibeSelectionStateImplCopyWithImpl<$Res>
     Object? showAdvancedSettings = null,
     Object? selectedLifeVibes = null,
     Object? selectedExperienceTypes = null,
+    Object? isFirstLogin = null,
   }) {
     return _then(_$VibeSelectionStateImpl(
       screenStatus: null == screenStatus
@@ -213,6 +222,10 @@ class __$$VibeSelectionStateImplCopyWithImpl<$Res>
           ? _value._selectedExperienceTypes
           : selectedExperienceTypes // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isFirstLogin: null == isFirstLogin
+          ? _value.isFirstLogin
+          : isFirstLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -229,7 +242,8 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
       this.selectedGroupSize,
       this.showAdvancedSettings = false,
       final List<String> selectedLifeVibes = const [],
-      final List<String> selectedExperienceTypes = const []})
+      final List<String> selectedExperienceTypes = const [],
+      this.isFirstLogin = false})
       : _selectedVibes = selectedVibes,
         _selectedLifeVibes = selectedLifeVibes,
         _selectedExperienceTypes = selectedExperienceTypes,
@@ -281,8 +295,12 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
   }
 
   @override
+  @JsonKey()
+  final bool isFirstLogin;
+
+  @override
   String toString() {
-    return 'VibeSelectionState(screenStatus: $screenStatus, selectedVibes: $selectedVibes, budget: $budget, distanceRadius: $distanceRadius, selectedTimeWindow: $selectedTimeWindow, selectedGroupSize: $selectedGroupSize, showAdvancedSettings: $showAdvancedSettings, selectedLifeVibes: $selectedLifeVibes, selectedExperienceTypes: $selectedExperienceTypes)';
+    return 'VibeSelectionState(screenStatus: $screenStatus, selectedVibes: $selectedVibes, budget: $budget, distanceRadius: $distanceRadius, selectedTimeWindow: $selectedTimeWindow, selectedGroupSize: $selectedGroupSize, showAdvancedSettings: $showAdvancedSettings, selectedLifeVibes: $selectedLifeVibes, selectedExperienceTypes: $selectedExperienceTypes, isFirstLogin: $isFirstLogin)';
   }
 
   @override
@@ -306,7 +324,9 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
             const DeepCollectionEquality()
                 .equals(other._selectedLifeVibes, _selectedLifeVibes) &&
             const DeepCollectionEquality().equals(
-                other._selectedExperienceTypes, _selectedExperienceTypes));
+                other._selectedExperienceTypes, _selectedExperienceTypes) &&
+            (identical(other.isFirstLogin, isFirstLogin) ||
+                other.isFirstLogin == isFirstLogin));
   }
 
   @override
@@ -320,7 +340,8 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
       selectedGroupSize,
       showAdvancedSettings,
       const DeepCollectionEquality().hash(_selectedLifeVibes),
-      const DeepCollectionEquality().hash(_selectedExperienceTypes));
+      const DeepCollectionEquality().hash(_selectedExperienceTypes),
+      isFirstLogin);
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.
@@ -342,7 +363,8 @@ abstract class _VibeSelectionState extends VibeSelectionState {
       final String? selectedGroupSize,
       final bool showAdvancedSettings,
       final List<String> selectedLifeVibes,
-      final List<String> selectedExperienceTypes}) = _$VibeSelectionStateImpl;
+      final List<String> selectedExperienceTypes,
+      final bool isFirstLogin}) = _$VibeSelectionStateImpl;
   _VibeSelectionState._() : super._();
 
   @override
@@ -363,6 +385,8 @@ abstract class _VibeSelectionState extends VibeSelectionState {
   List<String> get selectedLifeVibes;
   @override
   List<String> get selectedExperienceTypes;
+  @override
+  bool get isFirstLogin;
 
   /// Create a copy of VibeSelectionState
   /// with the given fields replaced by the non-null parameter values.

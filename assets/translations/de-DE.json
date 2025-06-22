@@ -64,6 +64,7 @@
     "TITLE": "Aktivitätsdetails",
     "DESCRIPTION": "Beschreibung",
     "INFORMATION": "Informationen",
+    "NO_DESCRIPTION": "Keine Beschreibung verfügbar.",
     "ACTION": {
       "SHARE": "Teilen",
       "FAVORITE": "Favorit",
@@ -74,7 +75,15 @@
       "DATE": "Datum",
       "COSTS": "Kosten",
       "CATEGORY": "Kategorie",
-      "LOCATION": "Ort"
+      "LOCATION": "Ort",
+      "DISTANCE": "Entfernung",
+      "FREE": "Kostenlos"
+    },
+    "TICKET": {
+      "BOOK": "Ticket buchen"
+    },
+    "ERROR": {
+      "MAP_UNAVAILABLE": "Karte kann nicht geöffnet werden"
     }
   },
   "SETTINGS": {
@@ -141,6 +150,9 @@
     }
   },
   "VIBE_SELECTION": {
+    "FIRST_LOGIN_HEADER": "Willkommen{name}! Lass uns deine Präferenzen einrichten.",
+    "FIRST_LOGIN_SUBTITLE": "Wähle deine Lieblings-Vibes aus, damit wir dir die besten Vorschläge machen können.",
+    "FINISH_FIRST_LOGIN_BUTTON": "Los geht's!",
     "TITLE": "Vibe-Auswahl",
     "HEADER": "Hallo{name}! Was ist heute dein Vibe?",
     "SUBTITLE": "Vibe-Auswahl",
@@ -151,21 +163,17 @@
       "OUTDOORS": "Draußen",
       "CHILL": "Entspannen"
     },
-    "REMEMBER_VIBE": "Meinen Vibe für das nächste Mal merken",
     "BUDGET": {
-      "TITLE": "Budget-Einstellung",
-      "REMEMBER": "Budget für nächste Sitzungen merken"
+      "TITLE": "Budget-Einstellung"
     },
     "DISTANCE": {
-      "TITLE": "Entfernungsradius",
-      "REMEMBER": "Meine Entfernungspräferenz merken"
+      "TITLE": "Entfernungsradius"
     },
     "TIME_WINDOW": {
       "TITLE": "Zeitfenster",
       "MORNING": "Morgen",
       "AFTERNOON": "Nachmittag",
-      "EVENING": "Abend",
-      "REMEMBER": "Meine Zeitfenster merken"
+      "EVENING": "Abend"
     },
     "GROUP_SIZE": {
       "TITLE": "Gruppengröße",

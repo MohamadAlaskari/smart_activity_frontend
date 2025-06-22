@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:vibe_day/domain/model/activity.dart';
@@ -9,18 +11,18 @@ class ActivityCard extends StatelessWidget {
   const ActivityCard({super.key, required this.activity, this.onTap});
 
   Color _getCategoryColor(String category) {
+    log('Category: "$category"');
     switch (category.toLowerCase()) {
-      case 'nature':
+      case 'outdoors':
         return Colors.green;
-      case 'music':
-        return Colors.orange;
+      case 'night out':
+        return Colors.deepPurple;
       case 'culture':
-        return Colors.blue;
-      case 'food':
-        return Colors.red;
-      case 'sport':
-      case 'movement':
-        return Colors.purple;
+        return Colors.indigo;
+      case 'chill':
+        return Colors.brown;
+      case 'sports':
+        return Colors.orange;
       default:
         return Colors.grey;
     }
@@ -28,17 +30,11 @@ class ActivityCard extends StatelessWidget {
 
   IconData _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
-      case 'nature':
       case 'outdoors':
         return Icons.nature;
-      case 'music':
-        return Icons.music_note;
       case 'culture':
         return Icons.theater_comedy;
-      case 'food':
-        return Icons.restaurant;
-      case 'sport':
-      case 'movement':
+      case 'sports':
         return Icons.directions_run;
       case 'chill':
         return Icons.coffee;
@@ -52,20 +48,20 @@ class ActivityCard extends StatelessWidget {
   Widget _buildImageWidget() {
     if (activity.images.isEmpty) {
       return Container(
-        color: _getCategoryColor(activity.category).withOpacity(0.1),
+        color: _getCategoryColor(activity.category),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               _getCategoryIcon(activity.category),
               size: 40,
-              color: _getCategoryColor(activity.category),
+              color: Colors.white,
             ),
             const SizedBox(height: 8),
             Text(
               activity.category.toUpperCase(),
-              style: TextStyle(
-                color: _getCategoryColor(activity.category),
+              style: const TextStyle(
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 12,
               ),
@@ -119,7 +115,7 @@ class ActivityCard extends StatelessWidget {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(13),
           child: Container(
             height: 200,
             color: Colors.white,
@@ -145,67 +141,74 @@ class ActivityCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 2,
+                SizedBox(
+                  height: 80,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           '$dateStr | $startTimeStr - $endTimeStr',
                           style: TextStyle(
                             fontSize: 11,
-                            color: Colors.grey[600],
+                            color: Colors.grey[800],
                           ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 2),
-                        Flexible(
+                        Expanded(
                           child: Text(
                             activity.title,
                             style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
+                              color: Colors.black,
                             ),
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const SizedBox(height: 4),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Flexible(
+                            Expanded(
                               child: Text(
                                 '${'HOME.ACTIVITY.COSTS'.tr()}: ${activity.price}',
                                 style: TextStyle(
                                   fontSize: 11,
-                                  color: Colors.grey[600],
+                                  color: Colors.grey[800],
                                 ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
                               ),
                             ),
-                            Flexible(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    size: 12,
-                                    color: Colors.grey[600],
-                                  ),
-                                  const SizedBox(width: 2),
-                                  Flexible(
-                                    child: Text(
-                                      activity.location.name,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: Colors.grey[600],
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                            Expanded(
+                              child: Container(
+                                alignment: Alignment.centerRight,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      size: 12,
+                                      color: Colors.grey[600],
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(width: 2),
+                                    Flexible(
+                                      child: Text(
+                                        activity.location.name,
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.grey[800],
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

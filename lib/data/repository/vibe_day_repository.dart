@@ -360,31 +360,6 @@ class VibeDayRepository {
     }
   }
 
-  String _getFallbackImageForCategory(String category) {
-    switch (category.toLowerCase()) {
-      case 'nature':
-      case 'outdoors':
-        return 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=300&fit=crop';
-      case 'music':
-        return 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=500&h=300&fit=crop';
-      case 'culture':
-      case 'arts & theatre':
-        return 'https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=500&h=300&fit=crop';
-      case 'food':
-        return 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=500&h=300&fit=crop';
-      case 'sport':
-      case 'sports':
-      case 'movement':
-        return 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop';
-      case 'chill':
-        return 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=500&h=300&fit=crop';
-      case 'night out':
-        return 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&h=300&fit=crop';
-      default:
-        return 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=500&h=300&fit=crop';
-    }
-  }
-
   Future<UserPreferences> createUserPreferences({
     required String userId,
     required UserPreferences preferences,

@@ -77,10 +77,14 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final userName = user?.firstName ?? user?.username ?? '';
     final nameWithSpace = userName.isNotEmpty ? ' $userName' : '';
+    final isFirstLogin = user?.isFirstLogin == true;
 
-    final displayText = 'VIBE_SELECTION.HEADER'.tr(
-      namedArgs: {'name': nameWithSpace},
-    );
+    final displayText =
+        isFirstLogin
+            ? 'VIBE_SELECTION.FIRST_LOGIN_HEADER'.tr(
+              namedArgs: {'name': nameWithSpace},
+            )
+            : 'VIBE_SELECTION.HEADER'.tr(namedArgs: {'name': nameWithSpace});
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,6 +97,13 @@ class Header extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        if (isFirstLogin) ...[
+          const SizedBox(height: 10),
+          Text(
+            'VIBE_SELECTION.FIRST_LOGIN_SUBTITLE'.tr(),
+            style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+          ),
+        ],
       ],
     );
   }
@@ -180,12 +191,21 @@ class FinishButton extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context, {bool isLoading = false}) {
+    final isFirstLogin = context.select<AppCubit, bool>(
+      (cubit) => cubit.state.user?.isFirstLogin == true,
+    );
+
+    final buttonText =
+        isFirstLogin
+            ? 'VIBE_SELECTION.FINISH_FIRST_LOGIN_BUTTON'.tr()
+            : 'VIBE_SELECTION.FINISH_BUTTON'.tr();
+
     return VibeDayButton(
-      text: 'VIBE_SELECTION.FINISH_BUTTON'.tr(),
+      text: buttonText,
       isLoading: isLoading,
       onPressed: () async {
         await context.read<VibeSelectionCubit>().finishSelection();
-        if (context.mounted) {
+        if (context.mounted && !isFirstLogin) {
           context.read<HomeCubit>().refreshData();
           context.pop();
         }

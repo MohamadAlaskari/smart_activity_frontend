@@ -68,26 +68,24 @@ class HomeCubit extends Cubit<HomeState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      // ⛅ أولًا: حمّل بيانات الطقس
       final weatherData = await _vibeDayRepository.getWeeklyWeather(
         state.location,
       );
 
       if (isClosed) return;
 
-      emit(
-        state.copyWith(
-          screenStatus: const ScreenStatus.success(),
-          weatherData: weatherData,
-          activities: [],
-        ),
-      );
+      emit(state.copyWith(weatherData: weatherData, activities: []));
 
       final activities = await _loadSuggestions();
 
       if (isClosed) return;
 
-      emit(state.copyWith(activities: activities));
+      emit(
+        state.copyWith(
+          screenStatus: const ScreenStatus.success(),
+          activities: activities,
+        ),
+      );
     } catch (e) {
       log('Error loading home data: $e');
       if (isClosed) return;

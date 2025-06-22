@@ -87,6 +87,23 @@ class AppCubit extends HydratedCubit<AppState> {
     );
   }
 
+  Future<void> refreshUserState() async {
+    try {
+      final currentUser = await _userStorageRepository.getUser();
+      if (currentUser != null) {
+        emit(
+          state.copyWith(
+            user: currentUser,
+            status: AuthResult.authenticated(currentUser),
+          ),
+        );
+        log('User state refreshed: isFirstLogin = ${currentUser.isFirstLogin}');
+      }
+    } catch (e) {
+      log('Error refreshing user state: $e');
+    }
+  }
+
   @override
   Future<void> close() async {
     await _vibeDayUserSubscription.cancel();

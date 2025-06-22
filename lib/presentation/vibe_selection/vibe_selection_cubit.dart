@@ -4,6 +4,7 @@ import 'package:vibe_day/common/screen_status.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/domain/model/user_preferences.dart';
+import 'package:vibe_day/domain/model/user.dart';
 import 'dart:developer';
 
 class VibeSelectionCubit extends Cubit<VibeSelectionState> {
@@ -68,12 +69,11 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     }
   }
 
-  Future<String?> _getUserId() async {
+  Future<User?> _getUser() async {
     try {
-      final user = await _userStorageRepository.getUser();
-      return user?.id;
+      return await _userStorageRepository.getUser();
     } catch (e) {
-      log('Error getting user ID: $e');
+      log('Error getting user: $e');
       return null;
     }
   }
@@ -161,8 +161,8 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      final userId = await _getUserId();
-      if (userId == null) {
+      final user = await _getUser();
+      if (user?.id == null) {
         throw Exception('User not found. Please login again.');
       }
 
@@ -170,17 +170,23 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
 
       try {
         await _vibeDayRepository.updateUserPreferences(
-          userId: userId,
+          userId: user!.id!,
           preferences: preferences,
         );
         log('Updated user preferences successfully');
       } catch (e) {
         log('Update failed, trying to create new preferences: $e');
         await _vibeDayRepository.createUserPreferences(
-          userId: userId,
+          userId: user!.id!,
           preferences: preferences,
         );
         log('Created new user preferences successfully');
+      }
+
+      if (user.isFirstLogin == true) {
+        final updatedUser = user.copyWith(isFirstLogin: false);
+        await _userStorageRepository.saveUser(updatedUser);
+        log('Updated user isFirstLogin to false');
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
@@ -193,7 +199,12 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       log('Life Vibes: ${state.selectedLifeVibes}');
       log('Experience Types: ${state.selectedExperienceTypes}');
 
-      emit(state.copyWith(screenStatus: const ScreenStatus.success()));
+      emit(
+        state.copyWith(
+          screenStatus: const ScreenStatus.success(),
+          isFirstLogin: user.isFirstLogin == true,
+        ),
+      );
     } catch (e) {
       log('Error finishing selection: $e');
       emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));

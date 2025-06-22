@@ -27,9 +27,7 @@ mixin _$User {
   String? get email => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
-  bool? get hasPushToken => throw _privateConstructorUsedError;
-  bool? get localAccount => throw _privateConstructorUsedError;
-  String? get userAuthority => throw _privateConstructorUsedError;
+  bool? get isFirstLogin => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,9 +51,7 @@ abstract class $UserCopyWith<$Res> {
       String? email,
       bool? active,
       String? name,
-      bool? hasPushToken,
-      bool? localAccount,
-      String? userAuthority});
+      bool? isFirstLogin});
 }
 
 /// @nodoc
@@ -80,9 +76,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
-    Object? hasPushToken = freezed,
-    Object? localAccount = freezed,
-    Object? userAuthority = freezed,
+    Object? isFirstLogin = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -113,18 +107,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      hasPushToken: freezed == hasPushToken
-          ? _value.hasPushToken
-          : hasPushToken // ignore: cast_nullable_to_non_nullable
+      isFirstLogin: freezed == isFirstLogin
+          ? _value.isFirstLogin
+          : isFirstLogin // ignore: cast_nullable_to_non_nullable
               as bool?,
-      localAccount: freezed == localAccount
-          ? _value.localAccount
-          : localAccount // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      userAuthority: freezed == userAuthority
-          ? _value.userAuthority
-          : userAuthority // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 }
@@ -144,9 +130,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? email,
       bool? active,
       String? name,
-      bool? hasPushToken,
-      bool? localAccount,
-      String? userAuthority});
+      bool? isFirstLogin});
 }
 
 /// @nodoc
@@ -168,9 +152,7 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
-    Object? hasPushToken = freezed,
-    Object? localAccount = freezed,
-    Object? userAuthority = freezed,
+    Object? isFirstLogin = freezed,
   }) {
     return _then(_$UserImpl(
       id: freezed == id
@@ -201,18 +183,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      hasPushToken: freezed == hasPushToken
-          ? _value.hasPushToken
-          : hasPushToken // ignore: cast_nullable_to_non_nullable
+      isFirstLogin: freezed == isFirstLogin
+          ? _value.isFirstLogin
+          : isFirstLogin // ignore: cast_nullable_to_non_nullable
               as bool?,
-      localAccount: freezed == localAccount
-          ? _value.localAccount
-          : localAccount // ignore: cast_nullable_to_non_nullable
-              as bool?,
-      userAuthority: freezed == userAuthority
-          ? _value.userAuthority
-          : userAuthority // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -228,9 +202,7 @@ class _$UserImpl extends _User {
       this.email,
       this.active,
       this.name,
-      this.hasPushToken,
-      this.localAccount,
-      this.userAuthority})
+      this.isFirstLogin = true})
       : super._();
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -251,15 +223,12 @@ class _$UserImpl extends _User {
   @override
   final String? name;
   @override
-  final bool? hasPushToken;
-  @override
-  final bool? localAccount;
-  @override
-  final String? userAuthority;
+  @JsonKey()
+  final bool? isFirstLogin;
 
   @override
   String toString() {
-    return 'User(id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, active: $active, name: $name, hasPushToken: $hasPushToken, localAccount: $localAccount, userAuthority: $userAuthority)';
+    return 'User(id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, active: $active, name: $name, isFirstLogin: $isFirstLogin)';
   }
 
   @override
@@ -277,18 +246,14 @@ class _$UserImpl extends _User {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.hasPushToken, hasPushToken) ||
-                other.hasPushToken == hasPushToken) &&
-            (identical(other.localAccount, localAccount) ||
-                other.localAccount == localAccount) &&
-            (identical(other.userAuthority, userAuthority) ||
-                other.userAuthority == userAuthority));
+            (identical(other.isFirstLogin, isFirstLogin) ||
+                other.isFirstLogin == isFirstLogin));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, firstName, lastName,
-      username, email, active, name, hasPushToken, localAccount, userAuthority);
+      username, email, active, name, isFirstLogin);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -315,9 +280,7 @@ abstract class _User extends User {
       final String? email,
       final bool? active,
       final String? name,
-      final bool? hasPushToken,
-      final bool? localAccount,
-      final String? userAuthority}) = _$UserImpl;
+      final bool? isFirstLogin}) = _$UserImpl;
   const _User._() : super._();
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -337,11 +300,7 @@ abstract class _User extends User {
   @override
   String? get name;
   @override
-  bool? get hasPushToken;
-  @override
-  bool? get localAccount;
-  @override
-  String? get userAuthority;
+  bool? get isFirstLogin;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.

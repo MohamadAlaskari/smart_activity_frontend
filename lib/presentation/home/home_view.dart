@@ -7,7 +7,6 @@ import 'package:vibe_day/presentation/home/ui/activity_card.dart';
 import 'package:vibe_day/presentation/home/ui/weather_row.dart';
 import 'package:vibe_day/presentation/settings/settings_view.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
-
 import 'home_cubit.dart';
 import 'home_state.dart';
 
@@ -17,87 +16,30 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorName.white,
       body: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
           return Column(
             children: [
-              Expanded(
-                child: CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: _buildLocationAndWeatherHeader(context, state),
-                    ),
-
-                    state.screenStatus.when(
-                      pure:
-                          () => const SliverToBoxAdapter(
-                            child: SizedBox.shrink(),
-                          ),
-                      loading:
-                          () => const SliverToBoxAdapter(
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(50.0),
-                                child: CircularProgressIndicator(
-                                  color: ColorName.colorPrimary,
-                                ),
-                              ),
-                            ),
-                          ),
-                      success:
-                          () => SliverList(
-                            delegate: SliverChildBuilderDelegate((
-                              context,
-                              index,
-                            ) {
-                              if (index < state.activities.length) {
-                                return ActivityCard(
-                                  activity: state.activities[index],
-                                  onTap: () {
-                                    context.pushNamed(
-                                      ActivityDetailProvider.routeName,
-                                      extra: state.activities[index],
-                                    );
-                                  },
-                                );
-                              }
-                              return null;
-                            }, childCount: state.activities.length),
-                          ),
-                      error:
-                          (messageKey) => SliverToBoxAdapter(
-                            child: Column(
-                              children: [
-                                if (state.activities.isNotEmpty)
-                                  ...state.activities.map(
-                                    (activity) => ActivityCard(
-                                      activity: activity,
-                                      onTap: () {
-                                        // TODO: Navigate to activity detail page
-                                        print(
-                                          'Activity tapped: ${activity.title}',
-                                        );
-                                      },
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                    ),
-
-                    const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                  ],
-                ),
-              ),
+              LocationAndWeatherHeader(state: state),
+              Expanded(child: HomeContentSection(state: state)),
             ],
           );
         },
       ),
     );
   }
+}
 
-  Widget _buildLocationAndWeatherHeader(BuildContext context, HomeState state) {
+class LocationAndWeatherHeader extends StatelessWidget {
+  final HomeState state;
+
+  const LocationAndWeatherHeader({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
+      color: Colors.white,
       padding: const EdgeInsets.fromLTRB(20, 60, 0, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,15 +60,6 @@ class HomeView extends StatelessWidget {
                           decoration: TextDecoration.underline,
                         ),
                         overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    Transform.translate(
-                      offset: const Offset(-12, 0),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.arrow_drop_down_outlined, size: 30),
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
                       ),
                     ),
                   ],
@@ -162,6 +95,101 @@ class HomeView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class HomeContentSection extends StatelessWidget {
+  final HomeState state;
+
+  const HomeContentSection({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    return state.screenStatus.when(
+      pure: () => const PureState(),
+      loading: () => const LoadingState(),
+      success: () => SuccessState(activities: state.activities),
+      error: (messageKey) => ErrorState(activities: state.activities),
+    );
+  }
+}
+
+class PureState extends StatelessWidget {
+  const PureState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox.shrink();
+  }
+}
+
+class LoadingState extends StatelessWidget {
+  const LoadingState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(50.0),
+        child: CircularProgressIndicator(color: ColorName.colorPrimary),
+      ),
+    );
+  }
+}
+
+class SuccessState extends StatelessWidget {
+  final List activities;
+
+  const SuccessState({super.key, required this.activities});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            if (index < activities.length) {
+              return ActivityCard(
+                activity: activities[index],
+                onTap: () {
+                  context.pushNamed(
+                    ActivityDetailProvider.routeName,
+                    extra: activities[index],
+                  );
+                },
+              );
+            }
+            return null;
+          }, childCount: activities.length),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+      ],
+    );
+  }
+}
+
+class ErrorState extends StatelessWidget {
+  final List activities;
+
+  const ErrorState({super.key, required this.activities});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Column(
+            children: [
+              if (activities.isNotEmpty)
+                ...activities.map(
+                  (activity) => ActivityCard(activity: activity),
+                ),
+            ],
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+      ],
     );
   }
 }

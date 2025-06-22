@@ -14,9 +14,7 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       email: json['email'] as String?,
       active: json['active'] as bool?,
       name: json['name'] as String?,
-      hasPushToken: json['hasPushToken'] as bool?,
-      localAccount: json['localAccount'] as bool?,
-      userAuthority: json['userAuthority'] as String?,
+      isFirstLogin: json['isFirstLogin'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
@@ -28,7 +26,5 @@ Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
       'email': instance.email,
       'active': instance.active,
       'name': instance.name,
-      'hasPushToken': instance.hasPushToken,
-      'localAccount': instance.localAccount,
-      'userAuthority': instance.userAuthority,
+      'isFirstLogin': instance.isFirstLogin,
     };
