@@ -5,7 +5,7 @@ import 'package:vibe_day/assets/colors.gen.dart';
 import 'package:vibe_day/presentation/detail/activity_detail_provider.dart';
 import 'package:vibe_day/presentation/home/ui/activity_card.dart';
 import 'package:vibe_day/presentation/home/ui/weather_row.dart';
-import 'package:vibe_day/presentation/settings/settings_view.dart';
+import 'package:vibe_day/presentation/profile/profile_view.dart';
 import 'package:vibe_day/presentation/vibe_selection/vibe_selection_provider.dart';
 import 'home_cubit.dart';
 import 'home_state.dart';
@@ -75,7 +75,7 @@ class LocationAndWeatherHeader extends StatelessWidget {
                 offset: const Offset(-8, 0),
                 child: IconButton(
                   onPressed: () {
-                    SettingsModal.show(context);
+                    ProfileView.show(context);
                   },
                   icon: const Icon(Icons.person, size: 30),
                 ),

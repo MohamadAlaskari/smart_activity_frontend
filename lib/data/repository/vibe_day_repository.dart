@@ -335,7 +335,6 @@ class VibeDayRepository {
         return [];
       }
 
-      // Transformiere die JSON-Liste direkt zu Activity-Objekten
       return response
           .whereType<Map<String, dynamic>>()
           .map((suggestion) => Activity.fromJson(suggestion))
@@ -401,7 +400,15 @@ class VibeDayRepository {
       final response = await _client.getUserPreferences(userId);
 
       log('Get User Preferences API Response: $response');
-      return UserPreferences.fromJson(response);
+
+      if (response is Map<String, dynamic> && response['data'] != null) {
+        return UserPreferences.fromJson(response['data']);
+      } else if (response is Map<String, dynamic> && response['selectedVibes'] != null) {
+        return UserPreferences.fromJson(response);
+      } else {
+        log('Unexpected response format: $response');
+        return null;
+      }
     } catch (e) {
       log('Error getting user preferences: $e');
 

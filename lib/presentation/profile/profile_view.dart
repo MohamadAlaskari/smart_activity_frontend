@@ -8,11 +8,11 @@ import 'package:vibe_day/presentation/login/login_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/presentation/ui/buttons/vibe_day_button.dart';
 
-class SettingsModal extends StatelessWidget {
-  const SettingsModal({super.key});
+class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
 
   static void show(BuildContext context) {
-    showDialog(context: context, builder: (context) => const SettingsModal());
+    showDialog(context: context, builder: (context) => const ProfileView());
   }
 
   @override
@@ -81,6 +81,13 @@ class SettingsModal extends StatelessWidget {
                     Navigator.of(context).pop();
                     await _logout(context);
                   },
+                ),
+                SizedBox(height: 16),
+                VibeDayButton(
+                  text: 'SETTINGS.DISCONNECT_HEALTH_APP'.tr(),
+                  icon: Icons.not_interested,
+                  padding: EdgeInsets.zero,
+                  onPressed: () async {},
                 ),
               ],
             ),

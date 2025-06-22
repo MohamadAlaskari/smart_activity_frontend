@@ -88,7 +88,8 @@
   },
   "SETTINGS": {
     "TITLE": "Einstellungen",
-    "LOGOUT": "Abmelden"
+    "LOGOUT": "Abmelden",
+    "DISCONNECT_HEALTH_APP": "Health App trennen"
   },
   "REGISTER": {
     "TITLE": "Registrieren",

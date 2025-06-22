@@ -24,6 +24,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
+      // Einfach immer die aktuellen User-Preferences vom Server holen
       await _loadUserPreferences();
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
     } catch (e) {
@@ -43,6 +44,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       final preferences = await _vibeDayRepository.getUserPreferences(
         user!.id!,
       );
+
       if (preferences != null) {
         log('Loaded user preferences: ${preferences.selectedVibes}');
 
@@ -63,6 +65,8 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
                     : null,
           ),
         );
+      } else {
+        log('No preferences found for user ${user.id}');
       }
     } catch (e) {
       log('Error loading user preferences: $e');
