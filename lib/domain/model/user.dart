@@ -16,7 +16,6 @@ class User with _$User {
     String? email,
     bool? active,
     String? name,
-    @Default(true) bool? isFirstLogin,
   }) = _User;
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);

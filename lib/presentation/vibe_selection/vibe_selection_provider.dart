@@ -21,15 +21,5 @@ class VibeSelectionProvider extends StatelessWidget {
     );
   }
 
-  void _onStatusChanged(BuildContext context, VibeSelectionState state) {
-    state.screenStatus.maybeWhen(
-      success: () {
-        if (state.isFirstLogin) {
-          context.read<AppCubit>().refreshUserState();
-          context.goNamed(HomeProvider.routeName);
-        }
-      },
-      orElse: () {},
-    );
-  }
+  void _onStatusChanged(BuildContext context, VibeSelectionState state) {}
 }

@@ -27,7 +27,6 @@ mixin _$User {
   String? get email => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
-  bool? get isFirstLogin => throw _privateConstructorUsedError;
 
   /// Serializes this User to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,8 +49,7 @@ abstract class $UserCopyWith<$Res> {
       String? username,
       String? email,
       bool? active,
-      String? name,
-      bool? isFirstLogin});
+      String? name});
 }
 
 /// @nodoc
@@ -76,7 +74,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
-    Object? isFirstLogin = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -107,10 +104,6 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      isFirstLogin: freezed == isFirstLogin
-          ? _value.isFirstLogin
-          : isFirstLogin // ignore: cast_nullable_to_non_nullable
-              as bool?,
     ) as $Val);
   }
 }
@@ -129,8 +122,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? username,
       String? email,
       bool? active,
-      String? name,
-      bool? isFirstLogin});
+      String? name});
 }
 
 /// @nodoc
@@ -152,7 +144,6 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? email = freezed,
     Object? active = freezed,
     Object? name = freezed,
-    Object? isFirstLogin = freezed,
   }) {
     return _then(_$UserImpl(
       id: freezed == id
@@ -183,10 +174,6 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
-      isFirstLogin: freezed == isFirstLogin
-          ? _value.isFirstLogin
-          : isFirstLogin // ignore: cast_nullable_to_non_nullable
-              as bool?,
     ));
   }
 }
@@ -201,8 +188,7 @@ class _$UserImpl extends _User {
       this.username,
       this.email,
       this.active,
-      this.name,
-      this.isFirstLogin = true})
+      this.name})
       : super._();
 
   factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
@@ -222,13 +208,10 @@ class _$UserImpl extends _User {
   final bool? active;
   @override
   final String? name;
-  @override
-  @JsonKey()
-  final bool? isFirstLogin;
 
   @override
   String toString() {
-    return 'User(id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, active: $active, name: $name, isFirstLogin: $isFirstLogin)';
+    return 'User(id: $id, firstName: $firstName, lastName: $lastName, username: $username, email: $email, active: $active, name: $name)';
   }
 
   @override
@@ -245,15 +228,13 @@ class _$UserImpl extends _User {
                 other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.active, active) || other.active == active) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.isFirstLogin, isFirstLogin) ||
-                other.isFirstLogin == isFirstLogin));
+            (identical(other.name, name) || other.name == name));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, firstName, lastName,
-      username, email, active, name, isFirstLogin);
+  int get hashCode => Object.hash(
+      runtimeType, id, firstName, lastName, username, email, active, name);
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.
@@ -279,8 +260,7 @@ abstract class _User extends User {
       final String? username,
       final String? email,
       final bool? active,
-      final String? name,
-      final bool? isFirstLogin}) = _$UserImpl;
+      final String? name}) = _$UserImpl;
   const _User._() : super._();
 
   factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
@@ -299,8 +279,6 @@ abstract class _User extends User {
   bool? get active;
   @override
   String? get name;
-  @override
-  bool? get isFirstLogin;
 
   /// Create a copy of User
   /// with the given fields replaced by the non-null parameter values.

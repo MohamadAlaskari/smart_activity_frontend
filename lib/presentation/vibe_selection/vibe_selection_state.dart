@@ -17,6 +17,5 @@ class VibeSelectionState with _$VibeSelectionState {
     @Default(false) bool showAdvancedSettings,
     @Default([]) List<String> selectedLifeVibes,
     @Default([]) List<String> selectedExperienceTypes,
-    @Default(false) bool isFirstLogin,
   }) = _VibeSelectionState;
 }

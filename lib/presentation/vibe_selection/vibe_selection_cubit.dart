@@ -183,12 +183,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
         log('Created new user preferences successfully');
       }
 
-      if (user.isFirstLogin == true) {
-        final updatedUser = user.copyWith(isFirstLogin: false);
-        await _userStorageRepository.saveUser(updatedUser);
-        log('Updated user isFirstLogin to false');
-      }
-
       await Future.delayed(const Duration(milliseconds: 500));
 
       log('Vibe Selection completed: ${state.selectedVibes}');
@@ -199,12 +193,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       log('Life Vibes: ${state.selectedLifeVibes}');
       log('Experience Types: ${state.selectedExperienceTypes}');
 
-      emit(
-        state.copyWith(
-          screenStatus: const ScreenStatus.success(),
-          isFirstLogin: user.isFirstLogin == true,
-        ),
-      );
+      emit(state.copyWith(screenStatus: const ScreenStatus.success()));
     } catch (e) {
       log('Error finishing selection: $e');
       emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));

@@ -19,12 +19,7 @@ final GoRouter router = GoRouter(
         return BlocBuilder<AppCubit, AppState>(
           builder: (context, state) {
             return state.status.maybeWhen(
-              authenticated: (user) {
-                if (user.isFirstLogin == true) {
-                  return const VibeSelectionProvider();
-                }
-                return const HomeProvider();
-              },
+              authenticated: (_) => const HomeProvider(),
               orElse: () => const LoginProvider(),
             );
           },
