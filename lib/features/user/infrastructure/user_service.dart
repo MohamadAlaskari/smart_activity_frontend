@@ -20,12 +20,11 @@ class UserService {
 
   Future<UserModel> updateUser(UserModel updatedUser) async {
     final token = await _storage.getToken();
-    final response = await _dio.put(
+    final response = await _dio.patch(
       '/users/${updatedUser.id}',
       data: updatedUser.toJson(),
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
-
     return UserModel.fromJson(response.data);
   }
 }

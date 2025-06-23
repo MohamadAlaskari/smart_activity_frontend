@@ -30,16 +30,17 @@ class LocationService {
     );
   }
 
-  Future<String> resolveCityFromCoordinates(double lat, double lon) async {
-    final response = await dio.get(
-      ApiConstants.locationResolveCity,
-      queryParameters: {'lat': lat, 'lon': lon},
-    );
+ Future<String> resolveCityFromCoordinates(double lat, double lon) async {
+  final response = await dio.get(
+    ApiConstants.locationResolveCity,
+    queryParameters: {'latitude': lat, 'longitude': lon}, // ✅ هنا التصحيح!
+  );
 
-    if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      throw Exception('Failed to resolve city');
-    }
+  if (response.statusCode == 200) {
+    return response.data;
+  } else {
+    throw Exception('Failed to resolve city');
   }
+}
+
 }

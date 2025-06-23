@@ -38,7 +38,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (mounted) {
         _emailController.clear();
         _passwordController.clear();
-        context.go('/weather');
+        context.go('/home');
       }
     } catch (e) {
       setState(() => _errorMessage = _formatError(e));
