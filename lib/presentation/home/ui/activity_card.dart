@@ -19,15 +19,23 @@ class ActivityCard extends StatelessWidget {
       case 'night out':
       case 'music party':
       case 'music concert':
+      case 'comedy':
         return Colors.deepPurple;
       case 'culture':
       case 'arts & theatre':
+      case 'art gallery':
+      case 'art exhibition':
+      case 'literature & arts':
+      case 'music & arts':
+      case 'theatre':
         return Colors.indigo;
       case 'chill':
-      case 'comedy':
         return Colors.brown;
       case 'sports':
         return Colors.orange;
+      case 'food & drink':
+      case 'dining':
+        return Colors.red;
       default:
         return Colors.grey;
     }
@@ -39,6 +47,12 @@ class ActivityCard extends StatelessWidget {
       case 'miscellaneous':
         return Icons.nature;
       case 'culture':
+      case 'arts & theatre':
+      case 'art gallery':
+      case 'art exhibition':
+      case 'literature & arts':
+      case 'music & arts':
+      case 'theatre':
         return Icons.theater_comedy;
       case 'sports':
         return Icons.directions_run;
@@ -49,6 +63,9 @@ class ActivityCard extends StatelessWidget {
       case 'music concert':
       case 'comedy':
         return Icons.nightlife;
+      case 'food & drink':
+      case 'dining':
+        return Icons.restaurant;
       default:
         return Icons.local_activity;
     }

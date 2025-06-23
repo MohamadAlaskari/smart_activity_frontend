@@ -163,7 +163,9 @@ class ActivityActionButtons extends StatelessWidget {
 ${hasUrl ? '\n🔗 ${activity.url}' : ''}
 ''';
 
-    Share.share(shareText, subject: activity.title);
+    SharePlus.instance.share(
+      ShareParams(text: shareText, subject: activity.title),
+    );
   }
 
   Future<void> _openRoute(BuildContext context) async {
