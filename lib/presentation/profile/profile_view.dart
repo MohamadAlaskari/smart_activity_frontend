@@ -82,13 +82,6 @@ class ProfileView extends StatelessWidget {
                     await _logout(context);
                   },
                 ),
-                SizedBox(height: 16),
-                VibeDayButton(
-                  text: 'SETTINGS.DISCONNECT_HEALTH_APP'.tr(),
-                  icon: Icons.not_interested,
-                  padding: EdgeInsets.zero,
-                  onPressed: () async {},
-                ),
               ],
             ),
           );

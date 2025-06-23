@@ -24,7 +24,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
     try {
-      // Einfach immer die aktuellen User-Preferences vom Server holen
       await _loadUserPreferences();
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
     } catch (e) {
@@ -161,6 +160,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(selectedExperienceTypes: currentExperienceTypes));
   }
 
+
   Future<void> finishSelection() async {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
@@ -187,8 +187,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
         log('Created new user preferences successfully');
       }
 
-      await Future.delayed(const Duration(milliseconds: 500));
-
       log('Vibe Selection completed: ${state.selectedVibes}');
       log('Budget: €${state.budget}');
       log('Distance: ${state.distanceRadius}km');
@@ -198,6 +196,9 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       log('Experience Types: ${state.selectedExperienceTypes}');
 
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
+
+      await Future.delayed(const Duration(seconds: 1));
+
     } catch (e) {
       log('Error finishing selection: $e');
       emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));

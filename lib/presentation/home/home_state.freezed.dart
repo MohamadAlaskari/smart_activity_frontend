@@ -23,6 +23,7 @@ mixin _$HomeState {
   int get selectedDayIndex => throw _privateConstructorUsedError;
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
+  bool get hasUserPreferences => throw _privateConstructorUsedError;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -43,7 +44,8 @@ abstract class $HomeStateCopyWith<$Res> {
       String location,
       int selectedDayIndex,
       double latitude,
-      double longitude});
+      double longitude,
+      bool hasUserPreferences});
 
   $ScreenStatusCopyWith<$Res> get screenStatus;
 }
@@ -70,6 +72,7 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
     Object? selectedDayIndex = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? hasUserPreferences = null,
   }) {
     return _then(_value.copyWith(
       screenStatus: null == screenStatus
@@ -100,6 +103,10 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      hasUserPreferences: null == hasUserPreferences
+          ? _value.hasUserPreferences
+          : hasUserPreferences // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 
@@ -129,7 +136,8 @@ abstract class _$$HomeStateImplCopyWith<$Res>
       String location,
       int selectedDayIndex,
       double latitude,
-      double longitude});
+      double longitude,
+      bool hasUserPreferences});
 
   @override
   $ScreenStatusCopyWith<$Res> get screenStatus;
@@ -155,6 +163,7 @@ class __$$HomeStateImplCopyWithImpl<$Res>
     Object? selectedDayIndex = null,
     Object? latitude = null,
     Object? longitude = null,
+    Object? hasUserPreferences = null,
   }) {
     return _then(_$HomeStateImpl(
       screenStatus: null == screenStatus
@@ -185,6 +194,10 @@ class __$$HomeStateImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double,
+      hasUserPreferences: null == hasUserPreferences
+          ? _value.hasUserPreferences
+          : hasUserPreferences // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -199,7 +212,8 @@ class _$HomeStateImpl extends _HomeState {
       this.location = '',
       this.selectedDayIndex = 0,
       this.latitude = 0.0,
-      this.longitude = 0.0})
+      this.longitude = 0.0,
+      this.hasUserPreferences = false})
       : _weatherData = weatherData,
         _activities = activities,
         super._();
@@ -237,10 +251,13 @@ class _$HomeStateImpl extends _HomeState {
   @override
   @JsonKey()
   final double longitude;
+  @override
+  @JsonKey()
+  final bool hasUserPreferences;
 
   @override
   String toString() {
-    return 'HomeState(screenStatus: $screenStatus, weatherData: $weatherData, activities: $activities, location: $location, selectedDayIndex: $selectedDayIndex, latitude: $latitude, longitude: $longitude)';
+    return 'HomeState(screenStatus: $screenStatus, weatherData: $weatherData, activities: $activities, location: $location, selectedDayIndex: $selectedDayIndex, latitude: $latitude, longitude: $longitude, hasUserPreferences: $hasUserPreferences)';
   }
 
   @override
@@ -261,7 +278,9 @@ class _$HomeStateImpl extends _HomeState {
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
-                other.longitude == longitude));
+                other.longitude == longitude) &&
+            (identical(other.hasUserPreferences, hasUserPreferences) ||
+                other.hasUserPreferences == hasUserPreferences));
   }
 
   @override
@@ -273,7 +292,8 @@ class _$HomeStateImpl extends _HomeState {
       location,
       selectedDayIndex,
       latitude,
-      longitude);
+      longitude,
+      hasUserPreferences);
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.
@@ -292,7 +312,8 @@ abstract class _HomeState extends HomeState {
       final String location,
       final int selectedDayIndex,
       final double latitude,
-      final double longitude}) = _$HomeStateImpl;
+      final double longitude,
+      final bool hasUserPreferences}) = _$HomeStateImpl;
   _HomeState._() : super._();
 
   @override
@@ -309,6 +330,8 @@ abstract class _HomeState extends HomeState {
   double get latitude;
   @override
   double get longitude;
+  @override
+  bool get hasUserPreferences;
 
   /// Create a copy of HomeState
   /// with the given fields replaced by the non-null parameter values.

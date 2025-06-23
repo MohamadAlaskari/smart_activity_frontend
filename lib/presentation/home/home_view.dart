@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -109,7 +110,11 @@ class HomeContentSection extends StatelessWidget {
     return state.screenStatus.when(
       pure: () => const PureState(),
       loading: () => const LoadingState(),
-      success: () => SuccessState(activities: state.activities),
+      success:
+          () => SuccessState(
+            activities: state.activities,
+            hasUserPreferences: state.hasUserPreferences,
+          ),
       error: (messageKey) => ErrorState(activities: state.activities),
     );
   }
@@ -140,11 +145,20 @@ class LoadingState extends StatelessWidget {
 
 class SuccessState extends StatelessWidget {
   final List activities;
+  final bool hasUserPreferences;
 
-  const SuccessState({super.key, required this.activities});
+  const SuccessState({
+    super.key,
+    required this.activities,
+    required this.hasUserPreferences,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (!hasUserPreferences) {
+      return const NoPreferencesMessage();
+    }
+
     return CustomScrollView(
       slivers: [
         SliverList(
@@ -165,6 +179,61 @@ class SuccessState extends StatelessWidget {
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
       ],
+    );
+  }
+}
+
+class NoPreferencesMessage extends StatelessWidget {
+  const NoPreferencesMessage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(40.0),
+        child: Column(
+          children: [
+            const Icon(Icons.mood, size: 60, color: ColorName.colorPrimary),
+            const SizedBox(height: 20),
+            Text(
+              'HOME.WELCOME'.tr(),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'HOME.CHOOSE_PREFERENCE'.tr(),
+              style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                context.pushNamed(VibeSelectionProvider.routeName);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorName.colorPrimary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 24,
+                  vertical: 12,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              child: Text(
+                'HOME.CHOOSE_PREFERENCE_BUTTON'.tr(),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

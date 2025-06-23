@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
@@ -76,16 +77,35 @@ class HomeCubit extends Cubit<HomeState> {
 
       emit(state.copyWith(weatherData: weatherData, activities: []));
 
-      final activities = await _loadSuggestions();
+      log('Starting user preferences check...');
+      final hasUserPreferences = await _checkUserPreferences();
+      log('User preferences check result: $hasUserPreferences');
 
-      if (isClosed) return;
+      if (hasUserPreferences) {
+        log('Loading suggestions because user has preferences');
+        final activities = await _loadSuggestions();
 
-      emit(
-        state.copyWith(
-          screenStatus: const ScreenStatus.success(),
-          activities: activities,
-        ),
-      );
+        if (isClosed) return;
+
+        emit(
+          state.copyWith(
+            screenStatus: const ScreenStatus.success(),
+            activities: activities,
+            hasUserPreferences: true,
+          ),
+        );
+      } else {
+        log('User has no preferences, showing no preferences message');
+        if (isClosed) return;
+
+        emit(
+          state.copyWith(
+            screenStatus: const ScreenStatus.success(),
+            activities: [],
+            hasUserPreferences: false,
+          ),
+        );
+      }
     } catch (e) {
       log('Error loading home data: $e');
       if (isClosed) return;
@@ -95,8 +115,45 @@ class HomeCubit extends Cubit<HomeState> {
           screenStatus: ScreenStatus.error(e.toString()),
           activities: [],
           weatherData: [],
+          hasUserPreferences: false,
         ),
       );
+    }
+  }
+
+  Future<bool> _checkUserPreferences() async {
+    try {
+      log('Getting user ID for preferences check...');
+      final userId = await _getUserId();
+
+      if (userId == null) {
+        log('No user ID available, assuming no preferences');
+        return false;
+      }
+
+      log('User ID found: $userId, fetching preferences...');
+      final preferences = await _vibeDayRepository.getUserPreferences(userId);
+
+      if (preferences == null) {
+        log('getUserPreferences returned null - no preferences found');
+        return false;
+      }
+
+      log('User preferences found: ${preferences.selectedVibes}');
+      log('Preferences object: $preferences');
+
+      if (preferences.selectedVibes.isEmpty &&
+          preferences.selectedLifeVibes.isEmpty &&
+          preferences.selectedExperienceTypes.isEmpty) {
+        log('Preferences exist but are empty - treating as no preferences');
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      log('Error checking user preferences: $e');
+      log('Stack trace: ${StackTrace.current}');
+      return false;
     }
   }
 
@@ -221,5 +278,22 @@ class HomeCubit extends Cubit<HomeState> {
 
   void refreshData() {
     loadData();
+  }
+
+  Future<void> onUserPreferencesUpdated() async {
+    if (isClosed) return;
+
+    log('User preferences were updated, refreshing data...');
+
+    emit(state.copyWith(hasUserPreferences: true));
+
+    await loadData();
+  }
+
+  Future<void> onUserAuthenticated() async {
+    if (isClosed) return;
+
+    log('User authenticated, loading home data...');
+    await _detectLocationAndLoadData();
   }
 }

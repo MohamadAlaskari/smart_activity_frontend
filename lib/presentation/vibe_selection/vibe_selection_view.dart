@@ -186,7 +186,8 @@ class FinishButton extends StatelessWidget {
       onPressed: () async {
         await context.read<VibeSelectionCubit>().finishSelection();
         if (context.mounted) {
-          context.read<HomeCubit>().refreshData();
+          context.read<HomeCubit>().onUserPreferencesUpdated();
+
           context.pop();
         }
       },

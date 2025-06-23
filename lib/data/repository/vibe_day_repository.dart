@@ -401,14 +401,24 @@ class VibeDayRepository {
 
       log('Get User Preferences API Response: $response');
 
-      if (response is Map<String, dynamic> && response['data'] != null) {
-        return UserPreferences.fromJson(response['data']);
-      } else if (response is Map<String, dynamic> && response['selectedVibes'] != null) {
-        return UserPreferences.fromJson(response);
-      } else {
-        log('Unexpected response format: $response');
-        return null;
+      if (response is Map<String, dynamic>) {
+        if (response['status'] == 'empty') {
+          log(
+            'User preferences not found - returning null for empty preferences',
+          );
+          return null;
+        } else if (response['status'] == 'success' &&
+            response['data'] != null) {
+          return UserPreferences.fromJson(response['data']);
+        } else if (response['data'] != null) {
+          return UserPreferences.fromJson(response['data']);
+        } else if (response['selectedVibes'] != null) {
+          return UserPreferences.fromJson(response);
+        }
       }
+
+      log('Unexpected response format: $response');
+      return null;
     } catch (e) {
       log('Error getting user preferences: $e');
 

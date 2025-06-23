@@ -16,5 +16,6 @@ class HomeState with _$HomeState {
     @Default(0) int selectedDayIndex,
     @Default(0.0) double latitude,
     @Default(0.0) double longitude,
+    @Default(false) bool hasUserPreferences,
   }) = _HomeState;
 }

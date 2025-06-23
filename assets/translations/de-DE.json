@@ -48,6 +48,9 @@
   },
   "HOME": {
     "TITLE": "Home",
+    "WELCOME": "Willkommen!",
+    "CHOOSE_PREFERENCE": "Bitte wählen Sie Ihre Präferenzen, um personalisierte Vorschläge zu erhalten",
+    "CHOOSE_PREFERENCE_BUTTON": "Präferenzen auswählen",
     "ACTIVITY": {
       "COSTS": "Kostet"
     },
