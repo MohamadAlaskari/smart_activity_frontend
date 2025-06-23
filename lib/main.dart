@@ -1,13 +1,38 @@
-// Ich beginne jetzt mit dem Schreiben der kompletten Flutter-Dateien entsprechend deiner Struktur. Ich fange mit main.dart und den wichtigsten Core-Dateien an. Danach folgen Router, Layout, WeatherScreen, ViewModel, Service und Widgets. Die einzelnen Dateien werden schrittweise erstellt. Sag einfach "weiter", wenn du bereit bist für den nächsten Teil.
-
-// lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'routes/app_router.dart';
-import 'core/theme/app_theme.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
-  runApp(const ProviderScope(child: SmartActivityApp()));
+import 'core/api/dio_provider.dart';
+import 'core/theme/app_theme.dart';
+import 'core/theme/theme_cubit.dart';
+import 'features/auth/cubit/auth_cubit.dart';
+import 'features/auth/services/auth_service.dart';
+import 'routes/app_router.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('de_DE', null);
+
+  runApp(const ProviderScope(child: AppBootstrapper()));
+}
+
+class AppBootstrapper extends ConsumerWidget {
+  const AppBootstrapper({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dio = ref.read(dioProvider); // نحصل على Dio من الـ Provider
+    final authService = AuthService(dio: dio); // نمرر dio إلى AuthService
+
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => AuthCubit(authService)..loadCurrentUser()),
+      ],
+      child: const SmartActivityApp(),
+    );
+  }
 }
 
 class SmartActivityApp extends StatelessWidget {
@@ -15,13 +40,17 @@ class SmartActivityApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Smart Activity',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
-      themeMode: ThemeMode.system,
-      routerConfig: AppRouter.router,
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        return MaterialApp.router(
+          title: 'VibeDay',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
+          themeMode: themeMode,
+          routerConfig: AppRouter.router,
+        );
+      },
     );
   }
 }

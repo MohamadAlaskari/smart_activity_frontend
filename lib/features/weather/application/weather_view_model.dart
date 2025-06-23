@@ -1,24 +1,31 @@
+// lib/features/weather/application/weather_view_model.dart
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/weather_state.dart';
-import '../infrastructure/weather_service.dart';
+import 'package:smart_activity_frontend/features/weather/domain/weather_state.dart';
+import 'package:smart_activity_frontend/features/weather/infrastructure/weather_service.dart';
+import 'package:smart_activity_frontend/features/weather/model/weather_model.dart';
 
 class WeatherViewModel extends StateNotifier<WeatherState> {
-  final WeatherService _service;
-  WeatherViewModel(this._service) : super(WeatherState.initial());
+  final WeatherService _weatherService;
 
-  Future<void> load(String city) async {
-    state = state.copyWith(isLoading: true, error: null);
+  WeatherViewModel(this._weatherService) : super(WeatherState.initial());
+
+  Future<void> fetchWeather(String city) async {
+    state = state.copyWith(isLoading: true, errorMessage: null);
+
     try {
-      final weather = await _service.fetchWeather(city);
-      state = state.copyWith(isLoading: false, weather: weather);
+      final List<WeatherModel> forecast = await _weatherService.fetchWeather(
+        city,
+      );
+      state = state.copyWith(
+        isLoading: false,
+        forecast: forecast,
+        errorMessage: null,
+      );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Fehler beim Laden des Wetters',
+      );
     }
   }
 }
-
-final weatherProvider = StateNotifierProvider<WeatherViewModel, WeatherState>((
-  ref,
-) {
-  return WeatherViewModel(WeatherService());
-});

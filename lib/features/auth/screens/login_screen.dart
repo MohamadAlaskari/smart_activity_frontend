@@ -1,76 +1,135 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../services/auth_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_activity_frontend/features/auth/services/auth_service.dart';
+import 'package:smart_activity_frontend/features/auth/providers/auth_service_provider.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
+
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _authService = AuthService();
-  final _storage = FlutterSecureStorage();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  void _login() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final token = await _authService.loginUser(
-          _emailController.text,
-          _passwordController.text,
-        );
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
 
-        await _storage.write(key: 'jwt_token', value: token);
+    final authService = ref.read(authServiceProvider);
 
-        final userData = await _authService.getCurrentUser(token);
-        final firstName = userData['firstName'];
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
 
-        Navigator.pushReplacementNamed(
-          context,
-          '/home',
-          arguments: {'firstName': firstName},
-        );
+    try {
+      await authService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
 
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Login erfolgreich!')));
-      } catch (e) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Login fehlgeschlagen: $e')));
+      if (mounted) {
+        _emailController.clear();
+        _passwordController.clear();
+        context.go('/weather');
+      }
+    } catch (e) {
+      setState(() => _errorMessage = _formatError(e));
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
+  }
+
+  String _formatError(Object error) {
+    final msg = error.toString();
+    if (msg.contains('Login failed')) {
+      return 'Login fehlgeschlagen. Bitte überprüfe deine Zugangsdaten.';
+    }
+    return 'Ein unbekannter Fehler ist aufgetreten.';
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Anmelden')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      appBar: AppBar(title: const Text('Login')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (_errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: Text(
+                    _errorMessage!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
               TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(labelText: 'E-Mail'),
+                decoration: const InputDecoration(
+                  labelText: 'E-Mail',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
                 validator:
-                    (value) => value!.isEmpty ? 'Bitte E-Mail eingeben' : null,
+                    (val) =>
+                        val == null || val.isEmpty
+                            ? 'E-Mail ist erforderlich'
+                            : null,
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Passwort'),
+                decoration: const InputDecoration(
+                  labelText: 'Passwort',
+                  border: OutlineInputBorder(),
+                ),
                 obscureText: true,
                 validator:
-                    (value) =>
-                        value!.isEmpty ? 'Bitte Passwort eingeben' : null,
+                    (val) =>
+                        val != null && val.length >= 6
+                            ? null
+                            : 'Mindestens 6 Zeichen erforderlich',
+                onFieldSubmitted: (_) => _handleLogin(),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(onPressed: _login, child: Text('Anmelden')),
+              const SizedBox(height: 32),
+              SizedBox(
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : _handleLogin,
+                  child:
+                      _isLoading
+                          ? const CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          )
+                          : const Text('Login'),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextButton(
+                onPressed: () => context.push('/register'),
+                child: const Text('Noch kein Konto? Jetzt registrieren'),
+              ),
             ],
           ),
         ),

@@ -1,19 +1,22 @@
 class WeatherModel {
-  final String condition;
-  final double temperature;
+  final String date;
+  final double tempMax;
+  final double tempMin;
   final String icon;
 
   WeatherModel({
-    required this.condition,
-    required this.temperature,
+    required this.date,
+    required this.tempMax,
+    required this.tempMin,
     required this.icon,
   });
 
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
-      condition: json['description'], // kommt aus deinem Backend
-      temperature: json['temperature'].toDouble(),
-      icon: json['icon'], // NEU: icon wird aus JSON gelesen
+      date: json['datetime'],
+      tempMax: (json['tempmax'] as num).toDouble(),
+      tempMin: (json['tempmin'] as num).toDouble(),
+      icon: json['icon'],
     );
   }
 }

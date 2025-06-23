@@ -1,20 +1,23 @@
-// lib/features/weather/infrastructure/weather_service.dart
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../model/weather_model.dart';
+import 'package:dio/dio.dart';
+import 'package:smart_activity_frontend/core/constants/api_constants.dart';
+import 'package:smart_activity_frontend/features/weather/model/weather_model.dart';
 
 class WeatherService {
-  final String baseUrl = 'https://smart-activity-backend.alaskaritech.com';
+  final Dio _dio;
 
-  Future<WeatherModel> fetchWeather(String city) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/weather?location=$city'),
-    );
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      return WeatherModel.fromJson(data);
-    } else {
-      throw Exception('Fehler beim Laden des Wetters');
+  WeatherService({required Dio dio}) : _dio = dio;
+
+  Future<List<WeatherModel>> fetchWeather(String city) async {
+    try {
+      final response = await _dio.get(
+        ApiConstants.weatherWeekLocation,
+        queryParameters: {'location': city},
+      );
+
+      final List data = response.data;
+      return data.map((e) => WeatherModel.fromJson(e)).toList();
+    } catch (e) {
+      throw Exception('Fehler beim Laden des Wetters: $e');
     }
   }
 }

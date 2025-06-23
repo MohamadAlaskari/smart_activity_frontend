@@ -1,23 +1,29 @@
-// lib/features/weather/domain/weather_state.dart
 import '../model/weather_model.dart';
 
 class WeatherState {
   final bool isLoading;
-  final WeatherModel? weather;
-  final String? error;
+  final List<WeatherModel> forecast;
+  final String? errorMessage;
 
-  WeatherState({required this.isLoading, this.weather, this.error});
+  WeatherState({
+    required this.isLoading,
+    required this.forecast,
+    this.errorMessage,
+  });
 
-  factory WeatherState.initial() => WeatherState(isLoading: false);
+  factory WeatherState.initial() {
+    return WeatherState(isLoading: false, forecast: []);
+  }
+
   WeatherState copyWith({
     bool? isLoading,
-    WeatherModel? weather,
-    String? error,
+    List<WeatherModel>? forecast,
+    String? errorMessage,
   }) {
     return WeatherState(
       isLoading: isLoading ?? this.isLoading,
-      weather: weather ?? this.weather,
-      error: error ?? this.error,
+      forecast: forecast ?? this.forecast,
+      errorMessage: errorMessage,
     );
   }
 }
