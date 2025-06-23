@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:vibe_day/assets/colors.gen.dart';
-import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/presentation/app/app_cubit.dart';
 import 'package:vibe_day/presentation/login/login_provider.dart';
-import 'package:go_router/go_router.dart';
 import 'package:vibe_day/presentation/ui/buttons/vibe_day_button.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_cubit.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -91,8 +91,8 @@ class ProfileView extends StatelessWidget {
   }
 
   Future<void> _logout(BuildContext context) async {
-    final vibeDayRepository = context.read<VibeDayRepository>();
-    await vibeDayRepository.logout();
+    context.read<VibeSelectionCubit>().resetToDefaults();
+    await context.read<AppCubit>().logout();
 
     if (context.mounted) {
       context.pushNamed(LoginProvider.routeName);

@@ -7,6 +7,7 @@ import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
 import 'package:vibe_day/domain/model/auth_result.dart';
 import 'package:vibe_day/domain/model/user.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
 
 part 'app_cubit.freezed.dart';
 
@@ -85,6 +86,20 @@ class AppCubit extends HydratedCubit<AppState> {
         ),
       ),
     );
+  }
+
+  Future<void> logout() async {
+    try {
+      await _vibeDayRepository.logout();
+      emit(
+        state.copyWith(
+          status: const AuthResult.unauthenticated(null, null),
+          user: null,
+        ),
+      );
+    } catch (e) {
+      log('Error during logout: $e');
+    }
   }
 
   @override

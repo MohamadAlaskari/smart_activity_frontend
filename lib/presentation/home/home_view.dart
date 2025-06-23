@@ -58,7 +58,6 @@ class LocationAndWeatherHeader extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -68,9 +67,15 @@ class LocationAndWeatherHeader extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
+                  context.read<HomeCubit>().refreshLocation();
+                },
+                icon: const Icon(Icons.refresh, size: 28),
+              ),
+              IconButton(
+                onPressed: () {
                   context.pushNamed(VibeSelectionProvider.routeName);
                 },
-                icon: const Icon(Icons.mood, size: 30),
+                icon: const Icon(Icons.mood, size: 28),
               ),
               Transform.translate(
                 offset: const Offset(-8, 0),
@@ -78,7 +83,7 @@ class LocationAndWeatherHeader extends StatelessWidget {
                   onPressed: () {
                     ProfileView.show(context);
                   },
-                  icon: const Icon(Icons.person, size: 30),
+                  icon: const Icon(Icons.person, size: 28),
                 ),
               ),
             ],

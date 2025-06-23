@@ -223,8 +223,8 @@ class _$VibeSelectionStateImpl extends _VibeSelectionState {
   _$VibeSelectionStateImpl(
       {this.screenStatus = const ScreenStatus.pure(),
       final List<String> selectedVibes = const [],
-      this.budget = 20.0,
-      this.distanceRadius = 10.0,
+      this.budget = 0.0,
+      this.distanceRadius = 0.0,
       this.selectedTimeWindow,
       this.selectedGroupSize,
       this.showAdvancedSettings = false,

@@ -1,0 +1,215 @@
+{
+  "LOGIN": {
+    "TITLE": "Login",
+    "MAIL_OR_USER": "Domain/User or Email Address",
+    "PASSWORD": "Password",
+    "ACTION": "Sign In",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "REGISTER_INSTEAD": "Don't have an account? Register now",
+    "ERROR": {
+      "ERROR_MESSAGE": "This field is required!"
+    },
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Error",
+        "DESCRIPTION": "Please check your information! It seems to be incomplete."
+      },
+      "INVALID": {
+        "TITLE": "Login not possible",
+        "DESCRIPTION": "Please check your username and/or password."
+      },
+      "BUTTON": {
+        "CLOSE": "OK"
+      }
+    }
+  },
+  "FORGOT_PASSWORD": {
+    "TITLE": "Forgot Password",
+    "ACTION": "Reset Password",
+    "BACK": "Back",
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Error",
+        "DESCRIPTION": "Please enter your username or email address!"
+      },
+      "SUCCESS_RESET": {
+        "TITLE": "Password Reset",
+        "DESCRIPTION": "Your password has been successfully reset. You will receive an email within the next few minutes with a link to save your new password."
+      },
+      "ERROR_RESET": {
+        "TITLE": "Error",
+        "DESCRIPTION": "An error occurred during reset. Please contact the administrator."
+      },
+      "USER_NOT_FOUND": {
+        "TITLE": "User not found",
+        "DESCRIPTION": "No user was found with this email address. Please check your input or register."
+      }
+    }
+  },
+  "HOME": {
+    "TITLE": "Home",
+    "WELCOME": "Welcome!",
+    "CHOOSE_PREFERENCE": "Please select your preferences to receive personalized suggestions",
+    "CHOOSE_PREFERENCE_BUTTON": "Select Preferences",
+    "ACTIVITY": {
+      "COSTS": "Costs"
+    },
+    "WEATHER": {
+      "LOADING": "Loading weather data...",
+      "ERROR": "Weather data could not be loaded",
+      "RETRY": "Retry",
+      "TODAY": "Today",
+      "TOMORROW": "Tomorrow",
+      "DAY": "Day {}"
+    }
+  },
+  "DETAIL": {
+    "TITLE": "Activity Details",
+    "DESCRIPTION": "Description",
+    "INFORMATION": "Information",
+    "NO_DESCRIPTION": "No description available.",
+    "ACTION": {
+      "SHARE": "Share",
+      "FAVORITE": "Favorite",
+      "ROUTE": "Route"
+    },
+    "ACTIVITY_INFORMATION": {
+      "TIME": "Time",
+      "DATE": "Date",
+      "COSTS": "Costs",
+      "CATEGORY": "Category",
+      "LOCATION": "Location",
+      "DISTANCE": "Distance",
+      "FREE": "Free"
+    },
+    "TICKET": {
+      "BOOK": "Book Ticket"
+    },
+    "ERROR": {
+      "MAP_UNAVAILABLE": "Map cannot be opened"
+    }
+  },
+  "SETTINGS": {
+    "TITLE": "Settings",
+    "LOGOUT": "Sign Out",
+    "DISCONNECT_HEALTH_APP": "Disconnect Health App"
+  },
+  "REGISTER": {
+    "TITLE": "Register",
+    "EMAIL": "Email Address",
+    "FIRST_NAME": "First Name",
+    "LAST_NAME": "Last Name",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm Password",
+    "ACTION": "Register",
+    "LOGIN_INSTEAD": "Already have an account? Sign in",
+    "EMAIL_VERIFICATION": {
+      "TITLE": "Registration successful",
+      "DESCRIPTION": "We have sent a confirmation email to your email address. Please check your inbox and click on the confirmation link to complete your registration."
+    },
+    "ERROR": {
+      "EMAIL": "Please enter a valid email address",
+      "EMAIL_ALREADY_EXISTS": "This email address is already registered",
+      "FIRST_NAME": "Please enter your first name",
+      "LAST_NAME": "Please enter your last name",
+      "USERNAME": "Please enter a username",
+      "USERNAME_ALREADY_EXISTS": "This username is already taken",
+      "PASSWORD": "Password must contain at least 6 characters",
+      "PASSWORD_TOO_SHORT": "Password must be at least 6 characters long",
+      "PASSWORDS_DONT_MATCH": "Passwords do not match"
+    },
+    "DIALOG": {
+      "INCOMPLETE": {
+        "TITLE": "Error",
+        "DESCRIPTION": "Please check your information! It seems to be incomplete."
+      },
+      "INVALID": {
+        "TITLE": "Registration not possible",
+        "DESCRIPTION": "An error occurred during registration. Please try again later."
+      },
+      "EMAIL_EXISTS": {
+        "TITLE": "Email already registered",
+        "DESCRIPTION": "This email address is already registered. Please use a different email address or sign in."
+      },
+      "USERNAME_EXISTS": {
+        "TITLE": "Username already taken",
+        "DESCRIPTION": "This username is already taken. Please choose a different username."
+      },
+      "PASSWORD_TOO_SHORT": {
+        "TITLE": "Password too short",
+        "DESCRIPTION": "Password must be at least 6 characters long. Please choose a longer password."
+      },
+      "SUCCESS": {
+        "TITLE": "Registration successful",
+        "DESCRIPTION": "Your account has been successfully created. You will be redirected..."
+      },
+      "EMAIL_VERIFICATION": {
+        "TITLE": "Email verification required",
+        "DESCRIPTION": "We have sent you an email. Please verify your email address and then sign in."
+      },
+      "BUTTON": {
+        "CLOSE": "OK"
+      }
+    }
+  },
+  "VIBE_SELECTION": {
+    "FIRST_LOGIN_HEADER": "Welcome{name}! Let's set up your preferences.",
+    "FIRST_LOGIN_SUBTITLE": "Choose your favorite vibes so we can give you the best suggestions.",
+    "FINISH_FIRST_LOGIN_BUTTON": "Let's go!",
+    "TITLE": "Vibe Selection",
+    "HEADER": "Hello{name}! What's your vibe today?",
+    "SUBTITLE": "Vibe Selection",
+    "VIBES": {
+      "MOVEMENT": "Movement",
+      "CULTURE": "Culture",
+      "NIGHT_OUT": "Night Out",
+      "OUTDOORS": "Outdoors",
+      "CHILL": "Chill"
+    },
+    "BUDGET": {
+      "TITLE": "Budget Setting"
+    },
+    "DISTANCE": {
+      "TITLE": "Distance Radius"
+    },
+    "TIME_WINDOW": {
+      "TITLE": "Time Window",
+      "MORNING": "Morning",
+      "AFTERNOON": "Afternoon",
+      "EVENING": "Evening"
+    },
+    "GROUP_SIZE": {
+      "TITLE": "Group Size",
+      "SOLO": "Solo",
+      "DUO": "Duo",
+      "GROUP": "Group"
+    },
+    "ADVANCED_SETTINGS": {
+      "BUTTON": "Advanced Settings",
+      "LIFE_VIBES": {
+        "TITLE": "What are typical vibes in your life?",
+        "SUBTITLE": "Choose up to 3",
+        "CREATIVE": "Creative & playful",
+        "CHILL": "Chill & relaxed",
+        "ACTIVE": "Active & energetic",
+        "SOCIAL": "Social & communicative",
+        "REFLECTIVE": "Deep & reflective",
+        "CURIOUS": "Curious & open",
+        "STRUCTURED": "Structure & clarity"
+      },
+      "EXPERIENCE_TYPES": {
+        "TITLE": "Which types of experiences appeal to you most?",
+        "ADVENTUROUS": "Adventurous & new",
+        "PEACEFUL": "Peaceful & mindful",
+        "SOCIAL": "Social & connecting",
+        "PLAYFUL": "Fun & playful",
+        "ROMANTIC": "Romantic & emotional",
+        "PRODUCTIVE": "Productive & goal-oriented",
+        "INSPIRING": "Inspiring & educational",
+        "MOOD": "Depending on mood"
+      }
+    },
+    "FINISH_BUTTON": "Finish & Start Exploring"
+  }
+}

@@ -22,7 +22,6 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.3
-  flutter_local_notifications: ^14.1.1
   flutter_map: ^5.0.0
   flutter_native_splash: ^2.3.2
   flutter_secure_storage: ^8.0.0
@@ -72,17 +71,18 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter_launcher_icons:
-      android: "launcher_icon"
-      ios: true
-      image_path: "assets/images/vibeday_app_logo.png"
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/vibeday_app_logo.png"
 
 flutter_native_splash:
-      background_image: assets/images/vibeday_splashscreen.png
+  image: assets/images/vibeday_splashscreen.png
 
-      android_12:
-        image: assets/images/vibeday_splashscreen.png
-        icon_background_color: "#ffffff"
+  color: "#FFFFFF"
 
+  android_12:
+    image: assets/images/vibeday_splashscreen.png
+    color: "#FFFFFF"
 
 flutter_gen:
   output: lib/assets

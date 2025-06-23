@@ -10,8 +10,8 @@ class VibeSelectionState with _$VibeSelectionState {
   factory VibeSelectionState({
     @Default(ScreenStatus.pure()) ScreenStatus screenStatus,
     @Default([]) List<String> selectedVibes,
-    @Default(20.0) double budget,
-    @Default(10.0) double distanceRadius,
+    @Default(0.0) double budget,
+    @Default(0.0) double distanceRadius,
     String? selectedTimeWindow,
     String? selectedGroupSize,
     @Default(false) bool showAdvancedSettings,

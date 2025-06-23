@@ -53,11 +53,11 @@ class $AssetsImagesGen {
 class $AssetsTranslationsGen {
   const $AssetsTranslationsGen();
 
-  /// File path: assets/translations/de-DE.json
-  String get deDE => 'assets/translations/de-DE.json';
+  /// File path: assets/translations/en-US.json
+  String get enUS => 'assets/translations/en-US.json';
 
   /// List of all assets
-  List<String> get values => [deDE];
+  List<String> get values => [enUS];
 }
 
 class Assets {

@@ -49,9 +49,10 @@ Future<void> mainCommon() async {
 
   runApp(
     EasyLocalization(
-      supportedLocales: const [Locale('de', 'DE')],
+      supportedLocales: const [
+        Locale('en', 'US'),
+      ],
       path: 'assets/translations',
-      fallbackLocale: const Locale('de', 'DE'),
       child: App(
         vibeDayRepository: vibeDayRepository,
         userStorageRepository: userStorageRepository,

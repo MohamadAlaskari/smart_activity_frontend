@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:go_router/go_router.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/presentation/home/home_cubit.dart';
 import 'package:vibe_day/presentation/home/home_provider.dart';
 import 'package:vibe_day/presentation/login/login_cubit.dart';
 import 'package:vibe_day/presentation/login/login_state.dart';
 import 'package:vibe_day/presentation/login/login_view.dart';
 import 'package:vibe_day/presentation/ui/widgets/validation_dialog.dart';
+
 class LoginProvider extends StatelessWidget {
   const LoginProvider({super.key});
 
@@ -33,6 +35,7 @@ class LoginProvider extends StatelessWidget {
   void _onStatusChanged(BuildContext context, LoginState state) {
     if (state.status == FormzSubmissionStatus.success) {
       context.goNamed(HomeProvider.routeName);
+      context.read<HomeCubit>().loadData();
     } else if (state.status == FormzSubmissionStatus.failure) {
       ValidationDialog.show(
         context: context,

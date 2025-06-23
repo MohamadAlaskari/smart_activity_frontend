@@ -14,12 +14,17 @@ class ActivityCard extends StatelessWidget {
     log('Category: "$category"');
     switch (category.toLowerCase()) {
       case 'outdoors':
+      case 'miscellaneous':
         return Colors.green;
       case 'night out':
+      case 'music party':
+      case 'music concert':
         return Colors.deepPurple;
       case 'culture':
+      case 'arts & theatre':
         return Colors.indigo;
       case 'chill':
+      case 'comedy':
         return Colors.brown;
       case 'sports':
         return Colors.orange;
@@ -31,6 +36,7 @@ class ActivityCard extends StatelessWidget {
   IconData _getCategoryIcon(String category) {
     switch (category.toLowerCase()) {
       case 'outdoors':
+      case 'miscellaneous':
         return Icons.nature;
       case 'culture':
         return Icons.theater_comedy;
@@ -39,6 +45,9 @@ class ActivityCard extends StatelessWidget {
       case 'chill':
         return Icons.coffee;
       case 'night out':
+      case 'music party':
+      case 'music concert':
+      case 'comedy':
         return Icons.nightlife;
       default:
         return Icons.local_activity;
@@ -92,9 +101,9 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startTimeStr = DateFormat.Hm().format(activity.startTime);
-    final endTimeStr = DateFormat.Hm().format(activity.endTime);
-    final dateStr = DateFormat.yMd().format(activity.startTime);
+    final startTimeStr = DateFormat('h:mm a').format(activity.startTime);
+    final endTimeStr = DateFormat('h:mm a').format(activity.endTime);
+    final dateStr = DateFormat('MMMM d, yyyy').format(activity.startTime);
 
     return GestureDetector(
       onTap: onTap,

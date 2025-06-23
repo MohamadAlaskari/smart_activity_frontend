@@ -1,11 +1,12 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
-import 'package:vibe_day/common/screen_status.dart';
-import 'package:vibe_day/data/repository/vibe_day_repository.dart';
-import 'package:vibe_day/data/repository/user_storage_repository.dart';
-import 'package:vibe_day/domain/model/user_preferences.dart';
-import 'package:vibe_day/domain/model/user.dart';
 import 'dart:developer';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vibe_day/common/screen_status.dart';
+import 'package:vibe_day/data/repository/user_storage_repository.dart';
+import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/domain/model/user.dart';
+import 'package:vibe_day/domain/model/user_preferences.dart';
+import 'package:vibe_day/presentation/vibe_selection/vibe_selection_state.dart';
 
 class VibeSelectionCubit extends Cubit<VibeSelectionState> {
   VibeSelectionCubit({
@@ -32,11 +33,16 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     }
   }
 
+  void resetToDefaults() {
+    emit(VibeSelectionState());
+  }
+
   Future<void> _loadUserPreferences() async {
     try {
       final user = await _userStorageRepository.getUser();
       if (user?.id == null) {
-        log('No user found, skipping preference loading');
+        log('No user found, resetting to default state');
+        resetToDefaults();
         return;
       }
 
@@ -65,10 +71,14 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
           ),
         );
       } else {
-        log('No preferences found for user ${user.id}');
+        log('No preferences found for user ${user.id}, resetting to defaults');
+        // WICHTIG: State auf Default-Werte zurücksetzen
+        emit(VibeSelectionState());
       }
     } catch (e) {
       log('Error loading user preferences: $e');
+      // Bei Fehler auch auf Default zurücksetzen
+      resetToDefaults();
     }
   }
 
@@ -160,7 +170,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
     emit(state.copyWith(selectedExperienceTypes: currentExperienceTypes));
   }
 
-
   Future<void> finishSelection() async {
     emit(state.copyWith(screenStatus: const ScreenStatus.loading()));
 
@@ -198,7 +207,6 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
       emit(state.copyWith(screenStatus: const ScreenStatus.success()));
 
       await Future.delayed(const Duration(seconds: 1));
-
     } catch (e) {
       log('Error finishing selection: $e');
       emit(state.copyWith(screenStatus: ScreenStatus.error(e.toString())));

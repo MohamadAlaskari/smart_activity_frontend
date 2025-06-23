@@ -162,8 +162,9 @@ class ActivityActionButtons extends StatelessWidget {
     final encodedAddress = Uri.encodeComponent(
       '${activity.location.name}, ${activity.location.address}',
     );
+
     final url =
-        'https://www.google.com/maps/search/?api=1&query=$encodedAddress';
+        'https://www.google.com/maps/dir/?api=1&destination=$encodedAddress';
 
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -236,12 +237,12 @@ class ActivityDetailInformation extends StatelessWidget {
               icon: Icons.schedule,
               label: 'DETAIL.ACTIVITY_INFORMATION.TIME'.tr(),
               value:
-                  '${DateFormat.Hm().format(activity.startTime)} - ${DateFormat.Hm().format(activity.endTime)}',
+                  '${DateFormat('h:mm a').format(activity.startTime)} - ${DateFormat('h:mm a').format(activity.endTime)}',
             ),
             _DetailRow(
               icon: Icons.date_range,
               label: 'DETAIL.ACTIVITY_INFORMATION.DATE'.tr(),
-              value: DateFormat.yMMMMd().format(activity.startTime),
+              value: DateFormat('MMMM d, yyyy').format(activity.startTime),
             ),
             _DetailRow(
               icon: Icons.location_on,
