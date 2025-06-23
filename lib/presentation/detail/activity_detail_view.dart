@@ -150,12 +150,20 @@ class ActivityActionButtons extends StatelessWidget {
   }
 
   void _shareActivity() {
-    final shareText =
-        '${activity.title}\n\n${activity.description}\n\n${activity.url}';
+    final hasUrl = activity.url.trim().isNotEmpty;
+    final shareText = '''
+🎉 ${activity.title}
 
-    SharePlus.instance.share(
-      ShareParams(text: shareText, subject: activity.title),
-    );
+🗓️ ${DateFormat.yMMMMd().format(activity.startTime)}  
+🕒 ${DateFormat.Hm().format(activity.startTime)} - ${DateFormat.Hm().format(activity.endTime)}
+
+📍 ${activity.location.name}
+📫 ${activity.location.address}
+
+${hasUrl ? '\n🔗 ${activity.url}' : ''}
+''';
+
+    Share.share(shareText, subject: activity.title);
   }
 
   Future<void> _openRoute(BuildContext context) async {
