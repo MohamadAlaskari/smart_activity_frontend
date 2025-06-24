@@ -46,9 +46,7 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
         return;
       }
 
-      final preferences = await _vibeDayRepository.getUserPreferences(
-        user!.id!,
-      );
+      final preferences = await _vibeDayRepository.getUserPreferences();
 
       if (preferences != null) {
         log('Loaded user preferences: ${preferences.selectedVibes}');
@@ -71,13 +69,10 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
           ),
         );
       } else {
-        log('No preferences found for user ${user.id}, resetting to defaults');
-        // WICHTIG: State auf Default-Werte zurücksetzen
         emit(VibeSelectionState());
       }
     } catch (e) {
       log('Error loading user preferences: $e');
-      // Bei Fehler auch auf Default zurücksetzen
       resetToDefaults();
     }
   }
@@ -183,14 +178,12 @@ class VibeSelectionCubit extends Cubit<VibeSelectionState> {
 
       try {
         await _vibeDayRepository.updateUserPreferences(
-          userId: user!.id!,
           preferences: preferences,
         );
         log('Updated user preferences successfully');
       } catch (e) {
         log('Update failed, trying to create new preferences: $e');
         await _vibeDayRepository.createUserPreferences(
-          userId: user!.id!,
           preferences: preferences,
         );
         log('Created new user preferences successfully');

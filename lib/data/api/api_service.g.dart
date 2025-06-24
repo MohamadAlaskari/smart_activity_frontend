@@ -153,14 +153,12 @@ class _ApiService implements ApiService {
 
   @override
   Future<dynamic> getSuggestions(
-    String userId,
     double lat,
     double lon,
     String date,
   ) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'userId': userId,
       r'lat': lat,
       r'lon': lon,
       r'date': date,
@@ -189,11 +187,9 @@ class _ApiService implements ApiService {
 
   @override
   Future<dynamic> createUserPreferences(
-    String userId,
-    Map<String, dynamic> preferences,
-  ) async {
+      Map<String, dynamic> preferences) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userId': userId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(preferences);
@@ -218,9 +214,9 @@ class _ApiService implements ApiService {
   }
 
   @override
-  Future<dynamic> getUserPreferences(String userId) async {
+  Future<dynamic> getUserPreferences() async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userId': userId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
@@ -245,11 +241,9 @@ class _ApiService implements ApiService {
 
   @override
   Future<dynamic> updateUserPreferences(
-    String userId,
-    Map<String, dynamic> preferences,
-  ) async {
+      Map<String, dynamic> preferences) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'userId': userId};
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(preferences);
@@ -261,6 +255,59 @@ class _ApiService implements ApiService {
         .compose(
           _dio.options,
           '/user-preferences',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> submitHealthData(Map<String, dynamic> healthData) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    _data.addAll(healthData);
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'POST',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/health-data',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        ))));
+    final value = _result.data;
+    return value;
+  }
+
+  @override
+  Future<dynamic> getHealthData() async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/health-data',
           queryParameters: queryParameters,
           data: _data,
         )

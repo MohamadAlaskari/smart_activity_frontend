@@ -26,23 +26,27 @@ abstract class ApiService {
 
   @GET('/suggestions')
   Future<dynamic> getSuggestions(
-    @Query('userId') String userId,
-    @Query('lat') double lat,
-    @Query('lon') double lon,
-    @Query('date') String date,
-  );
+      @Query('lat') double lat,
+      @Query('lon') double lon,
+      @Query('date') String date,
+      );
+
   @POST('/user-preferences')
   Future<dynamic> createUserPreferences(
-    @Query('userId') String userId,
-    @Body() Map<String, dynamic> preferences,
-  );
+      @Body() Map<String, dynamic> preferences,
+      );
 
   @GET('/user-preferences')
-  Future<dynamic> getUserPreferences(@Query('userId') String userId);
+  Future<dynamic> getUserPreferences();
 
   @PATCH('/user-preferences')
   Future<dynamic> updateUserPreferences(
-    @Query('userId') String userId,
-    @Body() Map<String, dynamic> preferences,
-  );
+      @Body() Map<String, dynamic> preferences,
+      );
+
+  @POST('/health-data')
+  Future<dynamic> submitHealthData(@Body() Map<String, dynamic> healthData);
+
+  @GET('/health-data')
+  Future<dynamic> getHealthData();
 }

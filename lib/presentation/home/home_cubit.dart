@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vibe_day/data/repository/user_storage_repository.dart';
 import 'package:vibe_day/data/repository/vibe_day_repository.dart';
+import 'package:vibe_day/data/service/health_data_service.dart';
 import 'package:vibe_day/data/service/location_service.dart';
 import 'package:vibe_day/presentation/home/home_state.dart';
 import 'package:vibe_day/common/screen_status.dart';
@@ -13,13 +14,11 @@ class HomeCubit extends Cubit<HomeState> {
     required VibeDayRepository vibeDayRepository,
     required UserStorageRepository userStorageRepository,
   }) : _vibeDayRepository = vibeDayRepository,
-       _userStorageRepository = userStorageRepository,
        super(HomeState()) {
     _init();
   }
 
   final VibeDayRepository _vibeDayRepository;
-  final UserStorageRepository _userStorageRepository;
 
   Future<void> _init() async {
     await _detectLocationAndLoadData();
@@ -123,16 +122,8 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<bool> _checkUserPreferences() async {
     try {
-      log('Getting user ID for preferences check...');
-      final userId = await _getUserId();
-
-      if (userId == null) {
-        log('No user ID available, assuming no preferences');
-        return false;
-      }
-
-      log('User ID found: $userId, fetching preferences...');
-      final preferences = await _vibeDayRepository.getUserPreferences(userId);
+      log('Checking user preferences...');
+      final preferences = await _vibeDayRepository.getUserPreferences();
 
       if (preferences == null) {
         log('getUserPreferences returned null - no preferences found');
@@ -159,17 +150,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<List<Activity>> _loadSuggestions() async {
     try {
-      final userId = await _getUserId();
-
-      if (userId == null) {
-        log('No user ID available, returning empty list');
-        return [];
-      }
+      await _ensureHealthDataForToday();
 
       final currentDate = DateTime.now().toIso8601String().split('T')[0];
 
       final suggestions = await _vibeDayRepository.getSuggestions(
-        userId: userId,
         latitude: state.latitude,
         longitude: state.longitude,
         date: currentDate,
@@ -182,36 +167,20 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<String?> _getUserId() async {
-    try {
-      final user = await _userStorageRepository.getUser();
-      return user?.id;
-    } catch (e) {
-      log('Error getting user ID: $e');
-      return null;
-    }
-  }
-
   Future<List<Activity>> _loadSuggestionsForDate(
     DateTime date,
     int dayIndex,
   ) async {
     try {
-      final userId = await _getUserId();
-
-      if (userId == null) {
-        log('No user ID available for date $date, returning empty list');
-        return [];
-      }
+      await _ensureHealthDataForToday();
 
       final dateStr = date.toIso8601String().split('T')[0];
 
       log(
-        'Requesting suggestions for userId: $userId, date: $dateStr, lat: ${state.latitude}, lng: ${state.longitude}',
+        'Requesting suggestions for date: $dateStr, lat: ${state.latitude}, lng: ${state.longitude}',
       );
 
       final suggestions = await _vibeDayRepository.getSuggestions(
-        userId: userId,
         latitude: state.latitude,
         longitude: state.longitude,
         date: dateStr,
@@ -223,6 +192,18 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       log('Error loading suggestions for date: $e');
       return [];
+    }
+  }
+
+  Future<void> _ensureHealthDataForToday() async {
+    try {
+      final healthDataService = HealthDataService(
+        vibeDayRepository: _vibeDayRepository,
+      );
+
+      await healthDataService.forceSubmitHealthDataForToday();
+    } catch (e) {
+      log('Error ensuring health data for today: $e');
     }
   }
 
@@ -294,6 +275,21 @@ class HomeCubit extends Cubit<HomeState> {
     if (isClosed) return;
 
     log('User authenticated, loading home data...');
+
+    await _submitRandomHealthDataIfNeeded();
+
     await _detectLocationAndLoadData();
+  }
+
+  Future<void> _submitRandomHealthDataIfNeeded() async {
+    try {
+      final healthDataService = HealthDataService(
+        vibeDayRepository: _vibeDayRepository,
+      );
+
+      await healthDataService.submitRandomHealthDataIfNeeded();
+    } catch (e) {
+      log('Error submitting random health data: $e');
+    }
   }
 }

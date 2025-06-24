@@ -23,6 +23,11 @@ _$ActivityImpl _$$ActivityImplFromJson(Map<String, dynamic> json) =>
       images:
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
       url: json['url'] as String,
+      healthDataMatch: json['healthDataMatch'] as bool? ?? false,
+      healthDataMatchReason: (json['healthDataMatchReason'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ActivityImplToJson(_$ActivityImpl instance) =>
@@ -39,6 +44,8 @@ Map<String, dynamic> _$$ActivityImplToJson(_$ActivityImpl instance) =>
       'vibeMatch': instance.vibeMatch,
       'images': instance.images,
       'url': instance.url,
+      'healthDataMatch': instance.healthDataMatch,
+      'healthDataMatchReason': instance.healthDataMatchReason,
     };
 
 _$ActivityLocationImpl _$$ActivityLocationImplFromJson(

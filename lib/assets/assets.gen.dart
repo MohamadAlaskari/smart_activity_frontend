@@ -19,6 +19,16 @@ class $AssetsColorGen {
   List<String> get values => [colors];
 }
 
+class $AssetsDataGen {
+  const $AssetsDataGen();
+
+  /// File path: assets/data/mock_data.json
+  String get mockData => 'assets/data/mock_data.json';
+
+  /// List of all assets
+  List<String> get values => [mockData];
+}
+
 class $AssetsFontsGen {
   const $AssetsFontsGen();
 
@@ -64,6 +74,7 @@ class Assets {
   const Assets._();
 
   static const $AssetsColorGen color = $AssetsColorGen();
+  static const $AssetsDataGen data = $AssetsDataGen();
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();

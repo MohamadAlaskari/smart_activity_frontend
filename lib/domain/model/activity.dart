@@ -3,10 +3,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'activity.freezed.dart';
 part 'activity.g.dart';
 
-@Freezed(toJson: true, fromJson: true)
+@freezed
 class Activity with _$Activity {
-  const Activity._();
-
   const factory Activity({
     required String title,
     required String description,
@@ -20,10 +18,11 @@ class Activity with _$Activity {
     required List<String> vibeMatch,
     required List<String> images,
     required String url,
+    @Default(false) bool healthDataMatch,
+    @Default([]) List<String> healthDataMatchReason,
   }) = _Activity;
 
-  factory Activity.fromJson(Map<String, dynamic> json) =>
-      _$ActivityFromJson(json);
+  factory Activity.fromJson(Map<String, dynamic> json) => _$ActivityFromJson(json);
 }
 
 @freezed
@@ -35,6 +34,5 @@ class ActivityLocation with _$ActivityLocation {
     required double lon,
   }) = _ActivityLocation;
 
-  factory ActivityLocation.fromJson(Map<String, dynamic> json) =>
-      _$ActivityLocationFromJson(json);
+  factory ActivityLocation.fromJson(Map<String, dynamic> json) => _$ActivityLocationFromJson(json);
 }

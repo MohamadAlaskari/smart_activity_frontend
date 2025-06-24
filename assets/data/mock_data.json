@@ -1,0 +1,28 @@
+[
+  {
+    "date": "2024-06-23",
+    "steps_today": 8321,
+    "steps_week_average": 7540,
+    "activity_minutes_today": 47,
+    "activity_minutes_week_average": 35,
+    "resting_heart_rate": 60,
+    "sleep_hours_last_night": 7.2,
+    "sleep_hours_week_average": 6.9,
+    "sleep_quality": "good",
+    "calories_burned_today": 1850,
+    "workout_type_last": "Running",
+    "workout_duration_last": 35,
+    "workout_frequency_week": 3,
+    "stress_level": "low",
+    "weight_kg": 78,
+    "bmi": 24.1,
+    "blood_pressure": {
+      "systolic": 122,
+      "diastolic": 76
+    },
+    "active_energy_burned_today": 520,
+    "hydration_ml_today": 1700,
+    "mood_today": "happy",
+    "menstruation_phase": "none"
+  }
+]

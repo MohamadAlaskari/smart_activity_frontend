@@ -52,7 +52,13 @@
     "CHOOSE_PREFERENCE": "Please select your preferences to receive personalized suggestions",
     "CHOOSE_PREFERENCE_BUTTON": "Select Preferences",
     "ACTIVITY": {
-      "COSTS": "Costs"
+      "COSTS": "Costs",
+      "HEALTH_MATCH": {
+        "TITLE": "Health Data Match",
+        "SUBTITLE": "This activity matches your current health data:",
+        "GENERAL_MATCH": "This activity is recommended based on your health profile",
+        "CLOSE": "Close"
+      }
     },
     "WEATHER": {
       "LOADING": "Loading weather data...",
@@ -61,6 +67,14 @@
       "TODAY": "Today",
       "TOMORROW": "Tomorrow",
       "DAY": "Day {}"
+    }
+  },
+  "ACTIVITY": {
+    "HEALTH_MATCH": {
+      "TITLE": "Health Data Match",
+      "SUBTITLE": "This activity matches your current health data:",
+      "GENERAL_MATCH": "This activity is recommended based on your health profile",
+      "CLOSE": "Close"
     }
   },
   "DETAIL": {

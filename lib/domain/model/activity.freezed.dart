@@ -32,6 +32,8 @@ mixin _$Activity {
   List<String> get vibeMatch => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   String get url => throw _privateConstructorUsedError;
+  bool get healthDataMatch => throw _privateConstructorUsedError;
+  List<String> get healthDataMatchReason => throw _privateConstructorUsedError;
 
   /// Serializes this Activity to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -60,7 +62,9 @@ abstract class $ActivityCopyWith<$Res> {
       bool isTicketed,
       List<String> vibeMatch,
       List<String> images,
-      String url});
+      String url,
+      bool healthDataMatch,
+      List<String> healthDataMatchReason});
 
   $ActivityLocationCopyWith<$Res> get location;
 }
@@ -92,6 +96,8 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
     Object? vibeMatch = null,
     Object? images = null,
     Object? url = null,
+    Object? healthDataMatch = null,
+    Object? healthDataMatchReason = null,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -142,6 +148,14 @@ class _$ActivityCopyWithImpl<$Res, $Val extends Activity>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      healthDataMatch: null == healthDataMatch
+          ? _value.healthDataMatch
+          : healthDataMatch // ignore: cast_nullable_to_non_nullable
+              as bool,
+      healthDataMatchReason: null == healthDataMatchReason
+          ? _value.healthDataMatchReason
+          : healthDataMatchReason // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 
@@ -176,7 +190,9 @@ abstract class _$$ActivityImplCopyWith<$Res>
       bool isTicketed,
       List<String> vibeMatch,
       List<String> images,
-      String url});
+      String url,
+      bool healthDataMatch,
+      List<String> healthDataMatchReason});
 
   @override
   $ActivityLocationCopyWith<$Res> get location;
@@ -207,6 +223,8 @@ class __$$ActivityImplCopyWithImpl<$Res>
     Object? vibeMatch = null,
     Object? images = null,
     Object? url = null,
+    Object? healthDataMatch = null,
+    Object? healthDataMatchReason = null,
   }) {
     return _then(_$ActivityImpl(
       title: null == title
@@ -257,13 +275,21 @@ class __$$ActivityImplCopyWithImpl<$Res>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String,
+      healthDataMatch: null == healthDataMatch
+          ? _value.healthDataMatch
+          : healthDataMatch // ignore: cast_nullable_to_non_nullable
+              as bool,
+      healthDataMatchReason: null == healthDataMatchReason
+          ? _value._healthDataMatchReason
+          : healthDataMatchReason // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ActivityImpl extends _Activity {
+class _$ActivityImpl implements _Activity {
   const _$ActivityImpl(
       {required this.title,
       required this.description,
@@ -276,10 +302,12 @@ class _$ActivityImpl extends _Activity {
       required this.isTicketed,
       required final List<String> vibeMatch,
       required final List<String> images,
-      required this.url})
+      required this.url,
+      this.healthDataMatch = false,
+      final List<String> healthDataMatchReason = const []})
       : _vibeMatch = vibeMatch,
         _images = images,
-        super._();
+        _healthDataMatchReason = healthDataMatchReason;
 
   factory _$ActivityImpl.fromJson(Map<String, dynamic> json) =>
       _$$ActivityImplFromJson(json);
@@ -320,10 +348,22 @@ class _$ActivityImpl extends _Activity {
 
   @override
   final String url;
+  @override
+  @JsonKey()
+  final bool healthDataMatch;
+  final List<String> _healthDataMatchReason;
+  @override
+  @JsonKey()
+  List<String> get healthDataMatchReason {
+    if (_healthDataMatchReason is EqualUnmodifiableListView)
+      return _healthDataMatchReason;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_healthDataMatchReason);
+  }
 
   @override
   String toString() {
-    return 'Activity(title: $title, description: $description, category: $category, location: $location, distanceKm: $distanceKm, startTime: $startTime, endTime: $endTime, price: $price, isTicketed: $isTicketed, vibeMatch: $vibeMatch, images: $images, url: $url)';
+    return 'Activity(title: $title, description: $description, category: $category, location: $location, distanceKm: $distanceKm, startTime: $startTime, endTime: $endTime, price: $price, isTicketed: $isTicketed, vibeMatch: $vibeMatch, images: $images, url: $url, healthDataMatch: $healthDataMatch, healthDataMatchReason: $healthDataMatchReason)';
   }
 
   @override
@@ -349,7 +389,11 @@ class _$ActivityImpl extends _Activity {
             const DeepCollectionEquality()
                 .equals(other._vibeMatch, _vibeMatch) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
-            (identical(other.url, url) || other.url == url));
+            (identical(other.url, url) || other.url == url) &&
+            (identical(other.healthDataMatch, healthDataMatch) ||
+                other.healthDataMatch == healthDataMatch) &&
+            const DeepCollectionEquality()
+                .equals(other._healthDataMatchReason, _healthDataMatchReason));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -367,7 +411,9 @@ class _$ActivityImpl extends _Activity {
       isTicketed,
       const DeepCollectionEquality().hash(_vibeMatch),
       const DeepCollectionEquality().hash(_images),
-      url);
+      url,
+      healthDataMatch,
+      const DeepCollectionEquality().hash(_healthDataMatchReason));
 
   /// Create a copy of Activity
   /// with the given fields replaced by the non-null parameter values.
@@ -385,7 +431,7 @@ class _$ActivityImpl extends _Activity {
   }
 }
 
-abstract class _Activity extends Activity {
+abstract class _Activity implements Activity {
   const factory _Activity(
       {required final String title,
       required final String description,
@@ -398,8 +444,9 @@ abstract class _Activity extends Activity {
       required final bool isTicketed,
       required final List<String> vibeMatch,
       required final List<String> images,
-      required final String url}) = _$ActivityImpl;
-  const _Activity._() : super._();
+      required final String url,
+      final bool healthDataMatch,
+      final List<String> healthDataMatchReason}) = _$ActivityImpl;
 
   factory _Activity.fromJson(Map<String, dynamic> json) =
       _$ActivityImpl.fromJson;
@@ -428,6 +475,10 @@ abstract class _Activity extends Activity {
   List<String> get images;
   @override
   String get url;
+  @override
+  bool get healthDataMatch;
+  @override
+  List<String> get healthDataMatchReason;
 
   /// Create a copy of Activity
   /// with the given fields replaced by the non-null parameter values.

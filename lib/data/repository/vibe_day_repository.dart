@@ -10,6 +10,7 @@ import 'package:vibe_day/domain/model/auth_result.dart';
 import 'package:vibe_day/domain/model/user.dart';
 import 'package:vibe_day/domain/model/activity.dart';
 import 'package:vibe_day/domain/model/user_preferences.dart';
+import 'package:vibe_day/domain/model/health_data.dart';
 
 class VibeDayRepository {
   late final ApiService _client;
@@ -309,7 +310,6 @@ class VibeDayRepository {
   }
 
   Future<List<Activity>> getSuggestions({
-    required String userId,
     required double latitude,
     required double longitude,
     required String date,
@@ -321,12 +321,7 @@ class VibeDayRepository {
         throw Exception('Authentication required. Please login again.');
       }
 
-      final response = await _client.getSuggestions(
-        userId,
-        latitude,
-        longitude,
-        date,
-      );
+      final response = await _client.getSuggestions(latitude, longitude, date);
 
       log('Suggestions API Response: $response');
 
@@ -335,19 +330,52 @@ class VibeDayRepository {
         return [];
       }
 
-      return response
-          .whereType<Map<String, dynamic>>()
-          .map((suggestion) => Activity.fromJson(suggestion))
-          .toList();
+      return response.whereType<Map<String, dynamic>>().map((suggestion) {
+        final processedSuggestion = Map<String, dynamic>.from(suggestion);
+
+        processedSuggestion['healthDataMatch'] =
+            suggestion['healthDataMatch'] ?? false;
+
+        final reasonField = suggestion['healthDataMatchReason'];
+        List<String> reasons = [];
+
+        try {
+          if (reasonField is List) {
+            reasons = reasonField.map((item) => item.toString()).toList();
+          } else if (reasonField is String) {
+            if (reasonField.trim().isNotEmpty) {
+              if (reasonField.contains(',')) {
+                reasons =
+                    reasonField
+                        .split(',')
+                        .map((s) => s.trim())
+                        .where((s) => s.isNotEmpty)
+                        .toList();
+              } else {
+                reasons = [reasonField.trim()];
+              }
+            }
+          }
+        } catch (e) {
+          log(
+            'Error parsing healthDataMatchReason for ${suggestion['title']}: $e',
+          );
+        }
+
+        processedSuggestion['healthDataMatchReason'] = reasons;
+
+        if (processedSuggestion['healthDataMatch'] == true) {
+          final reasons =
+              processedSuggestion['healthDataMatchReason'] as List<String>;
+          log('Health match for ${processedSuggestion['title']}: $reasons');
+        }
+
+        return Activity.fromJson(processedSuggestion);
+      }).toList();
     } catch (e) {
       log('Error fetching suggestions: $e');
 
       if (e is DioException) {
-        log('DioException details:');
-        log('- Status Code: ${e.response?.statusCode}');
-        log('- Request URL: ${e.requestOptions.uri}');
-        log('- Response Data: ${e.response?.data}');
-
         if (e.response?.statusCode == 401) {
           log('401 error - forcing logout');
           await logout();
@@ -360,7 +388,6 @@ class VibeDayRepository {
   }
 
   Future<UserPreferences> createUserPreferences({
-    required String userId,
     required UserPreferences preferences,
   }) async {
     try {
@@ -371,12 +398,22 @@ class VibeDayRepository {
       }
 
       final response = await _client.createUserPreferences(
-        userId,
         preferences.toApiRequest(),
       );
 
       log('Create User Preferences API Response: $response');
-      return UserPreferences.fromJson(response);
+
+      return UserPreferences(
+        selectedVibes: _toStringList(response['selectedVibes']) ?? [],
+        selectedLifeVibes: _toStringList(response['selectedLifeVibes']) ?? [],
+        selectedExperienceTypes:
+            _toStringList(response['selectedExperienceTypes']) ?? [],
+        budget: _toDouble(response['budget']) ?? 0.0,
+        distanceRadius: _toDouble(response['distanceRadius']) ?? 0.0,
+        selectedTimeWindows:
+            _toStringList(response['selectedTimeWindows']) ?? [],
+        selectedGroupSizes: _toStringList(response['selectedGroupSizes']) ?? [],
+      );
     } catch (e) {
       log('Error creating user preferences: $e');
 
@@ -389,7 +426,7 @@ class VibeDayRepository {
     }
   }
 
-  Future<UserPreferences?> getUserPreferences(String userId) async {
+  Future<UserPreferences?> getUserPreferences() async {
     try {
       final token = await getToken();
 
@@ -397,11 +434,13 @@ class VibeDayRepository {
         throw Exception('Authentication required. Please login again.');
       }
 
-      final response = await _client.getUserPreferences(userId);
+      final response = await _client.getUserPreferences();
 
       log('Get User Preferences API Response: $response');
 
       if (response is Map<String, dynamic>) {
+        Map<String, dynamic> preferencesData;
+
         if (response['status'] == 'empty') {
           log(
             'User preferences not found - returning null for empty preferences',
@@ -409,12 +448,44 @@ class VibeDayRepository {
           return null;
         } else if (response['status'] == 'success' &&
             response['data'] != null) {
-          return UserPreferences.fromJson(response['data']);
+          preferencesData = Map<String, dynamic>.from(response['data']);
         } else if (response['data'] != null) {
-          return UserPreferences.fromJson(response['data']);
+          preferencesData = Map<String, dynamic>.from(response['data']);
         } else if (response['selectedVibes'] != null) {
-          return UserPreferences.fromJson(response);
+          preferencesData = Map<String, dynamic>.from(response);
+        } else {
+          log('Unexpected response format: $response');
+          return null;
         }
+
+        preferencesData['budget'] = _toDouble(preferencesData['budget']) ?? 0.0;
+        preferencesData['distanceRadius'] =
+            _toDouble(preferencesData['distanceRadius']) ?? 0.0;
+
+        preferencesData['selectedVibes'] =
+            _toStringList(preferencesData['selectedVibes']) ?? [];
+        preferencesData['selectedLifeVibes'] =
+            _toStringList(preferencesData['selectedLifeVibes']) ?? [];
+        preferencesData['selectedExperienceTypes'] =
+            _toStringList(preferencesData['selectedExperienceTypes']) ?? [];
+        preferencesData['selectedTimeWindows'] =
+            _toStringList(preferencesData['selectedTimeWindows']) ?? [];
+        preferencesData['selectedGroupSizes'] =
+            _toStringList(preferencesData['selectedGroupSizes']) ?? [];
+
+        return UserPreferences(
+          selectedVibes: _toStringList(preferencesData['selectedVibes']) ?? [],
+          selectedLifeVibes:
+              _toStringList(preferencesData['selectedLifeVibes']) ?? [],
+          selectedExperienceTypes:
+              _toStringList(preferencesData['selectedExperienceTypes']) ?? [],
+          budget: _toDouble(preferencesData['budget']) ?? 0.0,
+          distanceRadius: _toDouble(preferencesData['distanceRadius']) ?? 0.0,
+          selectedTimeWindows:
+              _toStringList(preferencesData['selectedTimeWindows']) ?? [],
+          selectedGroupSizes:
+              _toStringList(preferencesData['selectedGroupSizes']) ?? [],
+        );
       }
 
       log('Unexpected response format: $response');
@@ -438,7 +509,6 @@ class VibeDayRepository {
   }
 
   Future<UserPreferences> updateUserPreferences({
-    required String userId,
     required UserPreferences preferences,
   }) async {
     try {
@@ -449,12 +519,22 @@ class VibeDayRepository {
       }
 
       final response = await _client.updateUserPreferences(
-        userId,
         preferences.toApiRequest(),
       );
 
       log('Update User Preferences API Response: $response');
-      return UserPreferences.fromJson(response);
+
+      return UserPreferences(
+        selectedVibes: _toStringList(response['selectedVibes']) ?? [],
+        selectedLifeVibes: _toStringList(response['selectedLifeVibes']) ?? [],
+        selectedExperienceTypes:
+            _toStringList(response['selectedExperienceTypes']) ?? [],
+        budget: _toDouble(response['budget']) ?? 0.0,
+        distanceRadius: _toDouble(response['distanceRadius']) ?? 0.0,
+        selectedTimeWindows:
+            _toStringList(response['selectedTimeWindows']) ?? [],
+        selectedGroupSizes: _toStringList(response['selectedGroupSizes']) ?? [],
+      );
     } catch (e) {
       log('Error updating user preferences: $e');
 
@@ -464,6 +544,94 @@ class VibeDayRepository {
       }
 
       rethrow;
+    }
+  }
+
+  Future<HealthData> submitHealthData({required HealthData healthData}) async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final apiData = healthData.toApiJson();
+      final response = await _client.submitHealthData(apiData);
+
+      log('Submit Health Data API Response: $response');
+      final result = HealthData.fromApiResponse(response);
+
+      return result;
+    } catch (e) {
+      log('Error submitting health data: $e');
+
+      if (e is DioException && e.response?.statusCode == 401) {
+        await logout();
+        throw Exception('Session expired. Please login again.');
+      }
+
+      rethrow;
+    }
+  }
+
+  Future<List<HealthData>> getHealthData() async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.getHealthData();
+
+      log('Get Health Data API Response: $response');
+
+      if (response is List) {
+        return response
+            .whereType<Map<String, dynamic>>()
+            .map((healthDataJson) => HealthData.fromApiResponse(healthDataJson))
+            .toList();
+      }
+
+      return [];
+    } catch (e) {
+      log('Error getting health data: $e');
+
+      if (e is DioException && e.response?.statusCode == 401) {
+        await logout();
+        throw Exception('Session expired. Please login again.');
+      }
+
+      return [];
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getRawHealthData() async {
+    try {
+      final token = await getToken();
+
+      if (token == null) {
+        throw Exception('Authentication required. Please login again.');
+      }
+
+      final response = await _client.getHealthData();
+
+      log('Get Raw Health Data API Response: $response');
+
+      if (response is List) {
+        return response.whereType<Map<String, dynamic>>().toList();
+      }
+
+      return [];
+    } catch (e) {
+      log('Error getting raw health data: $e');
+
+      if (e is DioException && e.response?.statusCode == 401) {
+        await logout();
+        throw Exception('Session expired. Please login again.');
+      }
+
+      return [];
     }
   }
 
@@ -481,6 +649,22 @@ class VibeDayRepository {
 
   void dispose() {
     _controller.close();
+  }
+
+  double? _toDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is double) return value;
+    if (value is int) return value.toDouble();
+    if (value is String) return double.tryParse(value);
+    return null;
+  }
+
+  List<String>? _toStringList(dynamic value) {
+    if (value == null) return null;
+    if (value is List) {
+      return value.map((item) => item.toString()).toList();
+    }
+    return null;
   }
 
   Future<void> _init() async {
