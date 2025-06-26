@@ -25,7 +25,6 @@ class AuthDataRepository implements TokenStorage<OAuth2Token> {
       await _storage.deleteAll();
     }
   }
-
   @override
   Future<OAuth2Token?> read() async {
     try {
