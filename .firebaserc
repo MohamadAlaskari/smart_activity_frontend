@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "smart-activity-app"
-  }
+    "vibeDay": "vibeday-3b539",
+    "default": "vibeday-3b539"
+  },
+  "targets": {},
+  "etags": {}
 }
